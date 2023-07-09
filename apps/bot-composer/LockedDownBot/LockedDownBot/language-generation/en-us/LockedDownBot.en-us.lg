@@ -1,0 +1,51 @@
+[import](common.lg)
+
+# SendActivity_Greeting()
+[Activity
+    Text = ${SendActivity_Greeting_text()}
+]
+
+# SendActivity_Greeting_text()
+- Welcome to FosterBot   . I am learned on a range of subjects - greetings, bank accounts and opening hours. How can I help you today?
+# SendActivity_LjxJMj()
+[Activity
+    Text = ${SendActivity_LjxJMj_text()}
+]
+
+# SendActivity_LjxJMj_text()
+- Hello to you too. How can I be of help?
+# SendActivity_lVGVGq()
+[Activity
+    Text = ${SendActivity_lVGVGq_text()}
+]
+
+# SendActivity_lVGVGq_text()
+- I'm sorry but I cannot help you with that. Let's just chat...
+# SendActivity_Nelnz0()
+[Activity
+    Text = ${SendActivity_Nelnz0_text()}
+]
+
+# SendActivity_Nelnz0_text()
+- Here? How!!
+# SendActivity_p5Qc2j()
+[Activity
+    Text = ${SendActivity_p5Qc2j_text()}
+]
+
+# SendActivity_p5Qc2j_text()
+- Raw: ${turn.lastresult.content.choices[0].message.content}
+# SendActivity_1Bl3ks()
+[Activity
+    Text = ${SendActivity_1Bl3ks_text()}
+]
+
+# SendActivity_1Bl3ks_text()
+- Anything else I can do?
+# SendActivity_Sl4TCl()
+[Activity
+    Text = ${SendActivity_Sl4TCl_text()}
+]
+
+# SendActivity_Sl4TCl_text()
+- Anything else I can do?

@@ -1,0 +1,20 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <OutputType>Exe</OutputType>
+        <TargetFramework>net7.0</TargetFramework>
+        <RootNamespace>lets_encrypt</RootNamespace>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+    </PropertyGroup>
+
+    <ItemGroup>
+      <PackageReference Include="ACMESharpCore" Version="2.2.0.148" />
+      <PackageReference Include="Azure.Identity" Version="1.9.0" />
+      <PackageReference Include="Azure.ResourceManager.Dns" Version="1.1.0-beta.1" />
+      <PackageReference Include="Azure.ResourceManager.KeyVault" Version="1.2.0-beta.2" />
+      <PackageReference Include="Azure.ResourceManager.Resources" Version="1.6.0" />
+      <PackageReference Include="Azure.Security.KeyVault.Certificates" Version="4.5.1" />
+    </ItemGroup>
+
+</Project>

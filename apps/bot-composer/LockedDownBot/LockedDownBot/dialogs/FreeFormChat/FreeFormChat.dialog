@@ -1,0 +1,24 @@
+{
+  "$kind": "Microsoft.AdaptiveDialog",
+  "$designer": {
+    "id": "w8pr0E",
+    "name": "FreeFormChat",
+    "comment": ""
+  },
+  "autoEndDialog": true,
+  "defaultResultProperty": "dialog.result",
+  "triggers": [
+    {
+      "$kind": "Microsoft.OnBeginDialog",
+      "$designer": {
+        "name": "BeginDialog",
+        "description": "",
+        "id": "N5BahD"
+      },
+      "actions": []
+    }
+  ],
+  "generator": "FreeFormChat.lg",
+  "recognizer": "FreeFormChat.lu.qna",
+  "id": "FreeFormChat"
+}

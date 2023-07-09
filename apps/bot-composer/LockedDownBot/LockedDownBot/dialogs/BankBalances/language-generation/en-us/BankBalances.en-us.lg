@@ -1,0 +1,44 @@
+[import](common.lg)
+
+# TextInput_Prompt_AJxDID()
+[Activity
+    Text = ${TextInput_Prompt_AJxDID_text()}
+]
+
+# TextInput_Prompt_AJxDID_text()
+- How can I help with your Bank Accounts?
+# SendActivity_xvaExX()
+[Activity
+    Text = ${SendActivity_xvaExX_text()}
+]
+
+# SendActivity_xvaExX_text()
+- Raw: ${turn.results.content.choices[0].message.content}
+# SendActivity_vBzhYS()
+[Activity
+    Text = ${SendActivity_vBzhYS_text()}
+]
+
+# SendActivity_vBzhYS_text()
+- ${json(turn.results.content.choices[0].message.content).error}
+# SendActivity_F2rfow()
+[Activity
+    Text = ${SendActivity_F2rfow_text()}
+]
+
+# SendActivity_F2rfow_text()
+- You're missing an account number there matey
+# SendActivity_qOJ5kH()
+[Activity
+    Text = ${SendActivity_qOJ5kH_text()}
+]
+
+# SendActivity_qOJ5kH_text()
+- One moment whilst I ${json(turn.results.content.choices[0].message.content).operation} on account ${json(turn.results.content.choices[0].message.content).accountNumber}
+# SendActivity_onrlSR()
+[Activity
+    Text = ${SendActivity_onrlSR_text()}
+]
+
+# SendActivity_onrlSR_text()
+- Taking you back to the greeting dialogue :D

@@ -1,0 +1,122 @@
+{
+  "$kind": "Microsoft.AdaptiveDialog",
+  "$designer": {
+    "id": "I2XTz4",
+    "name": "BankBalances",
+    "comment": ""
+  },
+  "autoEndDialog": true,
+  "defaultResultProperty": "dialog.result",
+  "triggers": [
+    {
+      "$kind": "Microsoft.OnBeginDialog",
+      "$designer": {
+        "name": "BeginDialog",
+        "description": "",
+        "id": "dySSsI"
+      },
+      "actions": [
+        {
+          "$kind": "Microsoft.TextInput",
+          "$designer": {
+            "id": "AJxDID"
+          },
+          "disabled": false,
+          "maxTurnCount": 3,
+          "alwaysPrompt": false,
+          "allowInterruptions": false,
+          "unrecognizedPrompt": "",
+          "invalidPrompt": "",
+          "prompt": "${TextInput_Prompt_AJxDID()}",
+          "property": "dialog.initialAsk"
+        },
+        {
+          "$kind": "Microsoft.HttpRequest",
+          "$designer": {
+            "id": "8EIVbi"
+          },
+          "resultProperty": "turn.results",
+          "method": "POST",
+          "body": {
+            "messages": [
+              {
+                "role": "system",
+                "content": "You are a bank machine that ALWAYS responds with entities extracted from the text in a JSON format: { \"operation\": \"\", \"accountNumber\": \"\", \"error\": \"\" }\n\nUnderstood operations:\n(1) GetAccountBalance - for anything related to account balances \n(2) GetLastTransactions - for anything related to recent transactions\n(3) GetUpcomingPayments - for anything related to upcoming payments\n(4) GetDirectDebit - for anything related to direct debit schedules\n(5) Unknown - for anything else\n\n-----\n"
+              },
+              {
+                "role": "user",
+                "content": "${turn.Activity}"
+              }
+            ]
+          },
+          "url": "${settings.OPENAI_ENDPOINT}openai/deployments/${settings.OPENAI_MODEL}/chat/completions?api-version=2023-05-15",
+          "headers": {
+            "api-key": "${settings.OPENAI_SECRET}"
+          },
+          "contentType": "application/json",
+          "responseType": "json"
+        },
+        {
+          "$kind": "Microsoft.SendActivity",
+          "$designer": {
+            "id": "xvaExX"
+          },
+          "activity": "${SendActivity_xvaExX()}"
+        },
+        {
+          "$kind": "Microsoft.IfCondition",
+          "$designer": {
+            "id": "zeLgvy"
+          },
+          "condition": "=json(turn.results.content.choices[0].message.content).error != \"\" || json(turn.results.content.choices[0].message.content).operation == \"Unknown\"",
+          "actions": [
+            {
+              "$kind": "Microsoft.SendActivity",
+              "$designer": {
+                "id": "vBzhYS"
+              },
+              "activity": "${SendActivity_vBzhYS()}"
+            }
+          ],
+          "elseActions": [
+            {
+              "$kind": "Microsoft.IfCondition",
+              "$designer": {
+                "id": "V4vmqW"
+              },
+              "condition": "=json(turn.results.content.choices[0].message.content).accountNumber == \"\"",
+              "actions": [
+                {
+                  "$kind": "Microsoft.SendActivity",
+                  "$designer": {
+                    "id": "F2rfow"
+                  },
+                  "activity": "${SendActivity_F2rfow()}"
+                }
+              ],
+              "elseActions": [
+                {
+                  "$kind": "Microsoft.SendActivity",
+                  "$designer": {
+                    "id": "qOJ5kH"
+                  },
+                  "activity": "${SendActivity_qOJ5kH()}"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "$kind": "Microsoft.SendActivity",
+          "$designer": {
+            "id": "onrlSR"
+          },
+          "activity": "${SendActivity_onrlSR()}"
+        }
+      ]
+    }
+  ],
+  "generator": "BankBalances.lg",
+  "recognizer": "BankBalances.lu.qna",
+  "id": "BankBalances"
+}

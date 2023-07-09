@@ -1,0 +1,180 @@
+{
+  "$kind": "Microsoft.AdaptiveDialog",
+  "$designer": {
+    "name": "LockedDownBot",
+    "description": "",
+    "id": "A79tBe",
+    "comment": "test"
+  },
+  "autoEndDialog": true,
+  "defaultResultProperty": "dialog.result",
+  "triggers": [
+    {
+      "$kind": "Microsoft.OnConversationUpdateActivity",
+      "$designer": {
+        "id": "376720",
+        "comment": "This trigger runs when a conversation update activity is sent to the bot. This indicates a user or bot being added or removed from a conversation."
+      },
+      "actions": [
+        {
+          "$kind": "Microsoft.Foreach",
+          "$designer": {
+            "id": "518944",
+            "name": "Loop: for each item",
+            "comment": "For each member added to the conversation."
+          },
+          "itemsProperty": "turn.Activity.membersAdded",
+          "actions": [
+            {
+              "$kind": "Microsoft.IfCondition",
+              "$designer": {
+                "id": "641773",
+                "name": "Branch: if/else",
+                "comment": "Checks that that member added ID does not match the bot ID. This prevents the greeting message from being sent when the bot is added to a conversation."
+              },
+              "condition": "=string(dialog.foreach.value.id) != string(turn.Activity.Recipient.id)",
+              "actions": [
+                {
+                  "$kind": "Microsoft.SendActivity",
+                  "$designer": {
+                    "id": "859266",
+                    "name": "Send a response"
+                  },
+                  "activity": "${SendActivity_Greeting()}"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "$kind": "Microsoft.OnUnknownIntent",
+      "$designer": {
+        "id": "mb2n1u",
+        "comment": "This trigger fires when an incoming activity is not handled by any other trigger."
+      },
+      "actions": [
+        {
+          "$kind": "Microsoft.HttpRequest",
+          "$designer": {
+            "id": "TRWLJ8",
+            "comment": "Call OpenAI service to work out intent..."
+          },
+          "resultProperty": "turn.results",
+          "method": "POST",
+          "url": "${settings.OPENAI_ENDPOINT}openai/deployments/${settings.OPENAI_MODEL}/chat/completions?api-version=2023-05-15",
+          "headers": {
+            "api-key": "${settings.OPENAI_SECRET}"
+          },
+          "responseType": "json",
+          "contentType": "application/json",
+          "body": {
+            "messages": [
+              {
+                "role": "system",
+                "content": "You are a helpful assistant. Reply with one of the four following responses. 'Greeting' when the user input is a simple greeting like 'hello'. 'BankBalance' when a user enquires about their bank balance. 'OpeningHours' if a user asks about opening hours of bank branches. 'Unknown' for anything else."
+              },
+              {
+                "role": "user",
+                "content": "${turn.Activity}"
+              }
+            ]
+          }
+        },
+        {
+          "$kind": "Microsoft.SendActivity",
+          "$designer": {
+            "id": "p5Qc2j"
+          },
+          "activity": "${SendActivity_p5Qc2j()}"
+        },
+        {
+          "$kind": "Microsoft.SwitchCondition",
+          "$designer": {
+            "id": "r0tkv1"
+          },
+          "condition": "turn.results.content.choices[0].message.content",
+          "cases": [
+            {
+              "actions": [
+                {
+                  "$kind": "Microsoft.SendActivity",
+                  "$designer": {
+                    "id": "LjxJMj"
+                  },
+                  "activity": "${SendActivity_LjxJMj()}"
+                }
+              ],
+              "value": "Greeting."
+            },
+            {
+              "value": "BankBalance",
+              "actions": [
+                {
+                  "$kind": "Microsoft.BeginDialog",
+                  "$designer": {
+                    "id": "fOxb7q"
+                  },
+                  "activityProcessed": true,
+                  "dialog": "BankBalances"
+                },
+                {
+                  "$kind": "Microsoft.SendActivity",
+                  "$designer": {
+                    "id": "1Bl3ks"
+                  },
+                  "activity": "${SendActivity_1Bl3ks()}"
+                }
+              ]
+            },
+            {
+              "value": "OpeningHours",
+              "actions": [
+                {
+                  "$kind": "Microsoft.BeginDialog",
+                  "$designer": {
+                    "id": "yjMWKV"
+                  },
+                  "activityProcessed": true,
+                  "dialog": "OpeningHours"
+                },
+                {
+                  "$kind": "Microsoft.SendActivity",
+                  "$designer": {
+                    "id": "Sl4TCl"
+                  },
+                  "activity": "${SendActivity_Sl4TCl()}"
+                }
+              ]
+            },
+            {
+              "value": "Unknown",
+              "actions": [
+                {
+                  "$kind": "Microsoft.SendActivity",
+                  "$designer": {
+                    "id": "lVGVGq"
+                  },
+                  "activity": "${SendActivity_lVGVGq()}"
+                }
+              ]
+            }
+          ],
+          "default": [
+            {
+              "$kind": "Microsoft.SendActivity",
+              "$designer": {
+                "id": "Nelnz0"
+              },
+              "activity": "${SendActivity_Nelnz0()}"
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "generator": "LockedDownBot.lg",
+  "id": "LockedDownBot",
+  "recognizer": "LockedDownBot.lu.qna"
+}

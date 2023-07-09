@@ -1,0 +1,9 @@
+[import](common.lg)
+
+# SendActivity_X18Hkq()
+[Activity
+    Text = ${SendActivity_X18Hkq_text()}
+]
+
+# SendActivity_X18Hkq_text()
+- Nothing to see here!!!
