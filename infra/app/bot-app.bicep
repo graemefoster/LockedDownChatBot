@@ -126,15 +126,15 @@ resource app 'Microsoft.Web/sites@2022-09-01' = {
         }
         {
           name: 'CosmosDbPartitionedStorage::cosmosDBEndpoint'
-          value: '@Microsoft.KeyVault(VaultName=${kvName};SecretName=${cosmosEndpoint})'
+          value: cosmosEndpoint
         }
         {
           name: 'CosmosDbPartitionedStorage::databaseId'
-          value: '@Microsoft.KeyVault(VaultName=${kvName};SecretName=${cosmosDatabaseId})'
+          value: cosmosDatabaseId
         }
         {
           name: 'CosmosDbPartitionedStorage::containerId'
-          value: '@Microsoft.KeyVault(VaultName=${kvName};SecretName=${cosmosContainerId})'
+          value: cosmosContainerId
         }
         {
           name: 'AzureBotTokenService_AUTHENTICATION_SECRET'
