@@ -11,6 +11,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Prompts", "Prompts", "{0A16
 		..\..\..\OpenAi\bankaccounts.json = ..\..\..\OpenAi\bankaccounts.json
 	EndProjectSection
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BotComposerOpenAi", "BotComposerOpenAi\BotComposerOpenAi.csproj", "{440DFD99-67B5-4B9B-9D03-AE1BDE919EEA}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +23,10 @@ Global
 		{4CCACBDA-BA3F-45A2-B289-F612E71F9EA1}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{4CCACBDA-BA3F-45A2-B289-F612E71F9EA1}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{4CCACBDA-BA3F-45A2-B289-F612E71F9EA1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{440DFD99-67B5-4B9B-9D03-AE1BDE919EEA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{440DFD99-67B5-4B9B-9D03-AE1BDE919EEA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{440DFD99-67B5-4B9B-9D03-AE1BDE919EEA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{440DFD99-67B5-4B9B-9D03-AE1BDE919EEA}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

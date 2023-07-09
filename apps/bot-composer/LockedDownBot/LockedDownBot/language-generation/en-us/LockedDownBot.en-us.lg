@@ -49,3 +49,17 @@
 
 # SendActivity_Sl4TCl_text()
 - Anything else I can do?
+# SendActivity_P3EGrX()
+[Activity
+    Text = ${SendActivity_P3EGrX_text()}
+]
+
+# SendActivity_P3EGrX_text()
+- ${dialog.result}
+# SendActivity_6u3PJV()
+[Activity
+    Text = ${SendActivity_6u3PJV_text()}
+]
+
+# SendActivity_6u3PJV_text()
+- HOLD ON!

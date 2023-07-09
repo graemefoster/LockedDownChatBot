@@ -339,6 +339,9 @@
     },
     {
       "$ref": "#/definitions/Microsoft.UrlEntityRecognizer"
+    },
+    {
+      "$ref": "#/definitions/OpenAiChat"
     }
   ],
   "definitions": {
@@ -4075,6 +4078,9 @@
         },
         {
           "$ref": "#/definitions/Microsoft.UpdateActivity"
+        },
+        {
+          "$ref": "#/definitions/OpenAiChat"
         },
         {
           "type": "string",
@@ -9462,6 +9468,46 @@
           "$ref": "#/definitions/equalsExpression"
         }
       ]
+    },
+    "OpenAiChat": {
+      "$role": "implements(Microsoft.IDialog)",
+      "title": "OpenAiChat",
+      "description": "Returns a completion from OpenAI with a system prompt",
+      "type": "object",
+      "required": [
+        "$kind"
+      ],
+      "additionalProperties": false,
+      "patternProperties": {
+        "^\\$": {
+          "title": "Tooling property",
+          "description": "Open ended property for tooling."
+        }
+      },
+      "properties": {
+        "systemPrompt": {
+          "$ref": "#/definitions/stringExpression",
+          "title": "SystemPrompt",
+          "description": "System Prompt"
+        },
+        "resultProperty": {
+          "$ref": "#/definitions/stringExpression",
+          "title": "Result",
+          "description": "Value from callers memory to store the result"
+        },
+        "$kind": {
+          "title": "Kind of dialog object",
+          "description": "Defines the valid properties for the component you are configuring (from a dialog .schema file)",
+          "type": "string",
+          "pattern": "^[a-zA-Z][a-zA-Z0-9.]*$",
+          "const": "OpenAiChat"
+        },
+        "$designer": {
+          "title": "Designer information",
+          "type": "object",
+          "description": "Extra information for the Bot Framework Composer."
+        }
+      }
     },
     "role": {
       "title": "$role",

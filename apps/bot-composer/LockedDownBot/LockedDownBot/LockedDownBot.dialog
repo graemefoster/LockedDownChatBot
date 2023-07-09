@@ -56,6 +56,28 @@
       },
       "actions": [
         {
+          "$kind": "Microsoft.SendActivity",
+          "$designer": {
+            "id": "mY7A3H"
+          },
+          "activity": ""
+        },
+        {
+          "$kind": "OpenAiChat",
+          "$designer": {
+            "id": "Vcj4Xi"
+          },
+          "systemPrompt": "You are a helpful assistant. Reply with one of the four following responses. 'Greeting' when the user input is a simple greeting like 'hello'. 'BankBalance' when a user enquires about their bank balance. 'OpeningHours' if a user asks about opening hours of bank branches. 'Unknown' for anything else.",
+          "resultProperty": "dialog.result"
+        },
+        {
+          "$kind": "Microsoft.SendActivity",
+          "$designer": {
+            "id": "P3EGrX"
+          },
+          "activity": "${SendActivity_P3EGrX()}"
+        },
+        {
           "$kind": "Microsoft.HttpRequest",
           "$designer": {
             "id": "TRWLJ8",
