@@ -55,11 +55,6 @@ resource sqlContainer 'Microsoft.DocumentDB/databaseAccounts/sqlDatabases/contai
         kind: 'Hash'
       }
     }
-    options: {
-      autoscaleSettings: {
-        maxThroughput: 400
-      }
-    }
   }
 }
 
@@ -100,7 +95,10 @@ resource privateEndpoint 'Microsoft.Network/privateEndpoints@2022-11-01' = {
 
 //allow web-app to connect via its managed identity
 //https://learn.microsoft.com/en-us/azure/cosmos-db/how-to-setup-rbac
-var cosmosDataContributorRoleId = '00000000-0000-0000-0000-000000000002'
+resource dataContributorRole 'Microsoft.DocumentDB/databaseAccounts/sqlRoleDefinitions@2023-04-15' existing = {
+  name: '00000000-0000-0000-0000-000000000002'
+  parent: database
+}
 
 resource webAppRbac 'Microsoft.Authorization/roleAssignments@2022-04-01' = {
   name: guid('${webAppManagedIdentityObjectId}-${database.id}')
@@ -108,7 +106,7 @@ resource webAppRbac 'Microsoft.Authorization/roleAssignments@2022-04-01' = {
   properties: {
     principalId: webAppManagedIdentityObjectId
     principalType: 'ServicePrincipal'
-    roleDefinitionId: cosmosDataContributorRoleId
+    roleDefinitionId: dataContributorRole.id
   }
 }
 

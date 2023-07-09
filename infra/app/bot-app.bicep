@@ -17,17 +17,16 @@ param cosmosEndpoint string
 param cosmosDatabaseId string
 param cosmosContainerId string
 
+// EXPERIMENTAL - BREAKS DEPLOYMENT :(
+// //Unclear if Bot Composer supports Managed Identity connections. Stored in KV for now
+// type cosmosConnectionDetailsType = {
+//   authKeySecretName: string
+//   endpoint: string
+//   databaseId: string
+//   containerId: string
+// }
 
-//Unclear if Bot Composer supports Managed Identity connections. Stored in KV for now
-type cosmosConnectionDetailsType = {
-  authKeySecretName: string
-  endpoint: string
-  databaseId: string
-  containerId: string
-}
-
-param cosmosConnectionDetails cosmosConnectionDetailsType
-
+// param cosmosConnectionDetails cosmosConnectionDetailsType
 
 resource botIdentity 'Microsoft.ManagedIdentity/userAssignedIdentities@2023-01-31' existing = {
   name: appServiceManagedIdentityName

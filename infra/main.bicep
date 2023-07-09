@@ -174,12 +174,6 @@ module app 'app/bot-app.bicep' = {
     cosmosContainerId: database.outputs.containerName
     cosmosDatabaseId: database.outputs.databaseName
     cosmosEndpoint: database.outputs.cosmosUrl
-    cosmosConnectionDetails: {
-      authKeySecretName: database.outputs.cosmosSecretName
-      containerId: database.outputs.containerName
-      databaseId: database.outputs.databaseName
-      endpoint: database.outputs.cosmosUrl
-    }
   }
 }
 
