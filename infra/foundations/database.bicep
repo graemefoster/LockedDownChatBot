@@ -95,6 +95,20 @@ resource privateEndpoint 'Microsoft.Network/privateEndpoints@2022-11-01' = {
   }
 }
 
+resource documentDbContributorRole 'Microsoft.Authorization/roleDefinitions@2022-04-01' existing = {
+  name: '5bd9cd88-fe45-4216-938b-f97437e15450'
+}
+
+resource contributorAssignment 'Microsoft.Authorization/roleAssignments@2022-04-01' = {
+  name: guid('${webAppManagedIdentityObjectId}-dbcontributor-${database.id}')
+  scope: database
+  properties: {
+    roleDefinitionId: documentDbContributorRole.id
+    principalId: webAppManagedIdentityObjectId
+    principalType: 'ServicePrincipal'
+  }
+}
+
 //allow web-app to connect via its managed identity
 //https://learn.microsoft.com/en-us/azure/cosmos-db/how-to-setup-rbac
 resource dataContributorRole 'Microsoft.DocumentDB/databaseAccounts/sqlRoleDefinitions@2023-04-15' existing = {
