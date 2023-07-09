@@ -1,7 +1,7 @@
 {
     "$schema": "https://schemas.botframework.com/schemas/component/v1.0/component.schema",
     "$role": "implements(Microsoft.IDialog)",
-    "title": "OpenAiChat",
+    "title": "OpenAiResponseWithSystemPrompt",
     "description": "Returns a completion from OpenAI with a system prompt",
     "type": "object",
     "additionalProperties": false,
@@ -10,6 +10,11 @@
             "$ref": "schema:#/definitions/stringExpression",
             "title": "SystemPrompt",
             "description": "System Prompt"
+        },
+        "useAllDialogueInput": {
+            "$ref": "schema:#/definitions/booleanExpression",
+            "title": "UseAllDialogueInput",
+            "description": "True to add more user-input from this dialogue to the prompt"
         },
         "resultProperty": {
             "$ref": "schema:#/definitions/stringExpression",

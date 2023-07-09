@@ -17,6 +17,13 @@
       },
       "actions": [
         {
+          "$kind": "Microsoft.SendActivity",
+          "$designer": {
+            "id": "l47k6j"
+          },
+          "activity": "${SendActivity_l47k6j()}"
+        },
+        {
           "$kind": "Microsoft.TextInput",
           "$designer": {
             "id": "AJxDID"

@@ -14,48 +14,20 @@
 
 # SendActivity_LjxJMj_text()
 - Hello to you too. How can I be of help?
-# SendActivity_lVGVGq()
-[Activity
-    Text = ${SendActivity_lVGVGq_text()}
-]
-
-# SendActivity_lVGVGq_text()
-- I'm sorry but I cannot help you with that. Let's just chat...
-# SendActivity_Nelnz0()
-[Activity
-    Text = ${SendActivity_Nelnz0_text()}
-]
-
-# SendActivity_Nelnz0_text()
-- Here? How!!
-# SendActivity_p5Qc2j()
-[Activity
-    Text = ${SendActivity_p5Qc2j_text()}
-]
-
-# SendActivity_p5Qc2j_text()
-- Raw: ${turn.lastresult.content.choices[0].message.content}
 # SendActivity_1Bl3ks()
 [Activity
     Text = ${SendActivity_1Bl3ks_text()}
 ]
 
 # SendActivity_1Bl3ks_text()
-- Anything else I can do?
+- Bank Balances
 # SendActivity_Sl4TCl()
 [Activity
     Text = ${SendActivity_Sl4TCl_text()}
 ]
 
 # SendActivity_Sl4TCl_text()
-- Anything else I can do?
-# SendActivity_P3EGrX()
-[Activity
-    Text = ${SendActivity_P3EGrX_text()}
-]
-
-# SendActivity_P3EGrX_text()
-- ${dialog.result}
+- Branch Information
 # SendActivity_6u3PJV()
 [Activity
     Text = ${SendActivity_6u3PJV_text()}
@@ -63,3 +35,24 @@
 
 # SendActivity_6u3PJV_text()
 - HOLD ON!
+# SendActivity_mY7A3H()
+[Activity
+    Text = ${SendActivity_mY7A3H_text()}
+]
+
+# SendActivity_mY7A3H_text()
+- ${turn.lastResult}
+# SendActivity_ufXf2h()
+[Activity
+    Text = ${SendActivity_ufXf2h_text()}
+]
+
+# SendActivity_ufXf2h_text()
+- ${dialog.detectedIntent.SuggestedPrompt}
+# SendActivity_HPpXr7()
+[Activity
+    Text = ${SendActivity_HPpXr7_text()}
+]
+
+# SendActivity_HPpXr7_text()
+- Hmm how did we get here?!

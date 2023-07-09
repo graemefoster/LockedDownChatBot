@@ -42,3 +42,10 @@
 
 # SendActivity_onrlSR_text()
 - Taking you back to the greeting dialogue :D
+# SendActivity_l47k6j()
+[Activity
+    Text = ${SendActivity_l47k6j_text()}
+]
+
+# SendActivity_l47k6j_text()
+- Welcome to Accounts...

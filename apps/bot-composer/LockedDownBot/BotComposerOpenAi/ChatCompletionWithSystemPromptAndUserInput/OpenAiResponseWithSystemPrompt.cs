@@ -4,53 +4,46 @@ using AdaptiveExpressions.Properties;
 using Azure;
 using Azure.AI.OpenAI;
 using Microsoft.Bot.Builder.Dialogs;
-using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json;
 
-namespace BotComposerOpenAi;
+namespace BotComposerOpenAi.ChatCompletionWithSystemPromptAndUserInput;
 
-public class OpenAiChat : Dialog
+/// <summary>
+/// Simple dialog. Provide a system prompt and returns a response given the User's input.
+/// </summary>
+public class OpenAiResponseWithSystemPrompt : Dialog
 {
-    private OpenAIClient? _client;
-    private string _model;
+    private readonly OpenAiClientFactory _openAiClientFactory;
 
     [JsonConstructor]
-    public OpenAiChat(
+    public OpenAiResponseWithSystemPrompt(
+        OpenAiClientFactory openAiClientFactory,
         [CallerFilePath] string sourceFilePath = "", 
         [CallerLineNumber] int sourceLineNumber = 0)
         : base()
     {
-        // var endpoint = config.GetValue<string>("OPENAI_Endpoint");
-        // var key = config.GetValue<string>("OPENAI_KEY");
-        // _model =  config.GetValue<string>("OPENAI_MODEL");
-        // _client = new Azure.AI.OpenAI.OpenAIClient(
-        //     new Uri(key),
-        //     new AzureKeyCredential(key));
+        _openAiClientFactory = openAiClientFactory;
         RegisterSourceLocation(sourceFilePath, sourceLineNumber);
     }
     
     [JsonProperty("$kind")]
-    public const string Kind = "OpenAiChat";
+    public const string Kind = "OpenAiResponseWithSystemPrompt";
     
     [JsonProperty("systemPrompt")]
     public StringExpression SystemPrompt { get; set; }
+
+    [JsonProperty("useAllDialogueInput")]
+    public BoolExpression UseAllDialogueInput { get; set; }
     
     [JsonProperty("resultProperty")]
     public StringExpression? ResultProperty { get; set; }
-
+    
     public override async Task<DialogTurnResult> BeginDialogAsync(DialogContext dc, object options = null,
-        CancellationToken cancellationToken = new CancellationToken())
+        CancellationToken cancellationToken = new())
     {
-        var config = (ImmutableDictionary<string, object>)dc.State["settings"];
-        var endpoint = (string)config["OPENAI_Endpoint"];
-        var key = (string)config["OPENAI_KEY"];
-        _model =  (string)config["OPENAI_MODEL"];
-        _client = _client ?? new Azure.AI.OpenAI.OpenAIClient(
-            new Uri(endpoint),
-            new AzureKeyCredential(key));
-        
-        var response = await _client.GetChatCompletionsAsync(
-            _model,
+        var client = _openAiClientFactory.GetFromDialogueContext(dc, out var model);
+        var response = await client.GetChatCompletionsAsync(
+            model,
             new ChatCompletionsOptions()
             {
                 Messages =

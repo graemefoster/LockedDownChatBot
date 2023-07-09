@@ -1,3 +1,5 @@
+using BotComposerOpenAi.ChatCompletionWithSystemPromptAndUserInput;
+using BotComposerOpenAi.TryToFindUserIntent;
 using Microsoft.Bot.Builder;
 using Microsoft.Bot.Builder.Dialogs.Declarative;
 using Microsoft.Extensions.Configuration;
@@ -9,11 +11,7 @@ namespace BotComposerOpenAi;
 /// Definition of a <see cref="Microsoft.Bot.Builder.BotComponent"/> that allows registration of
 /// services, custom actions, memory scopes and adapters.
 /// </summary>
-/// See https://learn.microsoft.com/en-us/composer/how-to-create-custom-actions
-/// To make your components available to the system you derive from BotComponent and register services to add functionality.
-/// These components then are consumed in appropriate places by the systems that need them. When using Composer, Startup gets called
-/// automatically on the components by the bot runtime, as long as the components are registered in the configuration.
-public class OpenAiChatBotComponent : BotComponent
+public class OpenAiComponents : BotComponent
 {
     /// <summary>
     /// Entry point for bot components to register types in resource explorer, consume configuration and register services in the
@@ -24,6 +22,8 @@ public class OpenAiChatBotComponent : BotComponent
     public override void ConfigureServices(IServiceCollection services, IConfiguration configuration)
     {
         // Anything that could be done in Startup.ConfigureServices can be done here.
-        services.AddSingleton<DeclarativeType>(sp => new DeclarativeType<OpenAiChat>(OpenAiChat.Kind));
+        services.AddSingleton<OpenAiClientFactory>();
+        services.AddSingleton<DeclarativeType>(sp => new DeclarativeType<OpenAiResponseWithSystemPrompt>(OpenAiResponseWithSystemPrompt.Kind));
+        services.AddSingleton<DeclarativeType>(sp => new DeclarativeType<OpenAiDetectIntent>(OpenAiDetectIntent.Kind));
     }
 }
