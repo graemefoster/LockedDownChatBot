@@ -24,7 +24,7 @@ resource database 'Microsoft.DocumentDB/databaseAccounts@2023-04-15' = {
       }
     ]
     databaseAccountOfferType: 'Standard'
-    publicNetworkAccess: 'SecuredByPerimeter'
+    publicNetworkAccess: 'Enabled'
     networkAclBypass: 'AzureServices'
   }
 
