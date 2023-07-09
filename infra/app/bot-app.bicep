@@ -117,23 +117,23 @@ resource app 'Microsoft.Web/sites@2022-09-01' = {
           value: '@Microsoft.KeyVault(VaultName=${kvName};SecretName=${openAiSecretName})'
         }
         {
-          name: 'runtimeSettings::storage'
+          name: 'runtimeSettings__storage'
           value: 'CosmosDbPartitionedStorage'
         }
         {
-          name: 'CosmosDbPartitionedStorage::authKey'
+          name: 'CosmosDbPartitionedStorage__authKey'
           value: '@Microsoft.KeyVault(VaultName=${kvName};SecretName=${cosmosAuthKeySecretName})'
         }
         {
-          name: 'CosmosDbPartitionedStorage::cosmosDBEndpoint'
+          name: 'CosmosDbPartitionedStorage__cosmosDBEndpoint'
           value: cosmosEndpoint
         }
         {
-          name: 'CosmosDbPartitionedStorage::databaseId'
+          name: 'CosmosDbPartitionedStorage__databaseId'
           value: cosmosDatabaseId
         }
         {
-          name: 'CosmosDbPartitionedStorage::containerId'
+          name: 'CosmosDbPartitionedStorage__containerId'
           value: cosmosContainerId
         }
         {

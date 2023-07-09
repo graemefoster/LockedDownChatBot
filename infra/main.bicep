@@ -142,7 +142,7 @@ module database 'foundations/database.bicep' = {
   scope: rg
   params: {
     location: location
-    databaseAccountName: '${abbrs.documentDBDatabaseAccounts}botstorage'
+    databaseAccountName: '${abbrs.documentDBDatabaseAccounts}${toLower(environmentName)}-bot'
     webAppManagedIdentityObjectId: managedIdentities.outputs.aspIdentityPrincipalId
     kvName: kvName
     privateDnsZoneId: vnet.outputs.cosmosPrivateDnsZoneId
