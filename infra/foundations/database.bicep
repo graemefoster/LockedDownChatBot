@@ -100,13 +100,13 @@ resource dataContributorRole 'Microsoft.DocumentDB/databaseAccounts/sqlRoleDefin
   parent: database
 }
 
-resource webAppRbac 'Microsoft.Authorization/roleAssignments@2022-04-01' = {
+//Doesn't use the normal RoleAssignment - this one is specific to Cosmos.
+resource webAppRbac 'Microsoft.DocumentDB/databaseAccounts/sqlRoleAssignments@2023-04-15' = {
   name: guid('${webAppManagedIdentityObjectId}-${database.id}')
-  scope: database
   properties: {
     principalId: webAppManagedIdentityObjectId
-    principalType: 'ServicePrincipal'
     roleDefinitionId: dataContributorRole.id
+    scope: database.id
   }
 }
 
