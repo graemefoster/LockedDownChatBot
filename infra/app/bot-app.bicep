@@ -113,7 +113,7 @@ resource app 'Microsoft.Web/sites@2022-09-01' = {
           value: openAiEndpoint
         }
         {
-          name: 'OPENAI_SECRET'
+          name: 'OPENAI_KEY'
           value: '@Microsoft.KeyVault(VaultName=${kvName};SecretName=${openAiSecretName})'
         }
         {

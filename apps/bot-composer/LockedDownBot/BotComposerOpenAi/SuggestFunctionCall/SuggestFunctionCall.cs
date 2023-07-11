@@ -13,7 +13,8 @@ namespace BotComposerOpenAi.TryToFindUserIntent;
 /// </summary>
 public class OpenAiDetectIntent : Dialog
 {
-    private readonly OpenAiClientFactory _openAiClientFactory;
+    private OpenAIClient? _client;
+    private string? _model;
 
     private const string SystemPromptInternal = @"
 {systemPrompt}
@@ -35,7 +36,6 @@ Given their input so-far, what would you ask the user next?
         [CallerLineNumber] int sourceLineNumber = 0)
         : base()
     {
-        _openAiClientFactory = openAiClientFactory;
         RegisterSourceLocation(sourceFilePath, sourceLineNumber);
     }
     
@@ -57,7 +57,14 @@ Given their input so-far, what would you ask the user next?
     public override async Task<DialogTurnResult> BeginDialogAsync(DialogContext dc, object options = null,
         CancellationToken cancellationToken = new())
     {
-        var client = _openAiClientFactory.GetFromDialogueContext(dc, out var model);
+        var config = (ImmutableDictionary<string, object>)dc.State["settings"];
+        var endpoint = (string)config["OPENAI_Endpoint"];
+        var key = (string)config["OPENAI_KEY"];
+        _model ??=  (string)config["OPENAI_MODEL"];
+        
+        _client ??= new OpenAIClient(
+            new Uri(endpoint),
+            new AzureKeyCredential(key));
 
         var intents = Intents.GetValue(dc.State);
         var getIntentPrompt = SystemPromptInternal
@@ -66,8 +73,8 @@ Given their input so-far, what would you ask the user next?
                 "{intents}",
                 string.Join(',',  intents));
         
-        var response = await client.GetChatCompletionsAsync(
-            model,
+        var response = await _client.GetChatCompletionsAsync(
+            _model,
             new ChatCompletionsOptions()
             {
                 Messages =
@@ -94,8 +101,8 @@ Given their input so-far, what would you ask the user next?
             .Replace("{systemPrompt}", SystemPrompt.GetValue(dc.State))
             .Replace("{intents}", string.Join(',',  intents));
         
-        var moreInfoResponse = await client.GetChatCompletionsAsync(
-            model,
+        var moreInfoResponse = await _client.GetChatCompletionsAsync(
+            _model,
             new ChatCompletionsOptions()
             {
                 Messages =
@@ -110,7 +117,7 @@ Given their input so-far, what would you ask the user next?
             Unknown = true,
             SuggestedPrompt = moreInfoResponse.Value.Choices[0].Message.Content
         };
-        dc.State.SetValue(ResultProperty.GetValue(dc.State), moreInfoResult);
+        dc.State.SetValue(this.ResultProperty.GetValue(dc.State), moreInfoResult);
         return await dc.EndDialogAsync(result: moreInfoResult, cancellationToken);
     }
 

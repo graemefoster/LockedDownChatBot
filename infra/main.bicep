@@ -33,11 +33,12 @@ param openAiEndpoint string
 param localBotAadId string = ''
 @description('Required for SingleTenant bot. Else can be empty')
 param localBotAadTenant string = ''
-@allowed(['MultiTenant', 'SingleTenant'])
+@allowed([ 'MultiTenant', 'SingleTenant', '' ])
 param localBotAadTenantType string = 'MultiTenant'
 
-
 var abbrs = loadJsonContent('./abbreviations.json')
+
+var resourceNameSuffix = toLower(replace(environmentName, '-', ''))
 
 // tags that should be applied to all resources.
 var tags = {
@@ -66,7 +67,6 @@ resource rg 'Microsoft.Resources/resourceGroups@2022-09-01' existing = {
 //not nice, but I want to get a certificate into KV before running this template
 var kvName = rg.tags['env-kv-name']
 
-
 // Add resources to be provisioned below.
 // A full example that leverages azd bicep modules can be seen in the todo-python-mongo template:
 // https://github.com/Azure-Samples/todo-python-mongo/tree/main/infra
@@ -94,7 +94,7 @@ module openAiPrivateEndpoint 'foundations/openai-private-endpoint.bicep' = {
   }
 }
 
-var gwayName = '${abbrs.networkApplicationGateways}gway'
+var gwayName = '${abbrs.networkApplicationGateways}${resourceNameSuffix}'
 
 module managedIdentities 'foundations/identities.bicep' = {
   name: '${deployment().name}-identities'
@@ -119,15 +119,15 @@ module core 'foundations/keyvault.bicep' = {
   }
 }
 
-var fwallPolicyName = '${abbrs.networkFirewallPolicies}fwallpcy'
+var fwallPolicyName = '${abbrs.networkFirewallPolicies}${resourceNameSuffix}'
 
 module firewall 'foundations/firewall.bicep' = {
   name: '${deployment().name}-fwall'
   scope: rg
   params: {
-    firewallPipName: '${abbrs.networkPublicIPAddresses}fwall'
-    firewallMgmtPipName: '${abbrs.networkPublicIPAddresses}fwallmgmt'
-    firewallName: '${abbrs.networkAzureFirewalls}botfwall'
+    firewallPipName: '${abbrs.networkPublicIPAddresses}${resourceNameSuffix}-fwall'
+    firewallMgmtPipName: '${abbrs.networkPublicIPAddresses}${resourceNameSuffix}-fwallmgmt'
+    firewallName: '${abbrs.networkAzureFirewalls}${resourceNameSuffix}-botfwall'
     firewallPolicyName: fwallPolicyName
     firewallSubnetId: vnet.outputs.firewallSubnetId
     firewallManagementSubnetId: vnet.outputs.firewallManagementSubnetId
@@ -142,7 +142,7 @@ module database 'foundations/database.bicep' = {
   scope: rg
   params: {
     location: location
-    databaseAccountName: '${abbrs.documentDBDatabaseAccounts}${toLower(environmentName)}-bot'
+    databaseAccountName: '${abbrs.documentDBDatabaseAccounts}${resourceNameSuffix}-bot'
     webAppManagedIdentityObjectId: managedIdentities.outputs.aspIdentityPrincipalId
     kvName: kvName
     privateDnsZoneId: vnet.outputs.cosmosPrivateDnsZoneId
@@ -150,13 +150,13 @@ module database 'foundations/database.bicep' = {
   }
 }
 
-var appName = '${abbrs.webSitesAppService}${uniqueString(rg.name)}-bot'
+var appName = '${abbrs.webSitesAppService}${resourceNameSuffix}-bot'
 
 module app 'app/bot-app.bicep' = {
   name: '${deployment().name}-app'
   scope: rg
   params: {
-    aspName: '${abbrs.webServerFarms}botasp'
+    aspName: '${abbrs.webServerFarms}${resourceNameSuffix}'
     appName: appName
     botCustomHostName: chatApiCustomHost
     location: location
@@ -183,7 +183,7 @@ module bot 'bot/bot-service.bicep' = {
   name: '${deployment().name}-bot'
   scope: rg
   params: {
-    botName: '${environmentName}-bottestfwall'
+    botName: '${environmentName}-bot'
     hostName: gatewayCustomHostName
     botIdentityName: app.outputs.botIdentityName
     logAnalyticsId: core.outputs.logAnalyticsId

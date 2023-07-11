@@ -37,14 +37,7 @@ var subscriptionResource = armClient
     .GetDefaultSubscription();
 
 //check for KeyVault
-var expectedKvName =
-    $"{Convert.ToBase64String(
-                SHA512.Create().ComputeHash(
-                    Encoding.UTF8.GetBytes(resourceGroup)))
-            .Substring(0, 6)}botkv"
-        .ToLowerInvariant()
-        .Replace("-", "")
-        .Replace("=", "");
+var expectedKvName =$"kv-{azdEnvironment.Replace("-", "").Replace("_", "").ToLowerInvariant()}";
 
 Console.WriteLine($"Checking for existing of Resource Group: {resourceGroup}");
 var rg = subscriptionResource

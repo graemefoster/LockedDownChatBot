@@ -13,7 +13,7 @@ public class OpenAiClientFactory
     public OpenAIClient GetFromDialogueContext(DialogContext ctx, out string model)
     {
         var config = (ImmutableDictionary<string, object>)ctx.State["settings"];
-        var endpoint = (string)config["OPENAI_Endpoint"];
+        var endpoint = (string)config["OPENAI_ENDPOINT"];
         var key = (string)config["OPENAI_KEY"];
 
         model = (string)config["OPENAI_MODEL"];
