@@ -17,20 +17,6 @@
       },
       "actions": [
         {
-          "$kind": "Microsoft.TextInput",
-          "$designer": {
-            "id": "AJxDID"
-          },
-          "disabled": false,
-          "maxTurnCount": 3,
-          "alwaysPrompt": false,
-          "allowInterruptions": false,
-          "unrecognizedPrompt": "",
-          "invalidPrompt": "",
-          "prompt": "${TextInput_Prompt_AJxDID()}",
-          "property": "dialog.initialAsk"
-        },
-        {
           "$kind": "Microsoft.EditArray",
           "$designer": {
             "id": "HkifG3"
@@ -71,9 +57,10 @@
               "$designer": {
                 "id": "6BJFyN"
               },
-              "systemPrompt": "You are a bank teller.\\n\\nWork out what the customer wants to do and respond with the function named \"customerInformation\"\\n\\nYou must return only the parameters in the sample.\\nYou must return the value \"UNKNOWN\" for missing parameters.\\nDo not make up parameters.",
-              "function": "{     \"name\": \"customerInformation\",     \"description\": \"get some information on the customers bank account\",     \"parameters\": {         \"type\": \"object\",         \"properties\": {             \"accountNumber\": {                 \"type\": \"string\",                 \"description\": \"The bank account number\"             },             \"service\": {                 \"type\": \"string\",                 \"enum\": [                     \"balance\",                     \"details\",                     \"payments\",                     \"schedules\",                     \"unknown\"                 ],                 \"description\": \"What the user wants to do\"             }         }     } }",
-              "resultProperty": "dialog.suggestedAction"
+              "resultProperty": "dialog.suggestedAction",
+              "inputs": "=conversation.userInput",
+              "systemPrompt": "You are a banking application.",
+              "function": "{   \"name\": \"customerInformation\",   \"description\": \"get some information on the customers bank account\",   \"parameters\": {     \"type\": \"object\",     \"properties\": {       \"accountNumber\": {         \"type\": \"string\",         \"description\": \"The bank account number\"       },       \"service\": {         \"type\": \"string\",         \"enum\": [           \"balance\",           \"details\",           \"payments\",           \"schedules\",           \"unknown\"         ],         \"description\": \"What the user wants to do\"       }     }   } }"
             },
             {
               "$kind": "Microsoft.IfCondition",
@@ -109,7 +96,16 @@
                   "unrecognizedPrompt": "",
                   "invalidPrompt": "",
                   "prompt": "${TextInput_Prompt_tnJNIB()}",
-                  "property": "dialog.initialAsk"
+                  "property": "turn.input"
+                },
+                {
+                  "$kind": "Microsoft.EditArray",
+                  "$designer": {
+                    "id": "J8smWM"
+                  },
+                  "changeType": "push",
+                  "itemsProperty": "conversation.userInput",
+                  "value": "=turn.input"
                 }
               ]
             }

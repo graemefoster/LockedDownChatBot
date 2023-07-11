@@ -17,7 +17,7 @@
             "description": "System Prompt"
         },
         "inputs": {
-            "$ref": "schema:#/definitions/booleanExpression",
+            "$ref": "schema:#/definitions/arrayExpression",
             "title": "Inputs to look for intent over",
             "description": "Pass in any text entered by the User to look for intent within"
         },

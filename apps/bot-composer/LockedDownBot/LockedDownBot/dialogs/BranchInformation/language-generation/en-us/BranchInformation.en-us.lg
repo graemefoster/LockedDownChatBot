@@ -1,1 +1,9 @@
 [import](common.lg)
+
+# SendActivity_tKct2A()
+[Activity
+    Text = ${SendActivity_tKct2A_text()}
+]
+
+# SendActivity_tKct2A_text()
+- ${dialog.suggestedAction}

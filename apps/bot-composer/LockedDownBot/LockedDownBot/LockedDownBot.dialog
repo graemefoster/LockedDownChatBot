@@ -56,6 +56,15 @@
       },
       "actions": [
         {
+          "$kind": "Microsoft.EditArray",
+          "$designer": {
+            "id": "xYVPCy"
+          },
+          "changeType": "push",
+          "itemsProperty": "conversation.userInput",
+          "value": "=turn.activity.text"
+        },
+        {
           "$kind": "OpenAiDetectIntent",
           "$designer": {
             "id": "5NbhZV"
@@ -67,7 +76,8 @@
           ],
           "systemPrompt": "You are a Bank Teller.",
           "useAllDialogueInput": false,
-          "resultProperty": "dialog.detectedIntent"
+          "resultProperty": "dialog.detectedIntent",
+          "inputs": "=conversation.userInput"
         },
         {
           "$kind": "Microsoft.IfCondition",
@@ -106,13 +116,6 @@
                     "id": "LjxJMj"
                   },
                   "activity": "${SendActivity_LjxJMj()}"
-                },
-                {
-                  "$kind": "Microsoft.RepeatDialog",
-                  "$designer": {
-                    "id": "j8Ug8s"
-                  },
-                  "activityProcessed": true
                 }
               ],
               "value": "Greeting"
@@ -123,17 +126,10 @@
                 {
                   "$kind": "Microsoft.BeginDialog",
                   "$designer": {
-                    "id": "fOxb7q"
+                    "id": "Csyurg"
                   },
                   "activityProcessed": true,
                   "dialog": "BankBalances"
-                },
-                {
-                  "$kind": "Microsoft.SendActivity",
-                  "$designer": {
-                    "id": "1Bl3ks"
-                  },
-                  "activity": "${SendActivity_1Bl3ks()}"
                 }
               ]
             },
@@ -143,17 +139,10 @@
                 {
                   "$kind": "Microsoft.BeginDialog",
                   "$designer": {
-                    "id": "yjMWKV"
+                    "id": "f8kfWd"
                   },
                   "activityProcessed": true,
-                  "dialog": "OpeningHours"
-                },
-                {
-                  "$kind": "Microsoft.SendActivity",
-                  "$designer": {
-                    "id": "Sl4TCl"
-                  },
-                  "activity": "${SendActivity_Sl4TCl()}"
+                  "dialog": "BranchInformation"
                 }
               ]
             }

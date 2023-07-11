@@ -1,12 +1,5 @@
 [import](common.lg)
 
-# TextInput_Prompt_AJxDID()
-[Activity
-    Text = ${TextInput_Prompt_AJxDID_text()}
-]
-
-# TextInput_Prompt_AJxDID_text()
-- How can I help with your Bank Accounts?
 # SendActivity_0IWTGe()
 [Activity
     Text = ${SendActivity_0IWTGe_text()}

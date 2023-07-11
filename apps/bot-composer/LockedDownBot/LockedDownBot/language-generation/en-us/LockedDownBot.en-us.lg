@@ -14,20 +14,6 @@
 
 # SendActivity_LjxJMj_text()
 - Hello to you too. How can I be of help?
-# SendActivity_1Bl3ks()
-[Activity
-    Text = ${SendActivity_1Bl3ks_text()}
-]
-
-# SendActivity_1Bl3ks_text()
-- Bank Balances
-# SendActivity_Sl4TCl()
-[Activity
-    Text = ${SendActivity_Sl4TCl_text()}
-]
-
-# SendActivity_Sl4TCl_text()
-- Branch Information
 # SendActivity_6u3PJV()
 [Activity
     Text = ${SendActivity_6u3PJV_text()}

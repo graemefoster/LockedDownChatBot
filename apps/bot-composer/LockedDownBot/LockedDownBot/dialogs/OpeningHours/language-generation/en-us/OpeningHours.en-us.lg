@@ -1,9 +1,0 @@
-[import](common.lg)
-
-# SendActivity_X18Hkq()
-[Activity
-    Text = ${SendActivity_X18Hkq_text()}
-]
-
-# SendActivity_X18Hkq_text()
-- We are in the general Bank Information dialogue.

@@ -13,7 +13,16 @@ public class OpenAiSuggestFunctionCall : Dialog
 {
     private readonly OpenAiClientFactory _openAiClientFactory;
 
-    private const string SystemPromptInternal = @"{systemPrompt}\nFUNCTION:\n{function}";
+    private const string SystemPromptInternal = @"Read the users input and respond in JSON with the arguments to call the function named ""customerInformation"".
+
+- DO NOT invent parameters.
+- Use the value UNKNOWN for arguments you don't know.
+
+{systemPrompt}
+
+``` json
+{function}
+```";
 
     [JsonConstructor]
     public OpenAiSuggestFunctionCall(
@@ -66,7 +75,8 @@ public class OpenAiSuggestFunctionCall : Dialog
                                 gptFriendlyFunctionInput //affects the output format...
                             )
                             .Replace("\\n", "\n")
-                    ),
+                            .ReplaceLineEndings("\n")
+                        ),
                     new ChatMessage(
                         ChatRole.User, input)
                 },
@@ -78,19 +88,28 @@ public class OpenAiSuggestFunctionCall : Dialog
             }, cancellationToken);
 
         var result = response;
-        var resultObject = JsonConvert.DeserializeObject<Dictionary<string, string>>(result)!;
-        var resultParameters = resultObject.Keys;
+        Dictionary<string, object> resultProperties;
+        try
+        {
+            resultProperties = JsonConvert.DeserializeObject<Dictionary<string, object>>(result);
+        }
+        catch (Exception)
+        {
+            resultProperties = JsonConvert.DeserializeObject<OpenAiFunctionResponse>(result)!.Parameters;
+        }
+
+        var resultParameters = resultProperties.Keys;
         var activityResponse = new SuggestFunctionCallResponse()
         {
-            Response = resultObject
+            Response = resultProperties
         };
 
         //check for all expected parameters:
         var functionDefinition = JsonConvert.DeserializeObject<JsonSchemaFunctionInput>(Function.GetValue(dc.State))!;
         var parameters = functionDefinition.Parameters.Properties.Select(x => x.Key);
         var missingParameters = parameters.Any(x =>
-            !resultParameters.Contains(x) || resultObject[x]
-                .Equals("UNKNOWN", StringComparison.InvariantCultureIgnoreCase));
+            !resultParameters.Contains(x) || resultProperties[x]
+                .ToString().Equals("UNKNOWN", StringComparison.InvariantCultureIgnoreCase));
         if (!missingParameters)
         {
             activityResponse.Complete = true;
@@ -136,16 +155,16 @@ public class SuggestFunctionCallResponse
 public class OpenAiFunctionResponse
 {
     public string Name { get; set; }
-    public Dictionary<string, string> Parameters { get; set; }
+    public Dictionary<string, object> Parameters { get; set; }
 }
 
 public class JsonSchemaFunctionInput
 {
     public string Name { get; set; }
-    public JsonSchemaFunctionParameters Parameters { get; set; }
+    public JsonSchemaFunctionInputParameters Parameters { get; set; }
 }
 
-public class JsonSchemaFunctionParameters
+public class JsonSchemaFunctionInputParameters
 {
     public Dictionary<string, object> Properties { get; set; }
 }

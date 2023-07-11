@@ -9508,7 +9508,7 @@
           "description": "System Prompt"
         },
         "inputs": {
-          "$ref": "#/definitions/booleanExpression",
+          "$ref": "#/definitions/arrayExpression",
           "title": "Inputs to look for intent over",
           "description": "Pass in any text entered by the User to look for intent within"
         },
@@ -9553,7 +9553,7 @@
           "description": "System Prompt"
         },
         "inputs": {
-          "$ref": "#/definitions/booleanExpression",
+          "$ref": "#/definitions/arrayExpression",
           "title": "Inputs to look for intent over",
           "description": "Pass in any text entered by the User to look for intent within"
         },
@@ -9603,7 +9603,7 @@
           "description": "Json Schema representation of function"
         },
         "inputs": {
-          "$ref": "#/definitions/booleanExpression",
+          "$ref": "#/definitions/arrayExpression",
           "title": "Inputs to look for intent over",
           "description": "Pass in any text entered by the User to look for intent within"
         },
