@@ -1,8 +1,8 @@
 {
     "$schema": "https://schemas.botframework.com/schemas/component/v1.0/component.schema",
     "$role": "implements(Microsoft.IDialog)",
-    "title": "OpenAiDetectIntent",
-    "description": "Recognises Intent, or returns a suggested dialogue to get closer.",
+    "title": "OpenAiSuggestFunctionCall",
+    "description": "Extracts key words to help create a function all.",
     "type": "object",
     "additionalProperties": false,
     "properties": {
@@ -11,15 +11,10 @@
             "title": "SystemPrompt",
             "description": "System Prompt"
         },
-        "intents": {
-            "$ref": "schema:#/definitions/arrayExpression",
-            "title": "SystemPrompt",
-            "description": "System Prompt"
-        },
-        "useAllDialogueInput": {
-            "$ref": "schema:#/definitions/booleanExpression",
-            "title": "UseAllDialogueInput",
-            "description": "True to add more user-input from this dialogue to the prompt"
+        "function": {
+            "$ref": "schema:#/definitions/stringExpression",
+            "title": "Function",
+            "description": "Json Schema representation of function"
         },
         "resultProperty": {
             "$ref": "schema:#/definitions/stringExpression",

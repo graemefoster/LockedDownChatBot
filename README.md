@@ -8,6 +8,12 @@ A sample application showing a secure setup with
 - Firewalls
 - Application Gateways
 
+# Learnings
+
+- Use GPT3.5-Turbo >= 0613. This model has been trained on functions (see [here](https://platform.openai.com/docs/guides/gpt/function-calling))
+- Still need to be careful with Function format... Windows newline in the JSON causes different response formats to Unix.
+- MS API doesn't support function calling via its API, but (this[https://codeconfessions.substack.com/p/creating-chatgpt-plugins-using-the]) looks useful 
+- Bot Composer custom dialogues are really useful, but won't work in Power Virtual Assistants. However you could use a custom skill / logic app / external API to abstract Open AI calls in this scenario.
 # Why?
 
 As of July 2023 the Azure Open AI support is maturing, but it still missing a few features to enable some experiences.

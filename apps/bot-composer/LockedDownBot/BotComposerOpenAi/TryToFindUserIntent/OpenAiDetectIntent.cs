@@ -15,27 +15,26 @@ public class OpenAiDetectIntent : Dialog
 {
     private readonly OpenAiClientFactory _openAiClientFactory;
 
-    private const string SystemPromptInternal = @"
-{systemPrompt}
+    private const string SystemPromptInternal = @"{systemPrompt}
+
 Find the INTENT of the user's input. 
 Possible intents are {intents}. Use ""Unknown"" if the intent is not in this list.
 Respond with the intent as a single word. 
 ";
 
-    private const string GetMoreInfoPrompt = @"
-{systemPrompt}
+    private const string GetMoreInfoPrompt = @"{systemPrompt}
+
 You need to find the user's intent. Possible intents are {intents}.
 Given their input so-far, what would you ask the user next? 
 ";
 
     [JsonConstructor]
     public OpenAiDetectIntent(
-        OpenAiClientFactory openAiClientFactory,
         [CallerFilePath] string sourceFilePath = "", 
         [CallerLineNumber] int sourceLineNumber = 0)
         : base()
     {
-        _openAiClientFactory = openAiClientFactory;
+        _openAiClientFactory = new OpenAiClientFactory();
         RegisterSourceLocation(sourceFilePath, sourceLineNumber);
     }
     
@@ -77,7 +76,7 @@ Given their input so-far, what would you ask the user next?
                 }
             }, cancellationToken);
 
-        var result = response.Value.Choices[0].Message.Content;
+        var result = response;
         if (intents.Contains(result))
         {
             var dialogueResult = new IntentResult()
@@ -108,7 +107,7 @@ Given their input so-far, what would you ask the user next?
         var moreInfoResult = new IntentResult()
         {
             Unknown = true,
-            SuggestedPrompt = moreInfoResponse.Value.Choices[0].Message.Content
+            SuggestedPrompt = moreInfoResponse
         };
         dc.State.SetValue(ResultProperty.GetValue(dc.State), moreInfoResult);
         return await dc.EndDialogAsync(result: moreInfoResult, cancellationToken);

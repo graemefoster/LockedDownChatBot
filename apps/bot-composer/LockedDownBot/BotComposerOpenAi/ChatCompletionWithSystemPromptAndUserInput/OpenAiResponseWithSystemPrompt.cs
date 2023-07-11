@@ -22,7 +22,7 @@ public class OpenAiResponseWithSystemPrompt : Dialog
         [CallerLineNumber] int sourceLineNumber = 0)
         : base()
     {
-        _openAiClientFactory = openAiClientFactory;
+        _openAiClientFactory = new OpenAiClientFactory();
         RegisterSourceLocation(sourceFilePath, sourceLineNumber);
     }
     
@@ -54,7 +54,7 @@ public class OpenAiResponseWithSystemPrompt : Dialog
             }, cancellationToken);
 
         
-        var result = response.Value.Choices[0].Message.Content;
+        var result = response;
         if (this.ResultProperty != null)
         {
             dc.State.SetValue(this.ResultProperty.GetValue(dc.State), result);

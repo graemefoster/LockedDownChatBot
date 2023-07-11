@@ -17,13 +17,6 @@
       },
       "actions": [
         {
-          "$kind": "Microsoft.SendActivity",
-          "$designer": {
-            "id": "l47k6j"
-          },
-          "activity": "${SendActivity_l47k6j()}"
-        },
-        {
           "$kind": "Microsoft.TextInput",
           "$designer": {
             "id": "AJxDID"
@@ -38,87 +31,114 @@
           "property": "dialog.initialAsk"
         },
         {
-          "$kind": "Microsoft.HttpRequest",
+          "$kind": "Microsoft.EditArray",
           "$designer": {
-            "id": "8EIVbi"
+            "id": "HkifG3"
           },
-          "resultProperty": "turn.results",
-          "method": "POST",
-          "body": {
-            "messages": [
-              {
-                "role": "system",
-                "content": "You are a bank machine that ALWAYS responds with entities extracted from the text in a JSON format: { \"operation\": \"\", \"accountNumber\": \"\", \"error\": \"\" }\n\nUnderstood operations:\n(1) GetAccountBalance - for anything related to account balances \n(2) GetLastTransactions - for anything related to recent transactions\n(3) GetUpcomingPayments - for anything related to upcoming payments\n(4) GetDirectDebit - for anything related to direct debit schedules\n(5) Unknown - for anything else\n\n-----\n"
-              },
-              {
-                "role": "user",
-                "content": "${turn.Activity}"
-              }
-            ]
-          },
-          "url": "${settings.OPENAI_ENDPOINT}openai/deployments/${settings.OPENAI_MODEL}/chat/completions?api-version=2023-05-15",
-          "headers": {
-            "api-key": "${settings.OPENAI_KEY}"
-          },
-          "contentType": "application/json",
-          "responseType": "json"
+          "changeType": "push",
+          "itemsProperty": "dialog.attempts",
+          "value": "1"
         },
         {
-          "$kind": "Microsoft.SendActivity",
+          "$kind": "Microsoft.EditArray",
           "$designer": {
-            "id": "xvaExX"
+            "id": "yhCfAp"
           },
-          "activity": "${SendActivity_xvaExX()}"
+          "changeType": "push",
+          "itemsProperty": "dialog.attempts",
+          "value": "2"
         },
         {
-          "$kind": "Microsoft.IfCondition",
+          "$kind": "Microsoft.EditArray",
           "$designer": {
-            "id": "zeLgvy"
+            "id": "nUlSq7"
           },
-          "condition": "=json(turn.results.content.choices[0].message.content).error != \"\" || json(turn.results.content.choices[0].message.content).operation == \"Unknown\"",
+          "itemsProperty": "dialog.attempts",
+          "changeType": "push",
+          "value": "3"
+        },
+        {
+          "$kind": "Microsoft.Foreach",
+          "$designer": {
+            "id": "hSk7V9"
+          },
+          "index": "dialog.foreach.index",
+          "value": "dialog.foreach.value",
+          "itemsProperty": "dialog.attempts",
           "actions": [
             {
-              "$kind": "Microsoft.SendActivity",
+              "$kind": "OpenAiSuggestFunctionCall",
               "$designer": {
-                "id": "vBzhYS"
+                "id": "6BJFyN"
               },
-              "activity": "${SendActivity_vBzhYS()}"
-            }
-          ],
-          "elseActions": [
+              "systemPrompt": "You are a bank teller.\\n\\nWork out what the customer wants to do and respond with the function named \"customerInformation\"\\n\\nYou must return only the parameters in the sample.\\nYou must return the value \"UNKNOWN\" for missing parameters.\\nDo not make up parameters.",
+              "function": "{     \"name\": \"customerInformation\",     \"description\": \"get some information on the customers bank account\",     \"parameters\": {         \"type\": \"object\",         \"properties\": {             \"accountNumber\": {                 \"type\": \"string\",                 \"description\": \"The bank account number\"             },             \"service\": {                 \"type\": \"string\",                 \"enum\": [                     \"balance\",                     \"details\",                     \"payments\",                     \"schedules\",                     \"unknown\"                 ],                 \"description\": \"What the user wants to do\"             }         }     } }",
+              "resultProperty": "dialog.suggestedAction"
+            },
             {
               "$kind": "Microsoft.IfCondition",
               "$designer": {
-                "id": "V4vmqW"
+                "id": "T0N2Dp"
               },
-              "condition": "=json(turn.results.content.choices[0].message.content).accountNumber == \"\"",
+              "condition": "=dialog.suggestedAction.Complete",
               "actions": [
                 {
                   "$kind": "Microsoft.SendActivity",
                   "$designer": {
-                    "id": "F2rfow"
+                    "id": "mXBnCY"
                   },
-                  "activity": "${SendActivity_F2rfow()}"
+                  "activity": "${SendActivity_mXBnCY()}"
+                },
+                {
+                  "$kind": "Microsoft.BreakLoop",
+                  "$designer": {
+                    "id": "X1qJcw"
+                  }
                 }
               ],
               "elseActions": [
                 {
-                  "$kind": "Microsoft.SendActivity",
+                  "$kind": "Microsoft.TextInput",
                   "$designer": {
-                    "id": "qOJ5kH"
+                    "id": "tnJNIB"
                   },
-                  "activity": "${SendActivity_qOJ5kH()}"
+                  "disabled": false,
+                  "maxTurnCount": 3,
+                  "alwaysPrompt": true,
+                  "allowInterruptions": false,
+                  "unrecognizedPrompt": "",
+                  "invalidPrompt": "",
+                  "prompt": "${TextInput_Prompt_tnJNIB()}",
+                  "property": "dialog.initialAsk"
                 }
               ]
             }
           ]
         },
         {
-          "$kind": "Microsoft.SendActivity",
+          "$kind": "Microsoft.IfCondition",
           "$designer": {
-            "id": "onrlSR"
+            "id": "nBg2vk"
           },
-          "activity": "${SendActivity_onrlSR()}"
+          "condition": "=dialog.suggestedAction.Complete",
+          "actions": [
+            {
+              "$kind": "Microsoft.SendActivity",
+              "$designer": {
+                "id": "0IWTGe"
+              },
+              "activity": "${SendActivity_0IWTGe()}"
+            }
+          ],
+          "elseActions": [
+            {
+              "$kind": "Microsoft.SendActivity",
+              "$designer": {
+                "id": "zV1GkZ"
+              },
+              "activity": "${SendActivity_zV1GkZ()}"
+            }
+          ]
         }
       ]
     }

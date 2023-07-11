@@ -6,10 +6,6 @@ MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LockedDownBot", "LockedDownBot\LockedDownBot.csproj", "{4CCACBDA-BA3F-45A2-B289-F612E71F9EA1}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Prompts", "Prompts", "{0A166ABB-1479-45B7-87D6-3FD7A80F372B}"
-	ProjectSection(SolutionItems) = preProject
-		..\..\..\OpenAi\unknown-intent.json = ..\..\..\OpenAi\unknown-intent.json
-		..\..\..\OpenAi\bankaccounts.json = ..\..\..\OpenAi\bankaccounts.json
-	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BotComposerOpenAi", "BotComposerOpenAi\BotComposerOpenAi.csproj", "{440DFD99-67B5-4B9B-9D03-AE1BDE919EEA}"
 EndProject

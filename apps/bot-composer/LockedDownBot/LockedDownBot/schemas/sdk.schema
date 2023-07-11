@@ -345,6 +345,9 @@
     },
     {
       "$ref": "#/definitions/OpenAiResponseWithSystemPrompt"
+    },
+    {
+      "$ref": "#/definitions/OpenAiSuggestFunctionCall"
     }
   ],
   "definitions": {
@@ -4087,6 +4090,9 @@
         },
         {
           "$ref": "#/definitions/OpenAiResponseWithSystemPrompt"
+        },
+        {
+          "$ref": "#/definitions/OpenAiSuggestFunctionCall"
         },
         {
           "type": "string",
@@ -9562,6 +9568,51 @@
           "type": "string",
           "pattern": "^[a-zA-Z][a-zA-Z0-9.]*$",
           "const": "OpenAiResponseWithSystemPrompt"
+        },
+        "$designer": {
+          "title": "Designer information",
+          "type": "object",
+          "description": "Extra information for the Bot Framework Composer."
+        }
+      }
+    },
+    "OpenAiSuggestFunctionCall": {
+      "$role": "implements(Microsoft.IDialog)",
+      "title": "OpenAiSuggestFunctionCall",
+      "description": "Extracts key words to help create a function all.",
+      "type": "object",
+      "required": [
+        "$kind"
+      ],
+      "additionalProperties": false,
+      "patternProperties": {
+        "^\\$": {
+          "title": "Tooling property",
+          "description": "Open ended property for tooling."
+        }
+      },
+      "properties": {
+        "systemPrompt": {
+          "$ref": "#/definitions/stringExpression",
+          "title": "SystemPrompt",
+          "description": "System Prompt"
+        },
+        "function": {
+          "$ref": "#/definitions/stringExpression",
+          "title": "Function",
+          "description": "Json Schema representation of function"
+        },
+        "resultProperty": {
+          "$ref": "#/definitions/stringExpression",
+          "title": "Result",
+          "description": "Value from callers memory to store the result"
+        },
+        "$kind": {
+          "title": "Kind of dialog object",
+          "description": "Defines the valid properties for the component you are configuring (from a dialog .schema file)",
+          "type": "string",
+          "pattern": "^[a-zA-Z][a-zA-Z0-9.]*$",
+          "const": "OpenAiSuggestFunctionCall"
         },
         "$designer": {
           "title": "Designer information",

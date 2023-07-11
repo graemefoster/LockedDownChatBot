@@ -1,4 +1,6 @@
+using Azure.AI.OpenAI;
 using BotComposerOpenAi.ChatCompletionWithSystemPromptAndUserInput;
+using BotComposerOpenAi.SuggestFunctionCall;
 using BotComposerOpenAi.TryToFindUserIntent;
 using Microsoft.Bot.Builder;
 using Microsoft.Bot.Builder.Dialogs.Declarative;
@@ -25,5 +27,6 @@ public class OpenAiComponents : BotComponent
         services.AddSingleton<OpenAiClientFactory>();
         services.AddSingleton<DeclarativeType>(sp => new DeclarativeType<OpenAiResponseWithSystemPrompt>(OpenAiResponseWithSystemPrompt.Kind));
         services.AddSingleton<DeclarativeType>(sp => new DeclarativeType<OpenAiDetectIntent>(OpenAiDetectIntent.Kind));
+        services.AddSingleton<DeclarativeType>(sp => new DeclarativeType<OpenAiSuggestFunctionCall>(OpenAiSuggestFunctionCall.Kind));
     }
 }
