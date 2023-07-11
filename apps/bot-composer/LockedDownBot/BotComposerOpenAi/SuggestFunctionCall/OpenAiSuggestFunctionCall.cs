@@ -34,10 +34,15 @@ public class OpenAiSuggestFunctionCall : Dialog
 
     [JsonProperty("resultProperty")] public StringExpression? ResultProperty { get; set; }
 
+    [JsonProperty("inputs")]
+    public ArrayExpression<string> Inputs { get; set; }
+
     public override async Task<DialogTurnResult> BeginDialogAsync(DialogContext dc, object options = null,
         CancellationToken cancellationToken = new())
     {
         var client = _openAiClientFactory.GetFromDialogueContext(dc, out var model);
+
+        var input = string.Join('\n', Inputs.GetValue(dc.State));
 
         var gptFriendlyFunctionInput = JsonConvert.SerializeObject(
             JsonConvert.DeserializeObject(Function.GetValue(dc.State)),
@@ -63,7 +68,7 @@ public class OpenAiSuggestFunctionCall : Dialog
                             .Replace("\\n", "\n")
                     ),
                     new ChatMessage(
-                        ChatRole.User, dc.Context.Activity.Text)
+                        ChatRole.User, input)
                 },
                 Temperature = 0,
                 PresencePenalty = 0,
@@ -106,7 +111,7 @@ public class OpenAiSuggestFunctionCall : Dialog
                                 .Replace("{function}", gptFriendlyFunctionInput)
                                 .Replace("\\n", "\n")),
                         new ChatMessage(
-                            ChatRole.User, dc.Context.Activity.Text)
+                            ChatRole.User, input)
                     },
                     Temperature = 0,
                     PresencePenalty = 0

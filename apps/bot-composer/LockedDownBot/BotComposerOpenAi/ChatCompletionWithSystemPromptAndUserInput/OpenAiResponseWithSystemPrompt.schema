@@ -11,11 +11,11 @@
             "title": "SystemPrompt",
             "description": "System Prompt"
         },
-        "useAllDialogueInput": {
-            "$ref": "schema:#/definitions/booleanExpression",
-            "title": "UseAllDialogueInput",
-            "description": "True to add more user-input from this dialogue to the prompt"
-        },
+      "inputs": {
+          "$ref": "schema:#/definitions/booleanExpression",
+          "title": "Inputs to look for intent over",
+          "description": "Pass in any text entered by the User to look for intent within"
+      },
         "resultProperty": {
             "$ref": "schema:#/definitions/stringExpression",
             "title": "Result",

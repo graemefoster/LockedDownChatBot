@@ -32,8 +32,8 @@ public class OpenAiResponseWithSystemPrompt : Dialog
     [JsonProperty("systemPrompt")]
     public StringExpression SystemPrompt { get; set; }
 
-    [JsonProperty("useAllDialogueInput")]
-    public BoolExpression UseAllDialogueInput { get; set; }
+    [JsonProperty("inputs")]
+    public ArrayExpression<string> Inputs { get; set; }
     
     [JsonProperty("resultProperty")]
     public StringExpression? ResultProperty { get; set; }
@@ -42,6 +42,9 @@ public class OpenAiResponseWithSystemPrompt : Dialog
         CancellationToken cancellationToken = new())
     {
         var client = _openAiClientFactory.GetFromDialogueContext(dc, out var model);
+
+        var input = string.Join('\n', Inputs.GetValue(dc.State));
+        
         var response = await client.GetChatCompletionsAsync(
             model,
             new ChatCompletionsOptions()
@@ -49,7 +52,7 @@ public class OpenAiResponseWithSystemPrompt : Dialog
                 Messages =
                 {
                     new ChatMessage(ChatRole.System, SystemPrompt.GetValue(dc.State)),
-                    new ChatMessage(ChatRole.User, dc.Context.Activity.Text)
+                    new ChatMessage(ChatRole.User, input)
                 }
             }, cancellationToken);
 

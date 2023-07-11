@@ -9507,10 +9507,10 @@
           "title": "SystemPrompt",
           "description": "System Prompt"
         },
-        "useAllDialogueInput": {
+        "inputs": {
           "$ref": "#/definitions/booleanExpression",
-          "title": "UseAllDialogueInput",
-          "description": "True to add more user-input from this dialogue to the prompt"
+          "title": "Inputs to look for intent over",
+          "description": "Pass in any text entered by the User to look for intent within"
         },
         "resultProperty": {
           "$ref": "#/definitions/stringExpression",
@@ -9552,10 +9552,10 @@
           "title": "SystemPrompt",
           "description": "System Prompt"
         },
-        "useAllDialogueInput": {
+        "inputs": {
           "$ref": "#/definitions/booleanExpression",
-          "title": "UseAllDialogueInput",
-          "description": "True to add more user-input from this dialogue to the prompt"
+          "title": "Inputs to look for intent over",
+          "description": "Pass in any text entered by the User to look for intent within"
         },
         "resultProperty": {
           "$ref": "#/definitions/stringExpression",
@@ -9601,6 +9601,11 @@
           "$ref": "#/definitions/stringExpression",
           "title": "Function",
           "description": "Json Schema representation of function"
+        },
+        "inputs": {
+          "$ref": "#/definitions/booleanExpression",
+          "title": "Inputs to look for intent over",
+          "description": "Pass in any text entered by the User to look for intent within"
         },
         "resultProperty": {
           "$ref": "#/definitions/stringExpression",

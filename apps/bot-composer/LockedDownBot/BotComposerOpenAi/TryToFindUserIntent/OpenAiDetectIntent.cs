@@ -47,8 +47,8 @@ Given their input so-far, what would you ask the user next?
     [JsonProperty("intents")]
     public ArrayExpression<string> Intents { get; set; }
 
-    [JsonProperty("useAllDialogueInput")]
-    public BoolExpression UseAllDialogueInput { get; set; }
+    [JsonProperty("inputs")]
+    public ArrayExpression<string> Inputs { get; set; }
     
     [JsonProperty("resultProperty")]
     public StringExpression? ResultProperty { get; set; }
@@ -58,7 +58,10 @@ Given their input so-far, what would you ask the user next?
     {
         var client = _openAiClientFactory.GetFromDialogueContext(dc, out var model);
 
+        var input = string.Join('\n', Inputs.GetValue(dc.State));
+
         var intents = Intents.GetValue(dc.State);
+
         var getIntentPrompt = SystemPromptInternal
             .Replace("{systemPrompt}", SystemPrompt.GetValue(dc.State))
             .Replace(
@@ -72,7 +75,7 @@ Given their input so-far, what would you ask the user next?
                 Messages =
                 {
                     new ChatMessage(ChatRole.System, getIntentPrompt),
-                    new ChatMessage(ChatRole.User, dc.Context.Activity.Text)
+                    new ChatMessage(ChatRole.User, input)
                 }
             }, cancellationToken);
 
