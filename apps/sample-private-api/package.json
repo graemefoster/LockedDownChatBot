@@ -2,10 +2,11 @@
   "name": "sample-private-api",
   "version": "1.0.0",
   "description": "Sample API to show how a private BOT can call downstream services",
-  "main": "./index.ts",
+  "main": "./src/index.ts",
   "scripts": {
-    "dev": "nodemon ./index.ts",
-    "build": "rm -rf build/ && prettier --write source/ && tsc"
+    "start": "node ./dist/index.js",
+    "dev": "nodemon ./src/index.ts",
+    "build": "tsc -b . "
   },
   "author": "",
   "license": "ISC",

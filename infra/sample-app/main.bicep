@@ -13,6 +13,7 @@ resource app 'Microsoft.Web/sites@2022-09-01' = {
   identity: {
     type: 'SystemAssigned'
   }
+  tags: { 'azd-service-name': 'internal-api' }
   properties: {
     httpsOnly: true
     serverFarmId: aspId
@@ -39,15 +40,19 @@ resource app 'Microsoft.Web/sites@2022-09-01' = {
         }
         {
           name: 'XDT_MicrosoftApplicationInsights_Mode'
-          value: 'recommended'
+          value: 'default'
         }
         {
-          name: 'InstrumentationEngine_EXTENSION_VERSION'
-          value: '~1'
+          name: 'XDT_MicrosoftApplicationInsights_NodeJS'
+          value: '1'
         }
         {
-          name: 'XDT_MicrosoftApplicationInsights_BaseExtensions'
-          value: '~1'
+          name: 'WEBSITE_NODE_DEFAULT_VERSION'
+          value: '~18'
+        }
+        {
+          name: 'SCM_DO_BUILD_DURING_DEPLOYMENT' //struggling to get azd to package my node modules up so let's get app-svc to do it instead.
+          value: 'true'
         }
       ]
     }
