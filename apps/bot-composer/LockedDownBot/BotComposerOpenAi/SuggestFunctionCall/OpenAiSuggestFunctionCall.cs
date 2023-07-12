@@ -13,16 +13,26 @@ public class OpenAiSuggestFunctionCall : Dialog
 {
     private readonly OpenAiClientFactory _openAiClientFactory;
 
-    private const string SystemPromptInternal = @"Read the users input and respond in JSON with the arguments to call the function named ""customerInformation"".
+    private const string SystemPromptInternal = @"Read the users input and respond in JSON arguments extracted from the users's input, to call the function detailed below.
 
 - DO NOT invent parameters.
-- Use the value UNKNOWN for arguments you don't know.
+- Use ""UNKNOWN"" for arguments you don't know.
+- ONLY respond in JSON
 
 {systemPrompt}
 
-``` json
+```function
 {function}
-```";
+```
+
+```response
+    {
+        parameters: {
+            ""parameterName"": ""parameterValue""
+        }
+    }
+```
+";
 
     [JsonConstructor]
     public OpenAiSuggestFunctionCall(
@@ -154,7 +164,6 @@ public class SuggestFunctionCallResponse
 
 public class OpenAiFunctionResponse
 {
-    public string Name { get; set; }
     public Dictionary<string, object> Parameters { get; set; }
 }
 
