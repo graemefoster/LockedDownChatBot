@@ -3,6 +3,7 @@ using System.Runtime.CompilerServices;
 using AdaptiveExpressions.Properties;
 using Azure;
 using Azure.AI.OpenAI;
+using BotComposerOpenAi.OpenAI;
 using Microsoft.Bot.Builder.Dialogs;
 using Newtonsoft.Json;
 
@@ -30,29 +31,24 @@ Given their input so-far, what would you ask the user next?
 
     [JsonConstructor]
     public OpenAiDetectIntent(
-        [CallerFilePath] string sourceFilePath = "", 
+        [CallerFilePath] string sourceFilePath = "",
         [CallerLineNumber] int sourceLineNumber = 0)
         : base()
     {
         _openAiClientFactory = new OpenAiClientFactory();
         RegisterSourceLocation(sourceFilePath, sourceLineNumber);
     }
-    
-    [JsonProperty("$kind")]
-    public const string Kind = "OpenAiDetectIntent";
-    
-    [JsonProperty("systemPrompt")]
-    public StringExpression SystemPrompt { get; set; }
 
-    [JsonProperty("intents")]
-    public ArrayExpression<string> Intents { get; set; }
+    [JsonProperty("$kind")] public const string Kind = "OpenAiDetectIntent";
 
-    [JsonProperty("inputs")]
-    public ArrayExpression<string> Inputs { get; set; }
-    
-    [JsonProperty("resultProperty")]
-    public StringExpression? ResultProperty { get; set; }
-    
+    [JsonProperty("systemPrompt")] public StringExpression SystemPrompt { get; set; }
+
+    [JsonProperty("intents")] public ArrayExpression<string> Intents { get; set; }
+
+    [JsonProperty("inputs")] public ArrayExpression<string> Inputs { get; set; }
+
+    [JsonProperty("resultProperty")] public StringExpression? ResultProperty { get; set; }
+
     public override async Task<DialogTurnResult> BeginDialogAsync(DialogContext dc, object options = null,
         CancellationToken cancellationToken = new())
     {
@@ -66,18 +62,13 @@ Given their input so-far, what would you ask the user next?
             .Replace("{systemPrompt}", SystemPrompt.GetValue(dc.State))
             .Replace(
                 "{intents}",
-                string.Join(',',  intents));
-        
-        var response = await client.GetChatCompletionsAsync(
+                string.Join(',', intents));
+
+        var response = await client.DefaultOpenAiCall(
             model,
-            new ChatCompletionsOptions()
-            {
-                Messages =
-                {
-                    new ChatMessage(ChatRole.System, getIntentPrompt),
-                    new ChatMessage(ChatRole.User, input)
-                }
-            }, cancellationToken);
+            getIntentPrompt,
+            input,
+            cancellationToken);
 
         var result = response;
         if (intents.Contains(result))
@@ -90,22 +81,17 @@ Given their input so-far, what would you ask the user next?
             dc.State.SetValue(this.ResultProperty.GetValue(dc.State), dialogueResult);
             return await dc.EndDialogAsync(result: dialogueResult, cancellationToken);
         }
-        
+
         //couldn't detect it. Let's ask GPT what to say next:
         var findMoreInfoPrompt = GetMoreInfoPrompt
             .Replace("{systemPrompt}", SystemPrompt.GetValue(dc.State))
-            .Replace("{intents}", string.Join(',',  intents));
-        
-        var moreInfoResponse = await client.GetChatCompletionsAsync(
-            model,
-            new ChatCompletionsOptions()
-            {
-                Messages =
-                {
-                    new ChatMessage(ChatRole.System, findMoreInfoPrompt),
-                    new ChatMessage(ChatRole.User, dc.Context.Activity.Text)
-                }
-            }, cancellationToken);
+            .Replace("{intents}", string.Join(',', intents));
+
+        var moreInfoResponse = await client.CreativeOpenAiCall(
+            model, 
+            findMoreInfoPrompt,
+            input, 
+            cancellationToken);
 
         var moreInfoResult = new IntentResult()
         {
@@ -114,12 +100,5 @@ Given their input so-far, what would you ask the user next?
         };
         dc.State.SetValue(ResultProperty.GetValue(dc.State), moreInfoResult);
         return await dc.EndDialogAsync(result: moreInfoResult, cancellationToken);
-    }
-
-    public class IntentResult
-    {
-        public bool Unknown { get; set; }
-        public string Intent { get; set; }
-        public string SuggestedPrompt { get; set; }
     }
 }

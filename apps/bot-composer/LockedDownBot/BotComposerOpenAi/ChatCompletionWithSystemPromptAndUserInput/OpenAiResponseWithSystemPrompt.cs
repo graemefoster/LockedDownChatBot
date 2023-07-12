@@ -3,6 +3,7 @@ using System.Runtime.CompilerServices;
 using AdaptiveExpressions.Properties;
 using Azure;
 using Azure.AI.OpenAI;
+using BotComposerOpenAi.OpenAI;
 using Microsoft.Bot.Builder.Dialogs;
 using Newtonsoft.Json;
 

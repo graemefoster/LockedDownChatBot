@@ -3,4 +3,4 @@
 [Dd]ebug/
 [Oo]bj/
 DS_Store
-
+node_modules/

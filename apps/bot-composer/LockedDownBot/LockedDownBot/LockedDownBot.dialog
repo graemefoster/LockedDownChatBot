@@ -56,12 +56,18 @@
       },
       "actions": [
         {
-          "$kind": "Microsoft.EditArray",
+          "$kind": "Microsoft.SendActivity",
           "$designer": {
-            "id": "xYVPCy"
+            "id": "SpPkMd"
           },
-          "changeType": "push",
-          "itemsProperty": "conversation.userInput",
+          "activity": "${SendActivity_SpPkMd()}"
+        },
+        {
+          "$kind": "Microsoft.SetProperty",
+          "$designer": {
+            "id": "s812gT"
+          },
+          "property": "conversation.intialAsk",
           "value": "=turn.activity.text"
         },
         {
@@ -76,15 +82,15 @@
           ],
           "systemPrompt": "You are a Bank Teller.",
           "useAllDialogueInput": false,
-          "resultProperty": "dialog.detectedIntent",
-          "inputs": "=conversation.userInput"
+          "resultProperty": "conversation.detectedIntent",
+          "inputs": "=createArray(conversation.intialAsk)"
         },
         {
           "$kind": "Microsoft.IfCondition",
           "$designer": {
             "id": "ZAEKaQ"
           },
-          "condition": "=dialog.detectedIntent.Unknown",
+          "condition": "=conversation.detectedIntent.Unknown",
           "actions": [
             {
               "$kind": "Microsoft.SendActivity",
@@ -101,6 +107,13 @@
               "activityProcessed": true
             }
           ]
+        },
+        {
+          "$kind": "Microsoft.SendActivity",
+          "$designer": {
+            "id": "9Fkf7T"
+          },
+          "activity": "${SendActivity_9Fkf7T()}"
         },
         {
           "$kind": "Microsoft.SwitchCondition",
@@ -156,7 +169,7 @@
               "activity": "${SendActivity_HPpXr7()}"
             }
           ],
-          "condition": "dialog.detectedIntent.Intent"
+          "condition": "conversation.detectedIntent.Intent"
         }
       ]
     }

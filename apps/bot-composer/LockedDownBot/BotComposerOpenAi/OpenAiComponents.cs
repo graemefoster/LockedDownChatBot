@@ -1,5 +1,6 @@
 using Azure.AI.OpenAI;
 using BotComposerOpenAi.ChatCompletionWithSystemPromptAndUserInput;
+using BotComposerOpenAi.OpenAI;
 using BotComposerOpenAi.SuggestFunctionCall;
 using BotComposerOpenAi.TryToFindUserIntent;
 using Microsoft.Bot.Builder;

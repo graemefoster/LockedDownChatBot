@@ -17,31 +17,27 @@
       },
       "actions": [
         {
-          "$kind": "Microsoft.EditArray",
+          "$kind": "Microsoft.SendActivity",
           "$designer": {
-            "id": "HkifG3"
+            "id": "mrf57L"
           },
-          "changeType": "push",
-          "itemsProperty": "dialog.attempts",
-          "value": "1"
+          "activity": "${SendActivity_mrf57L()}"
         },
         {
-          "$kind": "Microsoft.EditArray",
+          "$kind": "Microsoft.SetProperty",
           "$designer": {
-            "id": "yhCfAp"
+            "id": "Cki8uX"
           },
-          "changeType": "push",
-          "itemsProperty": "dialog.attempts",
-          "value": "2"
+          "property": "dialog.userInput",
+          "value": "=createArray(conversation.intialAsk)"
         },
         {
-          "$kind": "Microsoft.EditArray",
+          "$kind": "Microsoft.SetProperty",
           "$designer": {
-            "id": "nUlSq7"
+            "id": "WlZQAj"
           },
-          "itemsProperty": "dialog.attempts",
-          "changeType": "push",
-          "value": "3"
+          "property": "dialog.attempts",
+          "value": "=createArray(1,2,3,4,5)"
         },
         {
           "$kind": "Microsoft.Foreach",
@@ -58,9 +54,9 @@
                 "id": "6BJFyN"
               },
               "resultProperty": "dialog.suggestedAction",
-              "inputs": "=conversation.userInput",
+              "inputs": "=dialog.userInput",
               "systemPrompt": "You are a banking application.",
-              "function": "{   \"name\": \"customerInformation\",   \"description\": \"get some information on the customers bank account\",   \"parameters\": {     \"type\": \"object\",     \"properties\": {       \"accountNumber\": {         \"type\": \"string\",         \"description\": \"The bank account number\"       },       \"service\": {         \"type\": \"string\",         \"enum\": [           \"balance\",           \"details\",           \"payments\",           \"schedules\",           \"unknown\"         ],         \"description\": \"What the user wants to do\"       }     }   } }"
+              "function": "{   \"name\": \"accounts\",   \"description\": \"get some information on the customers bank account\",   \"parameters\": {     \"type\": \"object\",     \"properties\": {       \"accountNumber\": {         \"type\": \"string\",         \"description\": \"The bank account number\"       },       \"service\": {         \"type\": \"string\",         \"enum\": [           \"balance\",           \"details\",           \"payments\",           \"schedules\",           \"unknown\"         ],         \"description\": \"What the user wants to do\"       }     }   } }"
             },
             {
               "$kind": "Microsoft.IfCondition",
@@ -69,13 +65,6 @@
               },
               "condition": "=dialog.suggestedAction.Complete",
               "actions": [
-                {
-                  "$kind": "Microsoft.SendActivity",
-                  "$designer": {
-                    "id": "mXBnCY"
-                  },
-                  "activity": "${SendActivity_mXBnCY()}"
-                },
                 {
                   "$kind": "Microsoft.BreakLoop",
                   "$designer": {
@@ -95,8 +84,8 @@
                   "allowInterruptions": false,
                   "unrecognizedPrompt": "",
                   "invalidPrompt": "",
-                  "prompt": "${TextInput_Prompt_tnJNIB()}",
-                  "property": "turn.input"
+                  "property": "turn.input",
+                  "prompt": "${TextInput_Prompt_tnJNIB()}"
                 },
                 {
                   "$kind": "Microsoft.EditArray",
@@ -104,7 +93,7 @@
                     "id": "J8smWM"
                   },
                   "changeType": "push",
-                  "itemsProperty": "conversation.userInput",
+                  "itemsProperty": "dialog.userInput",
                   "value": "=turn.input"
                 }
               ]
@@ -119,11 +108,49 @@
           "condition": "=dialog.suggestedAction.Complete",
           "actions": [
             {
-              "$kind": "Microsoft.SendActivity",
+              "$kind": "Microsoft.HttpRequest",
               "$designer": {
-                "id": "0IWTGe"
+                "id": "KsnpOy",
+                "comment": "Fetch the relevant information from the accounts API"
               },
-              "activity": "${SendActivity_0IWTGe()}"
+              "resultProperty": "dialog.accountDataResponse",
+              "method": "GET",
+              "url": "${settings.ACCOUNTS_BASE_URL}account/${dialog.suggestedAction.Response.accountNumber}/${dialog.suggestedAction.Response.service}",
+              "responseType": "json"
+            },
+            {
+              "$kind": "Microsoft.IfCondition",
+              "$designer": {
+                "id": "aDm55P"
+              },
+              "condition": "=dialog.accountDataResponse.statusCode == 200",
+              "actions": [
+                {
+                  "$kind": "OpenAiResponseWithSystemPrompt",
+                  "$designer": {
+                    "id": "F47ban"
+                  },
+                  "systemPrompt": "Take the following JSON object describing bank account information, and format it as a nice table.",
+                  "inputs": "=createArray(string(dialog.accountDataResponse.content))",
+                  "resultProperty": "dialog.formattedAccountData"
+                },
+                {
+                  "$kind": "Microsoft.SendActivity",
+                  "$designer": {
+                    "id": "rxznMd"
+                  },
+                  "activity": "${SendActivity_rxznMd()}"
+                }
+              ],
+              "elseActions": [
+                {
+                  "$kind": "Microsoft.SendActivity",
+                  "$designer": {
+                    "id": "ICtw0K"
+                  },
+                  "activity": "${SendActivity_ICtw0K()}"
+                }
+              ]
             }
           ],
           "elseActions": [

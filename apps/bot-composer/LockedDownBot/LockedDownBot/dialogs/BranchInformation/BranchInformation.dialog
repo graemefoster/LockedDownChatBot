@@ -17,14 +17,21 @@
       },
       "actions": [
         {
+          "$kind": "Microsoft.SendActivity",
+          "$designer": {
+            "id": "qn18zx"
+          },
+          "activity": "${SendActivity_qn18zx()}"
+        },
+        {
           "$kind": "OpenAiSuggestFunctionCall",
           "$designer": {
             "id": "aCbFm4"
           },
           "systemPrompt": "Work out the best search terms given the user input.",
-          "inputs": "=conversation.userInput",
-          "resultProperty": "dialog.dialog.suggestedAction",
-          "function": "{   \"name\": \"customerInformation\",   \"description\": \"search over branch information\",   \"parameters\": {     \"type\": \"object\",     \"properties\": {       \"searchTerms\": {         \"type\": \"string\",         \"description\": \"Suggested terms to search over\"       }     }   } }"
+          "inputs": "=createArray(conversation.intialAsk)",
+          "resultProperty": "dialog.suggestedAction",
+          "function": "{     \"description\": \"search over branch information\",     \"parameters\": {         \"type\": \"object\",         \"properties\": {             \"searchTerms\": {                 \"type\": \"array\",                 \"description\": \"Suggested terms to search over\"             }         }     } }"
         },
         {
           "$kind": "Microsoft.SendActivity",

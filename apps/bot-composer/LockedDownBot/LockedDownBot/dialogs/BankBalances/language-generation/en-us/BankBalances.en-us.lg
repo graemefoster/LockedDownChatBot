@@ -1,12 +1,5 @@
 [import](common.lg)
 
-# SendActivity_0IWTGe()
-[Activity
-    Text = ${SendActivity_0IWTGe_text()}
-]
-
-# SendActivity_0IWTGe_text()
-- Call ${dialog.suggestedAction.Response}
 # SendActivity_zV1GkZ()
 [Activity
     Text = ${SendActivity_zV1GkZ_text()}
@@ -14,20 +7,6 @@
 
 # SendActivity_zV1GkZ_text()
 - So sorry but I couldn't work out what you wanted to do.
-# TextInput_Prompt_tnJNIB()
-[Activity
-    Text = ${TextInput_Prompt_tnJNIB_text()}
-]
-
-# TextInput_Prompt_tnJNIB_text()
-- ${dialog.suggestedAction.SuggestedPrompt}
-# SendActivity_mXBnCY()
-[Activity
-    Text = ${SendActivity_mXBnCY_text()}
-]
-
-# SendActivity_mXBnCY_text()
-- Action is complete...
 # LogAction_Text_KZzUbA()
 [Activity
     Text = ${LogAction_Text_KZzUbA_text()}
@@ -35,3 +14,26 @@
 
 # LogAction_Text_KZzUbA_text()
 - ${dialog.suggestedAction}
+# SendActivity_ICtw0K()
+[Activity
+    Text = ${SendActivity_ICtw0K_text()}
+]
+
+# SendActivity_ICtw0K_text()
+- Apologies but I could not access the data. Check the account number is correct.
+# SendActivity_rxznMd()
+[Activity
+    Text = ${SendActivity_rxznMd_text()}
+]
+
+# SendActivity_rxznMd_text()
+- ${dialog.formattedAccountData}
+# TextInput_Prompt_tnJNIB()
+- ${dialog.suggestedAction.SuggestedPrompt}
+# SendActivity_mrf57L()
+[Activity
+    Text = ${SendActivity_mrf57L_text()}
+]
+
+# SendActivity_mrf57L_text()
+- Welcome to Accounts. Please wait while I process your request...

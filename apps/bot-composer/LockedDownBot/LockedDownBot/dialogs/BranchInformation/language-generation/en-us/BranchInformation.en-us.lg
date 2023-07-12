@@ -6,4 +6,11 @@
 ]
 
 # SendActivity_tKct2A_text()
-- ${dialog.suggestedAction}
+- Call ${dialog.suggestedAction.Response}
+# SendActivity_qn18zx()
+[Activity
+    Text = ${SendActivity_qn18zx_text()}
+]
+
+# SendActivity_qn18zx_text()
+- Welcome to our information area. Please wait while we prcoess your response...

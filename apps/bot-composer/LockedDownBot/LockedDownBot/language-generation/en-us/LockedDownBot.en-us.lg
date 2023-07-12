@@ -34,7 +34,7 @@
 ]
 
 # SendActivity_ufXf2h_text()
-- ${dialog.detectedIntent.SuggestedPrompt}
+- ${conversation.detectedIntent.SuggestedPrompt}
 # SendActivity_HPpXr7()
 [Activity
     Text = ${SendActivity_HPpXr7_text()}
@@ -42,3 +42,17 @@
 
 # SendActivity_HPpXr7_text()
 - Hmm how did we get here?!
+# SendActivity_9Fkf7T()
+[Activity
+    Text = ${SendActivity_9Fkf7T_text()}
+]
+
+# SendActivity_9Fkf7T_text()
+- Transferring you to someone who can help with your query.
+# SendActivity_SpPkMd()
+[Activity
+    Text = ${SendActivity_SpPkMd_text()}
+]
+
+# SendActivity_SpPkMd_text()
+- Please wait a moment...

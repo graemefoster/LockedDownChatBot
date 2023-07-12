@@ -1,0 +1,21 @@
+{
+  "name": "sample-private-api",
+  "version": "1.0.0",
+  "description": "Sample API to show how a private BOT can call downstream services",
+  "main": "./index.ts",
+  "scripts": {
+    "dev": "nodemon ./index.ts",
+    "build": "rm -rf build/ && prettier --write source/ && tsc"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.18.2",
+    "ts-node": "^10.9.1",
+    "typescript": "^5.1.6"
+  },
+  "devDependencies": {
+    "@types/express": "^4.17.17",
+    "nodemon": "^3.0.1"
+  }
+}
