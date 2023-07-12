@@ -30,7 +30,7 @@ public class OpenAiSuggestFunctionCall : Dialog
 
 ```response
     {
-        parameters: {
+        ""parameters"": {
             ""parameterName"": ""parameterValue""
         }
     }
