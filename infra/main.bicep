@@ -67,6 +67,8 @@ resource rg 'Microsoft.Resources/resourceGroups@2022-09-01' existing = {
 //not nice, but I want to get a certificate into KV before running this template
 var kvName = rg.tags['env-kv-name']
 
+var appName = '${abbrs.webSitesAppService}${resourceNameSuffix}-bot'
+
 // Add resources to be provisioned below.
 // A full example that leverages azd bicep modules can be seen in the todo-python-mongo template:
 // https://github.com/Azure-Samples/todo-python-mongo/tree/main/infra
@@ -116,6 +118,8 @@ module core 'foundations/keyvault.bicep' = {
     openAiKey: openAiKey
     gatewayIdentityId: managedIdentities.outputs.gwayIdentityPrincipalId
     appServiceIdentityId: managedIdentities.outputs.aspIdentityPrincipalId
+    appName: appName
+    aspName: '${abbrs.webServerFarms}${resourceNameSuffix}'
   }
 }
 
@@ -150,13 +154,27 @@ module database 'foundations/database.bicep' = {
   }
 }
 
-var appName = '${abbrs.webSitesAppService}${resourceNameSuffix}-bot'
+var sampleApiName = '${abbrs.webSitesAppService}${resourceNameSuffix}-api'
+module sampleApp 'sample-app/main.bicep' = {
+  name: '${deployment().name}-sampleapi'
+  scope: rg
+  params: {
+    logAnalyticsId: core.outputs.logAnalyticsId
+    appInsightsConnectionString: core.outputs.applicationInsightsConnectionString
+    aspId: core.outputs.aspId
+    privateDnsZoneId: vnet.outputs.privateDnsZoneId
+    privateEndpointSubnetId: vnet.outputs.privateEndpointSubnetId
+    sampleAppName: sampleApiName
+    vnetIntegrationSubnetId: vnet.outputs.vnetIntegrationSubnetId
+    location: location
+  }
+}
+
 
 module app 'app/bot-app.bicep' = {
   name: '${deployment().name}-app'
   scope: rg
   params: {
-    aspName: '${abbrs.webServerFarms}${resourceNameSuffix}'
     appName: appName
     botCustomHostName: chatApiCustomHost
     location: location
@@ -174,6 +192,10 @@ module app 'app/bot-app.bicep' = {
     cosmosContainerId: database.outputs.containerName
     cosmosDatabaseId: database.outputs.databaseName
     cosmosEndpoint: database.outputs.cosmosUrl
+    applicationInsightsConnectionString: core.outputs.applicationInsightsConnectionString
+    aspId: core.outputs.aspId
+    apiUrl: sampleApp.outputs.appUrl
+
   }
 }
 
@@ -187,7 +209,7 @@ module bot 'bot/bot-service.bicep' = {
     hostName: gatewayCustomHostName
     botIdentityName: app.outputs.botIdentityName
     logAnalyticsId: core.outputs.logAnalyticsId
-    appInsightsInstrumentationKey: app.outputs.appInsightsKey
+    appInsightsInstrumentationKey: core.outputs.applicationInsightsInstrumentationKey
     localBotAadId: localBotAadId
     localBotAadTenant: localBotAadTenant
     localBotAadTenantType: localBotAadTenantType

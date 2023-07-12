@@ -1,4 +1,3 @@
-param aspName string
 param appName string
 param botCustomHostName string
 param privateEndpointSubnetId string
@@ -16,6 +15,9 @@ param cosmosAuthKeySecretName string
 param cosmosEndpoint string
 param cosmosDatabaseId string
 param cosmosContainerId string
+param applicationInsightsConnectionString string
+param aspId string
+param apiUrl string
 
 // EXPERIMENTAL - BREAKS DEPLOYMENT :(
 // //Unclear if Bot Composer supports Managed Identity connections. Stored in KV for now
@@ -32,29 +34,6 @@ resource botIdentity 'Microsoft.ManagedIdentity/userAssignedIdentities@2023-01-3
   name: appServiceManagedIdentityName
 }
 
-resource asp 'Microsoft.Web/serverfarms@2022-09-01' = {
-  name: aspName
-  location: location
-  sku: {
-    name: 'S1'
-    capacity: 1
-  }
-  properties: {
-    zoneRedundant: false
-  }
-}
-
-resource appInsights 'Microsoft.Insights/components@2020-02-02' = {
-  kind: 'web'
-  location: location
-  name: '${appName}-appinsights'
-  properties: {
-    Application_Type: 'web'
-    Flow_Type: 'BlueField'
-    WorkspaceResourceId: logAnalyticsId
-    RetentionInDays: 30
-  }
-}
 
 resource app 'Microsoft.Web/sites@2022-09-01' = {
   name: appName
@@ -68,7 +47,7 @@ resource app 'Microsoft.Web/sites@2022-09-01' = {
   }
   properties: {
     httpsOnly: true
-    serverFarmId: asp.id
+    serverFarmId: aspId
     vnetRouteAllEnabled: true
     virtualNetworkSubnetId: vnetIntegrationSubnetId
     publicNetworkAccess: 'Enabled' //simulate locked-down network by blocking access to app site. But I need to deploy, so I open up SCM site.
@@ -102,7 +81,11 @@ resource app 'Microsoft.Web/sites@2022-09-01' = {
         }
         {
           name: 'APPLICATIONINSIGHTS_CONNECTION_STRING'
-          value: appInsights.properties.ConnectionString
+          value: applicationInsightsConnectionString
+        }
+        {
+          name: 'ACCOUNTS_BASE_URL'
+          value: apiUrl
         }
         {
           name: 'OPENAI_MODEL'
@@ -237,4 +220,3 @@ resource privateEndpoint 'Microsoft.Network/privateEndpoints@2022-11-01' = {
 
 output botIdentityName string = botIdentity.name
 output appName string = app.name
-output appInsightsKey string = appInsights.properties.InstrumentationKey
