@@ -28,20 +28,6 @@
 
 # SendActivity_mY7A3H_text()
 - ${turn.lastResult}
-# SendActivity_ufXf2h()
-[Activity
-    Text = ${SendActivity_ufXf2h_text()}
-]
-
-# SendActivity_ufXf2h_text()
-- ${conversation.detectedIntent.SuggestedPrompt}
-# SendActivity_HPpXr7()
-[Activity
-    Text = ${SendActivity_HPpXr7_text()}
-]
-
-# SendActivity_HPpXr7_text()
-- Hmm how did we get here?!
 # SendActivity_9Fkf7T()
 [Activity
     Text = ${SendActivity_9Fkf7T_text()}
@@ -56,3 +42,10 @@
 
 # SendActivity_SpPkMd_text()
 - Please wait a moment...
+# TextInput_Prompt_oat8VZ()
+[Activity
+    Text = ${TextInput_Prompt_oat8VZ_text()}
+]
+
+# TextInput_Prompt_oat8VZ_text()
+- ${dialog.intent.SuggestedPrompt}

@@ -29,5 +29,6 @@ public class OpenAiComponents : BotComponent
         services.AddSingleton<DeclarativeType>(sp => new DeclarativeType<OpenAiResponseWithSystemPrompt>(OpenAiResponseWithSystemPrompt.Kind));
         services.AddSingleton<DeclarativeType>(sp => new DeclarativeType<OpenAiDetectIntent>(OpenAiDetectIntent.Kind));
         services.AddSingleton<DeclarativeType>(sp => new DeclarativeType<OpenAiSuggestFunctionCall>(OpenAiSuggestFunctionCall.Kind));
+        services.AddSingleton<DeclarativeType>(sp => new DeclarativeType<SummariseConversation.SummariseConversation>(SummariseConversation.SummariseConversation.Kind));
     }
 }

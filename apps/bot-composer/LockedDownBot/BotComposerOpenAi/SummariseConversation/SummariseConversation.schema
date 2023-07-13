@@ -1,7 +1,7 @@
 {
     "$schema": "https://schemas.botframework.com/schemas/component/v1.0/component.schema",
     "$role": "implements(Microsoft.IDialog)",
-    "title": "OpenAiDetectIntent",
+    "title": "SummariseConversation",
     "description": "Recognises Intent, or returns a suggested dialogue to get closer.",
     "type": "object",
     "additionalProperties": false,
@@ -11,15 +11,10 @@
             "title": "SystemPrompt",
             "description": "System Prompt"
         },
-        "intents": {
+        "conversation": {
             "$ref": "schema:#/definitions/arrayExpression",
-            "title": "Intents",
-            "description": "Intents to look for"
-        },
-        "inputs": {
-            "$ref": "schema:#/definitions/arrayExpression",
-            "title": "Inputs to look for intent over",
-            "description": "Pass in any text entered by the User to look for intent within"
+            "title": "Conversation",
+            "description": "Conversation to summarise"
         },
         "resultProperty": {
             "$ref": "schema:#/definitions/stringExpression",

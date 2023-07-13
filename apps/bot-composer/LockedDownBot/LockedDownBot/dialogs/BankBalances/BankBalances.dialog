@@ -101,6 +101,13 @@
           ]
         },
         {
+          "$kind": "Microsoft.SendActivity",
+          "$designer": {
+            "id": "bKEhyn"
+          },
+          "activity": "${SendActivity_bKEhyn()}"
+        },
+        {
           "$kind": "Microsoft.IfCondition",
           "$designer": {
             "id": "nBg2vk"
