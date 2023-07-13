@@ -1,11 +1,9 @@
-using System.Collections.Immutable;
 using System.Runtime.CompilerServices;
 using AdaptiveExpressions.Properties;
-using Azure;
 using Azure.AI.OpenAI;
-using BotComposerOpenAi.OpenAI;
 using Microsoft.Bot.Builder.Dialogs;
 using Newtonsoft.Json;
+using OpenAiSimplePipeline.OpenAI;
 
 namespace BotComposerOpenAi.ChatCompletionWithSystemPromptAndUserInput;
 
@@ -42,12 +40,10 @@ public class OpenAiResponseWithSystemPrompt : Dialog
     public override async Task<DialogTurnResult> BeginDialogAsync(DialogContext dc, object options = null,
         CancellationToken cancellationToken = new())
     {
-        var client = _openAiClientFactory.GetFromDialogueContext(dc, out var model);
-
+        var client = _openAiClientFactory.GetFromSettings((IDictionary<string, object>)dc.State["settings"], out var model);
         var input = string.Join('\n', Inputs.GetValue(dc.State));
         
         var response = await client.GetChatCompletionsAsync(
-            model,
             new ChatCompletionsOptions()
             {
                 Messages =
@@ -57,7 +53,6 @@ public class OpenAiResponseWithSystemPrompt : Dialog
                 }
             }, cancellationToken);
 
-        
         var result = response;
         if (this.ResultProperty != null)
         {

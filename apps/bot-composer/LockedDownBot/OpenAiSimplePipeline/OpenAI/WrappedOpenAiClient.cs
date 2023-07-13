@@ -1,32 +1,40 @@
 ﻿using Azure;
 using Azure.AI.OpenAI;
 using Newtonsoft.Json;
+using OpenAiSimplePipeline.OpenAI.Chains;
 
-namespace BotComposerOpenAi.OpenAI;
+namespace OpenAiSimplePipeline.OpenAI;
 
 class WrappedOpenAiClient : IOpenAiClient
 {
+    private readonly string _model;
     private readonly OpenAIClient _client;
 
-    public WrappedOpenAiClient(Uri uri, AzureKeyCredential azureKeyCredential)
+    public WrappedOpenAiClient(Uri uri, AzureKeyCredential azureKeyCredential, string model)
     {
+        _model = model;
         _client = new OpenAIClient(uri, azureKeyCredential);
     }
 
-    public async Task<string> GetChatCompletionsAsync(string deploymentOrModelName,
+    public async Task<TResult> Execute<TResult>(IChainableCall<TResult> chain, CancellationToken cancellationToken)
+    {
+        var result = await chain.Execute(this, cancellationToken);
+        return result;
+    }
+
+    public async Task<string> GetChatCompletionsAsync(
         ChatCompletionsOptions chatCompletionsOptions,
         CancellationToken cancellationToken = default)
     {
         var response =
-            await _client.GetChatCompletionsAsync(deploymentOrModelName, chatCompletionsOptions, cancellationToken);
+            await _client.GetChatCompletionsAsync(_model, chatCompletionsOptions, cancellationToken);
         return response.Value.Choices[0].Message.Content;
     }
 
-    public Task<string> CreativeOpenAiCall(string model, string systemPrompt, string userInput,
+    public Task<string> CreativeOpenAiCall(string systemPrompt, string userInput,
         CancellationToken cancellationToken)
     {
         return DefaultOpenAiCall(
-            model,
             systemPrompt,
             userInput,
             cancellationToken,
@@ -36,11 +44,10 @@ class WrappedOpenAiClient : IOpenAiClient
             frequencyPenalty: 0f);
     }
 
-    public Task<string> PredictableOpenAiCall(string model, string systemPrompt, string userInput,
+    public Task<string> PredictableOpenAiCall(string systemPrompt, string userInput,
         CancellationToken cancellationToken)
     {
         return DefaultOpenAiCall(
-            model,
             systemPrompt,
             userInput,
             cancellationToken,
@@ -50,11 +57,11 @@ class WrappedOpenAiClient : IOpenAiClient
             frequencyPenalty: 0f);
     }
 
-    public Task<string> DefaultOpenAiCall(string model, string systemPrompt, string userInput,
+    public Task<string> DefaultOpenAiCall(string systemPrompt, string userInput,
         CancellationToken cancellationToken, float? temperature = 1f, float? presencePenalty = 0f, float? topP = 0f,
         float? frequencyPenalty = 0f)
     {
-        return GetChatCompletionsAsync(model,
+        return GetChatCompletionsAsync(
             new ChatCompletionsOptions()
             {
                 Messages =
@@ -80,4 +87,5 @@ class WrappedOpenAiClient : IOpenAiClient
                 Formatting = Formatting.Indented,
             });
     }
+
 }

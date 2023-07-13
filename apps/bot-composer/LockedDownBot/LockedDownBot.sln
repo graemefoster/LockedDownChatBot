@@ -9,6 +9,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Prompts", "Prompts", "{0A16
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BotComposerOpenAi", "BotComposerOpenAi\BotComposerOpenAi.csproj", "{440DFD99-67B5-4B9B-9D03-AE1BDE919EEA}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OpenAiSimplePipeline", "OpenAiSimplePipeline\OpenAiSimplePipeline.csproj", "{6C80F668-4D26-4590-B35B-9482D9A01FC1}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -23,6 +25,10 @@ Global
 		{440DFD99-67B5-4B9B-9D03-AE1BDE919EEA}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{440DFD99-67B5-4B9B-9D03-AE1BDE919EEA}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{440DFD99-67B5-4B9B-9D03-AE1BDE919EEA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6C80F668-4D26-4590-B35B-9482D9A01FC1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6C80F668-4D26-4590-B35B-9482D9A01FC1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6C80F668-4D26-4590-B35B-9482D9A01FC1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6C80F668-4D26-4590-B35B-9482D9A01FC1}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

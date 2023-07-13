@@ -1,12 +1,12 @@
 using Azure.AI.OpenAI;
 using BotComposerOpenAi.ChatCompletionWithSystemPromptAndUserInput;
-using BotComposerOpenAi.OpenAI;
 using BotComposerOpenAi.SuggestFunctionCall;
 using BotComposerOpenAi.TryToFindUserIntent;
 using Microsoft.Bot.Builder;
 using Microsoft.Bot.Builder.Dialogs.Declarative;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using OpenAiSimplePipeline.OpenAI;
 
 namespace BotComposerOpenAi;
 

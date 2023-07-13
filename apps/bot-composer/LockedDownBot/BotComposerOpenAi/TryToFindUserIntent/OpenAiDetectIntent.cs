@@ -1,11 +1,9 @@
-using System.Collections.Immutable;
 using System.Runtime.CompilerServices;
 using AdaptiveExpressions.Properties;
-using Azure;
-using Azure.AI.OpenAI;
-using BotComposerOpenAi.OpenAI;
 using Microsoft.Bot.Builder.Dialogs;
 using Newtonsoft.Json;
+using OpenAiSimplePipeline.OpenAI;
+using OpenAiSimplePipeline.Prompts.ExtractIntent;
 
 namespace BotComposerOpenAi.TryToFindUserIntent;
 
@@ -15,19 +13,6 @@ namespace BotComposerOpenAi.TryToFindUserIntent;
 public class OpenAiDetectIntent : Dialog
 {
     private readonly OpenAiClientFactory _openAiClientFactory;
-
-    private const string SystemPromptInternal = @"{systemPrompt}
-
-Find the INTENT of the user's input. 
-Possible intents are {intents}. Use ""Unknown"" if the intent is not in this list.
-Respond with the intent as a single word. 
-";
-
-    private const string GetMoreInfoPrompt = @"{systemPrompt}
-
-You need to find the user's intent. Possible intents are {intents}.
-Given their input so-far, what would you ask the user next? 
-";
 
     [JsonConstructor]
     public OpenAiDetectIntent(
@@ -52,53 +37,17 @@ Given their input so-far, what would you ask the user next?
     public override async Task<DialogTurnResult> BeginDialogAsync(DialogContext dc, object options = null,
         CancellationToken cancellationToken = new())
     {
-        var client = _openAiClientFactory.GetFromDialogueContext(dc, out var model);
+        var client = _openAiClientFactory.GetFromSettings((IDictionary<string, object>)dc.State["settings"], out var model);
 
+        var prompt = SystemPrompt.GetValue(dc.State);
         var input = string.Join('\n', Inputs.GetValue(dc.State));
+        var intents = Intents.GetValue(dc.State)?.ToArray() ?? Array.Empty<string>();
 
-        var intents = Intents.GetValue(dc.State);
+        var response =
+            new ExtractIntentFromInput(prompt, intents, input)
+                .Execute(client, cancellationToken);
 
-        var getIntentPrompt = SystemPromptInternal
-            .Replace("{systemPrompt}", SystemPrompt.GetValue(dc.State))
-            .Replace(
-                "{intents}",
-                string.Join(',', intents));
-
-        var response = await client.DefaultOpenAiCall(
-            model,
-            getIntentPrompt,
-            input,
-            cancellationToken);
-
-        var result = response;
-        if (intents.Contains(result))
-        {
-            var dialogueResult = new IntentResult()
-            {
-                Unknown = false,
-                Intent = result
-            };
-            dc.State.SetValue(this.ResultProperty.GetValue(dc.State), dialogueResult);
-            return await dc.EndDialogAsync(result: dialogueResult, cancellationToken);
-        }
-
-        //couldn't detect it. Let's ask GPT what to say next:
-        var findMoreInfoPrompt = GetMoreInfoPrompt
-            .Replace("{systemPrompt}", SystemPrompt.GetValue(dc.State))
-            .Replace("{intents}", string.Join(',', intents));
-
-        var moreInfoResponse = await client.CreativeOpenAiCall(
-            model, 
-            findMoreInfoPrompt,
-            input, 
-            cancellationToken);
-
-        var moreInfoResult = new IntentResult()
-        {
-            Unknown = true,
-            SuggestedPrompt = moreInfoResponse
-        };
-        dc.State.SetValue(ResultProperty.GetValue(dc.State), moreInfoResult);
-        return await dc.EndDialogAsync(result: moreInfoResult, cancellationToken);
+        dc.State.SetValue(ResultProperty.GetValue(dc.State), response);
+        return await dc.EndDialogAsync(result: response, cancellationToken);
     }
 }
