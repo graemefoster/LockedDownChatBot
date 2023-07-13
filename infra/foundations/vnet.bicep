@@ -52,6 +52,7 @@ resource vnet 'Microsoft.Network/virtualNetworks@2022-11-01' = {
           addressPrefix: cidrSubnet(vnetCidr, 24, 4)
           privateEndpointNetworkPolicies: 'Enabled'
           privateLinkServiceNetworkPolicies: 'Enabled'
+          networkSecurityGroup: gwayNsg
         }
       }
       {
@@ -63,6 +64,30 @@ resource vnet 'Microsoft.Network/virtualNetworks@2022-11-01' = {
     ]
   }
 }
+
+resource gwayNsg 'Microsoft.Network/networkSecurityGroups@2022-11-01' = {
+  name: '${vnetName}-gway-nsg'
+  location: location
+  properties: {
+    securityRules: [
+      {
+        name: 'AllowIncomingFromInternetToBot'
+        properties: {
+          access: 'Allow'
+          direction: 'Inbound'
+          priority: 1000
+          protocol: 'Tcp'
+          description: 'Let Bot traffic in'
+          sourcePortRange: '*'
+          destinationPortRange: '443'
+          sourceAddressPrefix: '*'
+          destinationAddressPrefix: '*'
+        }
+      }
+    ]
+  }
+}
+
 
 resource privateDnsZone 'Microsoft.Network/privateDnsZones@2020-06-01' = {
   name: 'privatelink.azurewebsites.net'
