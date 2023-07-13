@@ -36,6 +36,14 @@ param localBotAadTenant string = ''
 @allowed([ 'MultiTenant', 'SingleTenant', '' ])
 param localBotAadTenantType string = 'MultiTenant'
 
+//Used to demonstrate getting a JWT from a user
+param optionalAadTenantId string
+param optionalAadClientId string
+@secure()
+param optionalAadClientSecret string
+param optionalAadRequiredScopes string
+
+
 var abbrs = loadJsonContent('./abbreviations.json')
 
 var resourceNameSuffix = toLower(replace(environmentName, '-', ''))
@@ -213,6 +221,9 @@ module bot 'bot/bot-service.bicep' = {
     localBotAadId: localBotAadId
     localBotAadTenant: localBotAadTenant
     localBotAadTenantType: localBotAadTenantType
+    optionalAadClientId: optionalAadClientId
+    optionalAadClientSecret: optionalAadClientSecret
+    optionalAadRequiredScopes: optionalAadRequiredScopes
   }
 }
 

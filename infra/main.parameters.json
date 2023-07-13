@@ -1,45 +1,57 @@
 {
-    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentParameters.json#",
-    "contentVersion": "1.0.0.0",
-    "parameters": {
-      "environmentName": {
-        "value": "${AZURE_ENV_NAME}"
-      },
-      "location": {
-        "value": "${AZURE_LOCATION}"
-      },
-      "dnsResourceName" : {
-        "value": "${DNS_RESOURCE_NAME}"
-      },
-      "dnsResourceGroupName" : {
-        "value": "${DNS_RESOURCE_RG}"
-      },
-      "kvGroupObjectId": {
-        "value": "${SECRETS_OFFICER_AAD_GROUP_OBJECTID}"
-      },
-      "chatApiCustomHost": {
-        "value": "${CHAT_API_CUSTOM_HOST}"
-      },
-      "openAiResourceId": {
-        "value": "${OPENAI_RESOURCE_ID}"
-      },
-      "openAiModel": {
-        "value": "${OPENAI_MODEL}"
-      },
-      "openAiKey": {
-        "value": "${OPENAI_KEY}"
-      },
-      "openAiEndpoint": {
-        "value": "${OPENAI_Endpoint}"
-      },
-      "localBotAadId": {
-        "value": "${LOCAL_BOT_AAD_ID}"
-      },
-      "localBotAadSecret": {
-        "value": "${LOCAL_BOT_AAD_SECRET}"
-      },
-      "localBotAadTenantType": {
-        "value": "${LOCAL_BOT_AAD_TenantType}"
-      }
+  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentParameters.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "environmentName": {
+      "value": "${AZURE_ENV_NAME}"
+    },
+    "location": {
+      "value": "${AZURE_LOCATION}"
+    },
+    "dnsResourceName": {
+      "value": "${DNS_RESOURCE_NAME}"
+    },
+    "dnsResourceGroupName": {
+      "value": "${DNS_RESOURCE_RG}"
+    },
+    "kvGroupObjectId": {
+      "value": "${SECRETS_OFFICER_AAD_GROUP_OBJECTID}"
+    },
+    "chatApiCustomHost": {
+      "value": "${CHAT_API_CUSTOM_HOST}"
+    },
+    "openAiResourceId": {
+      "value": "${OPENAI_RESOURCE_ID}"
+    },
+    "openAiModel": {
+      "value": "${OPENAI_MODEL}"
+    },
+    "openAiKey": {
+      "value": "${OPENAI_KEY}"
+    },
+    "openAiEndpoint": {
+      "value": "${OPENAI_ENDPOINT}"
+    },
+    "localBotAadId": {
+      "value": "${LOCAL_BOT_AAD_ID}"
+    },
+    "localBotAadSecret": {
+      "value": "${LOCAL_BOT_AAD_SECRET}"
+    },
+    "localBotAadTenantType": {
+      "value": "${LOCAL_BOT_AAD_TenantType}"
+    },
+    "optionalAadTenantId": {
+      "value" : "${OPTIONAL_API_AAD_TENANT_ID}"
+    },
+    "optionalAadClientId": {
+      "value" : "${OPTIONAL_API_AAD_CLIENT_ID}"
+    },
+    "optionalAadClientSecret": {
+      "value" : "${OPTIONAL_API_AAD_CLIENT_SECRET}"
+    },
+    "optionalAadRequiredScopes": {
+      "value" : "${OPTIONAL_API_AAD_REQUIRED_SCOPES}"
     }
+  }
 }

@@ -8,7 +8,11 @@ public class AskForMissingInformation : IChainableCall<ExtractFunctionInformatio
 {
     private const string SystemPrompt = @"{systemPrompt}
 
-The user wants to call the following function but is missing some parameters. Ask them nicely to provide the missing parameters.
+The user wants to call the below function but is missing inputs for these parameters:
+
+{missingParameters}
+
+ Ask them friendly to provide information so we can call it.
 
 ```function
 {function}
@@ -32,6 +36,7 @@ The user wants to call the following function but is missing some parameters. As
     {
         var systemPrompt = SystemPrompt
             .Replace("{systemPrompt}", _prompt)
+            .Replace("{missingParameters}", string.Join("\n", _extractFunctionOutput.MissingParameters))
             .Replace("{function}", _function);
 
         var result = await client.PredictableOpenAiCall(

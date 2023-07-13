@@ -4,10 +4,18 @@ param hostName string
 param logAnalyticsId string
 param appInsightsInstrumentationKey string
 
+param optionalAadTenantId string
+param optionalAadClientId string
+@secure()
+param optionalAadClientSecret string
+param optionalAadRequiredScopes string
+
 //Used if you need a Bot based on AAD. Blank if you don't
 param localBotAadId string
 param localBotAadTenant string
 param localBotAadTenantType string
+
+var oauthSignInCardName = 'sample-aad-auth'
 
 resource botIdentity 'Microsoft.ManagedIdentity/userAssignedIdentities@2023-01-31' existing = {
   name: botIdentityName
@@ -56,6 +64,28 @@ resource bot 'Microsoft.BotService/botServices@2022-09-15' = {
     kind: 'sdk'
     properties: {
       channelName: 'MsTeamsChannel'
+    }
+  }
+
+  resource oauthSignIn 'connections@2022-09-15' = if (optionalAadClientId != '') {
+    name: oauthSignInCardName
+    kind: 'sdk'
+    properties: {
+      clientId: optionalAadClientId
+      clientSecret: optionalAadClientSecret
+      parameters: [
+        {
+          key: 'tenantId'
+          value: optionalAadTenantId
+        }
+        {
+          key: 'scopes'
+          value: optionalAadRequiredScopes
+        }
+      ]
+      scopes: optionalAadRequiredScopes
+      name: oauthSignInCardName
+      serviceProviderId: '30dd229c-58e3-4a48-bdfd-91ec48eb906c' //AAD V2 magic GUID
     }
   }
 }

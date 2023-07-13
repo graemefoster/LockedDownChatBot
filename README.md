@@ -59,6 +59,9 @@ We support the Azure Developer CLI (azd). To get started you'll need a few thing
 
 - DNS (a subzone will do, but to wire up the Application Gateway we need to provision a LetsEncrypt certificate)
 - An OpenAI service. We don't deploy this (right now) so please bring your own.
+- Optional AAD application for local testing. We use a Managed Identity in the cloud to auth your Bot, but this isn't possible from a local dev machine
+- Optional AAD sign-in card. There's a dialogue to trigger a User-SignIn if you want to understand the flows.
+  - Your application needs a redirect to https://token.botframework.com/.auth/web/redirect 
 
 ```bash
 gh repo clone graemefoster/LockedDownChatBot
