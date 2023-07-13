@@ -67,38 +67,97 @@
           "$designer": {
             "id": "s812gT"
           },
-          "property": "conversation.intialAsk",
-          "value": "=turn.activity.text"
+          "property": "dialog.initialAsk",
+          "value": "=createArray(\"User: \" + turn.activity.text)"
         },
         {
-          "$kind": "OpenAiDetectIntent",
+          "$kind": "Microsoft.SetProperty",
           "$designer": {
-            "id": "5NbhZV"
+            "id": "XoSfSO"
           },
-          "intents": [
-            "AccountBalance",
-            "Greeting",
-            "BranchInformation"
-          ],
-          "systemPrompt": "You are a Bank Teller.",
-          "useAllDialogueInput": false,
-          "resultProperty": "conversation.detectedIntent",
-          "inputs": "=createArray(conversation.intialAsk)"
+          "property": "dialog.attempts",
+          "value": "=createArray(1,2,3)"
+        },
+        {
+          "$kind": "Microsoft.Foreach",
+          "$designer": {
+            "id": "6exLRn"
+          },
+          "index": "dialog.foreach.index",
+          "value": "dialog.foreach.value",
+          "itemsProperty": "dialog.attempts",
+          "actions": [
+            {
+              "$kind": "OpenAiDetectIntent",
+              "$designer": {
+                "id": "SsQgrA"
+              },
+              "inputs": "=dialog.initialAsk",
+              "resultProperty": "dialog.intent",
+              "systemPrompt": "You are a bank teller",
+              "intents": [
+                "Accounts",
+                "BranchInformation"
+              ]
+            },
+            {
+              "$kind": "Microsoft.IfCondition",
+              "$designer": {
+                "id": "Cev4vr"
+              },
+              "condition": "=dialog.intent.Unknown",
+              "actions": [
+                {
+                  "$kind": "Microsoft.EditArray",
+                  "$designer": {
+                    "id": "rZejdk"
+                  },
+                  "changeType": "push",
+                  "itemsProperty": "dialog.initialAsk",
+                  "value": "system: ${dialog.intent.SuggestedPrompt}"
+                },
+                {
+                  "$kind": "Microsoft.TextInput",
+                  "$designer": {
+                    "id": "oat8VZ"
+                  },
+                  "disabled": false,
+                  "maxTurnCount": 3,
+                  "alwaysPrompt": true,
+                  "allowInterruptions": false,
+                  "prompt": "${TextInput_Prompt_oat8VZ()}",
+                  "unrecognizedPrompt": "",
+                  "invalidPrompt": "",
+                  "property": "turn.input"
+                },
+                {
+                  "$kind": "Microsoft.EditArray",
+                  "$designer": {
+                    "id": "7NF2PI"
+                  },
+                  "changeType": "push",
+                  "itemsProperty": "dialog.initialAsk",
+                  "value": "user: ${turn.input}"
+                }
+              ],
+              "elseActions": [
+                {
+                  "$kind": "Microsoft.BreakLoop",
+                  "$designer": {
+                    "id": "4XJtBN"
+                  }
+                }
+              ]
+            }
+          ]
         },
         {
           "$kind": "Microsoft.IfCondition",
           "$designer": {
             "id": "ZAEKaQ"
           },
-          "condition": "=conversation.detectedIntent.Unknown",
+          "condition": "=dialog.intent.Unknown",
           "actions": [
-            {
-              "$kind": "Microsoft.SendActivity",
-              "$designer": {
-                "id": "ufXf2h"
-              },
-              "activity": "${SendActivity_ufXf2h()}"
-            },
             {
               "$kind": "Microsoft.RepeatDialog",
               "$designer": {
@@ -116,25 +175,23 @@
           "activity": "${SendActivity_9Fkf7T()}"
         },
         {
+          "$kind": "SummariseConversation",
+          "$designer": {
+            "id": "byr2AF"
+          },
+          "systemPrompt": "You are a bank teller.",
+          "resultProperty": "conversation.intialAsk",
+          "intents": "=dialog.initialAsk",
+          "conversation": "=dialog.initialAsk"
+        },
+        {
           "$kind": "Microsoft.SwitchCondition",
           "$designer": {
             "id": "r0tkv1"
           },
           "cases": [
             {
-              "actions": [
-                {
-                  "$kind": "Microsoft.SendActivity",
-                  "$designer": {
-                    "id": "LjxJMj"
-                  },
-                  "activity": "${SendActivity_LjxJMj()}"
-                }
-              ],
-              "value": "Greeting"
-            },
-            {
-              "value": "AccountBalance",
+              "value": "Accounts",
               "actions": [
                 {
                   "$kind": "Microsoft.BeginDialog",
@@ -160,16 +217,8 @@
               ]
             }
           ],
-          "default": [
-            {
-              "$kind": "Microsoft.SendActivity",
-              "$designer": {
-                "id": "HPpXr7"
-              },
-              "activity": "${SendActivity_HPpXr7()}"
-            }
-          ],
-          "condition": "conversation.detectedIntent.Intent"
+          "default": [],
+          "condition": "dialog.intent.Intent"
         }
       ]
     }

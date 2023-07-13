@@ -60,7 +60,7 @@ public class ExtractFunctionInformation : IChainableCall<ExtractFunctionInformat
                 resultProperties[x].ToString()!.Equals("UNKNOWN", StringComparison.InvariantCultureIgnoreCase))
             .ToHashSet();
 
-        return new ExtractFunctionInformationOutput(missingParameters.Any(), missingParameters, resultProperties, null);
+        return new ExtractFunctionInformationOutput(!missingParameters.Any(), missingParameters, resultProperties, null);
     }
 
     record JsonSchemaFunctionInput(JsonSchemaFunctionInputParameters Parameters);
