@@ -41,7 +41,7 @@ What would you ask the user to find their intent?
     {
         var systemPrompt = SystemPrompt
             .Replace("{systemPrompt}", _prompt)
-            .Replace($"{_intents}", string.Join('\n', _intents));
+            .Replace("{intents}", string.Join('\n', _intents));
 
         var result = await client.PredictableOpenAiCall(
             systemPrompt,
@@ -49,11 +49,12 @@ What would you ask the user to find their intent?
             token
         );
 
+        
         var foundIntent = _intents.Contains(result);
 
         if (foundIntent)
         {
-            return new ExtractIntentOutput(foundIntent, result, null);
+            return new ExtractIntentOutput(false, result, null);
         }
 
         systemPrompt = GetMoreInfoPrompt

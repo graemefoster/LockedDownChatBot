@@ -43,7 +43,7 @@ public class OpenAiDetectIntent : Dialog
         var input = string.Join('\n', Inputs.GetValue(dc.State));
         var intents = Intents.GetValue(dc.State)?.ToArray() ?? Array.Empty<string>();
 
-        var response =
+        var response = await
             new ExtractIntentFromInput(prompt, intents, input)
                 .Execute(client, cancellationToken);
 
