@@ -1,0 +1,30 @@
+[import](common.lg)
+
+# SendActivity_tBw747()
+[Activity
+    Text = ${SendActivity_tBw747_text()}
+]
+
+# SendActivity_tBw747_text()
+- Got a token
+# OAuthInput_InvalidPrompt_pBq1JK()
+[Activity
+    Text = ${OAuthInput_InvalidPrompt_pBq1JK_text()}
+]
+
+# OAuthInput_InvalidPrompt_pBq1JK_text()
+- Hello... some prompt is missing?
+# OAuthInput_DefaultValueResponse_pBq1JK()
+[Activity
+    Text = ${OAuthInput_DefaultValueResponse_pBq1JK_text()}
+]
+
+# OAuthInput_DefaultValueResponse_pBq1JK_text()
+- Welcome to the secret section. We need your consent to access.
+# SendActivity_P9YWS9()
+[Activity
+    Text = ${SendActivity_P9YWS9_text()}
+]
+
+# SendActivity_P9YWS9_text()
+- Welcome to the secret section!

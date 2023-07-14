@@ -70,6 +70,7 @@ resource bot 'Microsoft.BotService/botServices@2022-09-15' = {
   resource oauthSignIn 'connections@2022-09-15' = if (optionalAadClientId != '') {
     name: oauthSignInCardName
     kind: 'sdk'
+    location: 'global'
     properties: {
       clientId: optionalAadClientId
       clientSecret: optionalAadClientSecret

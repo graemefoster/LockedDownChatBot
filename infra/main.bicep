@@ -221,6 +221,7 @@ module bot 'bot/bot-service.bicep' = {
     localBotAadId: localBotAadId
     localBotAadTenant: localBotAadTenant
     localBotAadTenantType: localBotAadTenantType
+    optionalAadTenantId: optionalAadTenantId
     optionalAadClientId: optionalAadClientId
     optionalAadClientSecret: optionalAadClientSecret
     optionalAadRequiredScopes: optionalAadRequiredScopes

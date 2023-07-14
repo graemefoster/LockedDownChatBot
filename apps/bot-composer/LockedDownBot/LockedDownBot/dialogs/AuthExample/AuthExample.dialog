@@ -1,0 +1,54 @@
+{
+  "$kind": "Microsoft.AdaptiveDialog",
+  "$designer": {
+    "id": "phQRFu",
+    "name": "AuthExample",
+    "comment": ""
+  },
+  "autoEndDialog": true,
+  "defaultResultProperty": "dialog.result",
+  "triggers": [
+    {
+      "$kind": "Microsoft.OnBeginDialog",
+      "$designer": {
+        "name": "BeginDialog",
+        "description": "",
+        "id": "qD3JYv"
+      },
+      "actions": [
+        {
+          "$kind": "Microsoft.SendActivity",
+          "$designer": {
+            "id": "P9YWS9"
+          },
+          "activity": "${SendActivity_P9YWS9()}"
+        },
+        {
+          "$kind": "Microsoft.OAuthInput",
+          "$designer": {
+            "id": "pBq1JK"
+          },
+          "timeout": 900000,
+          "property": "turn.token",
+          "maxTurnCount": 3,
+          "allowInterruptions": true,
+          "connectionName": "sample-aad-auth",
+          "text": "Please sign-in to access your details",
+          "title": "Login",
+          "invalidPrompt": "${OAuthInput_InvalidPrompt_pBq1JK()}",
+          "defaultValueResponse": "${OAuthInput_DefaultValueResponse_pBq1JK()}"
+        },
+        {
+          "$kind": "Microsoft.SendActivity",
+          "$designer": {
+            "id": "tBw747"
+          },
+          "activity": "${SendActivity_tBw747()}"
+        }
+      ]
+    }
+  ],
+  "generator": "AuthExample.lg",
+  "recognizer": "AuthExample.lu.qna",
+  "id": "AuthExample"
+}

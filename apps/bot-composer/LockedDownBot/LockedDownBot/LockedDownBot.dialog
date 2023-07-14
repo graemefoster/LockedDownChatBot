@@ -97,7 +97,8 @@
               "systemPrompt": "You are a bank teller",
               "intents": [
                 "Accounts",
-                "BranchInformation"
+                "BranchInformation",
+                "EmployeeSite"
               ]
             },
             {
@@ -213,6 +214,19 @@
                   },
                   "activityProcessed": true,
                   "dialog": "BranchInformation"
+                }
+              ]
+            },
+            {
+              "value": "EmployeeSite",
+              "actions": [
+                {
+                  "$kind": "Microsoft.BeginDialog",
+                  "$designer": {
+                    "id": "cGJMhQ"
+                  },
+                  "activityProcessed": true,
+                  "dialog": "AuthExample"
                 }
               ]
             }
