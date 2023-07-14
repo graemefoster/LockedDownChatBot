@@ -23,7 +23,7 @@ You need to find the user's intent. Possible intents are
 
 {intents}
 
-What would you ask the user to find their intent? 
+Ask them what they want to do.
 ";
     
     private readonly string _prompt;
