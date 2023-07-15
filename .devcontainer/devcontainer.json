@@ -4,7 +4,7 @@
         "dockerfile": "Dockerfile",
         "args": {
             // List of images: https://github.com/devcontainers/images/tree/main/src
-            "IMAGE": "python:3.10"
+            "IMAGE": "dotnet:6.0"
         }
     },
     "features": {
