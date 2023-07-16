@@ -8,6 +8,14 @@ A sample application showing a secure setup with
 - Firewalls
 - Application Gateways
 
+TLDR;
+```bash
+gh repo clone graemefoster/LockedDownChatBot
+cd LockedDownChatBot
+azd up
+```
+
+
 # Learnings
 
 - Use GPT3.5-Turbo >= 0613. This model has been trained on functions (see [here](https://platform.openai.com/docs/guides/gpt/function-calling))
@@ -71,4 +79,6 @@ azd up
 
 The solution builds an Azure Architecture like this:
 
-![Azure Resources](./artifacts/sample-azure-resources.png "Azure Resources")
+![Logical](./artifacts/Architecture.png "Simple view")
+
+![Azure Resources](./artifacts/sample-azure-resources.png "Generated view")
