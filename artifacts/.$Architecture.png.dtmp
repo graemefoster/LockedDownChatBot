@@ -1,6 +1,6 @@
-<mxfile host="Electron" modified="2023-07-16T06:37:55.747Z" agent="Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) draw.io/21.6.1 Chrome/112.0.5615.204 Electron/24.6.1 Safari/537.36" etag="I1g4SUjKde2fZRoUfB3h" version="21.6.1" type="device">
+<mxfile host="Electron" modified="2023-07-16T06:39:46.240Z" agent="Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) draw.io/21.6.1 Chrome/112.0.5615.204 Electron/24.6.1 Safari/537.36" etag="Z0blLIOZf1VsGjavC1Nh" version="21.6.1" type="device">
   <diagram name="Page-1" id="VaPYOFnFGS76Kqwr0tM0">
-    <mxGraphModel dx="1122" dy="724" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" background="#ffffff" math="0" shadow="0">
+    <mxGraphModel dx="1122" dy="724" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" background="#FFFFFF" math="0" shadow="0">
       <root>
         <mxCell id="0" />
         <mxCell id="1" parent="0" />
@@ -125,9 +125,6 @@
         <mxCell id="qYzfHf2ZCZvZ-HRf7kPD-16" value="" style="image;aspect=fixed;html=1;points=[];align=center;fontSize=12;image=img/lib/azure2/networking/DNS_Zones.svg;" vertex="1" parent="1">
           <mxGeometry x="670" y="240.93" width="34" height="34" as="geometry" />
         </mxCell>
-        <mxCell id="qYzfHf2ZCZvZ-HRf7kPD-17" value="" style="shape=image;verticalLabelPosition=bottom;labelBackgroundColor=default;verticalAlign=top;aspect=fixed;imageAspect=0;image=https://letsencrypt.org/images/letsencrypt-logo-horizontal.svg;" vertex="1" parent="1">
-          <mxGeometry x="720" y="239.33" width="149" height="35.6" as="geometry" />
-        </mxCell>
         <mxCell id="qYzfHf2ZCZvZ-HRf7kPD-19" value="TLS cert created for Gateway &lt;br&gt;using Let&#39;s Encrypt ACME" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;" vertex="1" parent="1">
           <mxGeometry x="704" y="274.93" width="180" height="40" as="geometry" />
         </mxCell>
@@ -136,6 +133,9 @@
         </mxCell>
         <mxCell id="qYzfHf2ZCZvZ-HRf7kPD-22" value="" style="image;aspect=fixed;html=1;points=[];align=center;fontSize=12;image=img/lib/azure2/networking/Network_Security_Groups.svg;" vertex="1" parent="1">
           <mxGeometry x="340" y="560" width="19.76" height="24" as="geometry" />
+        </mxCell>
+        <mxCell id="qYzfHf2ZCZvZ-HRf7kPD-24" value="" style="shape=image;verticalLabelPosition=bottom;labelBackgroundColor=default;verticalAlign=top;aspect=fixed;imageAspect=0;image=https://letsencrypt.org/images/letsencrypt-logo-horizontal.svg;" vertex="1" parent="1">
+          <mxGeometry x="708.71" y="236.98" width="175.29" height="41.88" as="geometry" />
         </mxCell>
       </root>
     </mxGraphModel>
