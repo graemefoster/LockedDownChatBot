@@ -32,7 +32,7 @@
           "index": "=settings.COGNITIVE_SEARCH_INDEX",
           "searchServiceUrl": "=settings.COGNITIVE_SEARCH_URL",
           "managedIdentityId": "=settings.COGNITIVE_SEARCH_IDENTITY_ID",
-          "resultProperty": "=dialog.searchOutput",
+          "resultProperty": "dialog.searchOutput",
           "inputs": "=createArray(conversation.intialAsk)"
         },
         {

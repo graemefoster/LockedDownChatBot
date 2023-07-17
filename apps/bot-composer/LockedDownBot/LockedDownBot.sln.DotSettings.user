@@ -2,4 +2,5 @@
 	<s:String x:Key="/Default/Environment/AssemblyExplorer/XmlDocument/@EntryValue">&lt;AssemblyExplorer&gt;&#xD;
   &lt;Assembly Path="C:\Users\graemefoster\.nuget\packages\adaptiveexpressions\4.18.1\lib\netstandard2.0\AdaptiveExpressions.dll" /&gt;&#xD;
   &lt;Assembly Path="C:\Users\graemefoster\.nuget\packages\azure.ai.openai\1.0.0-beta.5\lib\netstandard2.0\Azure.AI.OpenAI.dll" /&gt;&#xD;
+  &lt;Assembly Path="C:\Users\graemefoster\.nuget\packages\microsoft.bot.builder.dialogs\4.18.1\lib\netstandard2.0\Microsoft.Bot.Builder.Dialogs.dll" /&gt;&#xD;
 &lt;/AssemblyExplorer&gt;</s:String></wpf:ResourceDictionary>
