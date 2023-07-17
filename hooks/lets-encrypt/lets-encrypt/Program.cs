@@ -19,6 +19,11 @@ using Azure.ResourceManager.Resources.Models;
 using Azure.Security.KeyVault.Certificates;
 using Newtonsoft.Json;
 
+var deployEdgeSecurity = Environment.GetEnvironmentVariable("DEPLOY_EDGE_SECURITY");
+
+//Don't bother getting a LetsEncrypt cert if we aren't deploying the edge security pieces.
+if (!deployEdgeSecurity) { return false;}
+
 var location = Environment.GetEnvironmentVariable("AZURE_LOCATION");
 var azdEnvironment = Environment.GetEnvironmentVariable("AZURE_ENV_NAME");
 var certificateName = Environment.GetEnvironmentVariable("CHAT_API_CUSTOM_HOST");

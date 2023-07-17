@@ -43,6 +43,8 @@ param optionalAadClientId string
 param optionalAadClientSecret string
 param optionalAadRequiredScopes string
 
+//When set to true, deploys Basic Firewall and Application Gateway
+param deployEdgeSecurity bool = false
 
 var abbrs = loadJsonContent('./abbreviations.json')
 
@@ -133,7 +135,7 @@ module core 'foundations/keyvault.bicep' = {
 
 var fwallPolicyName = '${abbrs.networkFirewallPolicies}${resourceNameSuffix}'
 
-module firewall 'foundations/firewall.bicep' = {
+module firewall 'foundations/firewall.bicep' = if (deployEdgeSecurity) {
   name: '${deployment().name}-fwall'
   scope: rg
   params: {
@@ -203,7 +205,7 @@ module app 'app/bot-app.bicep' = {
     applicationInsightsConnectionString: core.outputs.applicationInsightsConnectionString
     aspId: core.outputs.aspId
     apiUrl: sampleApp.outputs.appUrl
-
+    deployEdgeSecurity: deployEdgeSecurity
   }
 }
 
@@ -228,7 +230,7 @@ module bot 'bot/bot-service.bicep' = {
   }
 }
 
-module gateway 'foundations/gateway.bicep' = {
+module gateway 'foundations/gateway.bicep' = if (deployEdgeSecurity) {
   name: '${deployment().name}-gway'
   scope: rg
   params: {

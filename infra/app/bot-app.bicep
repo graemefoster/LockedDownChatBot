@@ -19,6 +19,9 @@ param applicationInsightsConnectionString string
 param aspId string
 param apiUrl string
 
+//If set to true then lock the web-app down to private endpoint
+param deployEdgeSecurity bool
+
 // EXPERIMENTAL - BREAKS DEPLOYMENT :(
 // //Unclear if Bot Composer supports Managed Identity connections. Stored in KV for now
 // type cosmosConnectionDetailsType = {
@@ -33,7 +36,6 @@ param apiUrl string
 resource botIdentity 'Microsoft.ManagedIdentity/userAssignedIdentities@2023-01-31' existing = {
   name: appServiceManagedIdentityName
 }
-
 
 resource app 'Microsoft.Web/sites@2022-09-01' = {
   name: appName
@@ -57,7 +59,7 @@ resource app 'Microsoft.Web/sites@2022-09-01' = {
       minTlsVersion: '1.2'
       alwaysOn: true
       vnetRouteAllEnabled: true
-      ipSecurityRestrictionsDefaultAction: 'Deny'
+      ipSecurityRestrictionsDefaultAction: deployEdgeSecurity ? 'Deny' : 'Allow' //set to Deny to simulate locked down environment if we are deploying edge gateway
       scmIpSecurityRestrictionsDefaultAction: 'Allow'
       ipSecurityRestrictions: []
       scmIpSecurityRestrictions: []
@@ -147,7 +149,7 @@ resource app 'Microsoft.Web/sites@2022-09-01' = {
               }
             }
           }
-        }        
+        }
       }
     }
   }
@@ -183,7 +185,7 @@ resource diagnostics 'Microsoft.Insights/diagnosticSettings@2021-05-01-preview' 
   }
 }
 
-resource privateEndpoint 'Microsoft.Network/privateEndpoints@2022-11-01' = {
+resource privateEndpoint 'Microsoft.Network/privateEndpoints@2022-11-01' = if (deployEdgeSecurity) {
   name: '${botCustomHostName}-private-endpoint'
   location: location
   properties: {
@@ -203,7 +205,7 @@ resource privateEndpoint 'Microsoft.Network/privateEndpoints@2022-11-01' = {
     ]
   }
 
-  resource dnsGroup 'privateDnsZoneGroups@2022-11-01' = {
+  resource dnsGroup 'privateDnsZoneGroups@2022-11-01' = if (deployEdgeSecurity) {
     name: '${botCustomHostName}-private-endpoint-dns'
     properties: {
       privateDnsZoneConfigs: [

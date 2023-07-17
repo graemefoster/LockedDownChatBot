@@ -42,16 +42,19 @@
       "value": "${LOCAL_BOT_AAD_TenantType}"
     },
     "optionalAadTenantId": {
-      "value" : "${OPTIONAL_API_AAD_TENANT_ID}"
+      "value": "${OPTIONAL_API_AAD_TENANT_ID}"
     },
     "optionalAadClientId": {
-      "value" : "${OPTIONAL_API_AAD_CLIENT_ID}"
+      "value": "${OPTIONAL_API_AAD_CLIENT_ID}"
     },
     "optionalAadClientSecret": {
-      "value" : "${OPTIONAL_API_AAD_CLIENT_SECRET}"
+      "value": "${OPTIONAL_API_AAD_CLIENT_SECRET}"
     },
     "optionalAadRequiredScopes": {
-      "value" : "${OPTIONAL_API_AAD_REQUIRED_SCOPES}"
+      "value": "${OPTIONAL_API_AAD_REQUIRED_SCOPES}"
+    },
+    "deployEdgeSecurity": {
+      "value": "${DEPLOY_EDGE_SECURITY}"
     }
   }
 }
