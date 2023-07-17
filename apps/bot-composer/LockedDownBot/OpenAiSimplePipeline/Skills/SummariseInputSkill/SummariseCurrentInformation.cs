@@ -11,7 +11,7 @@ public class SummariseCurrentInformation : IChainableCall<SummariseInputOutput>
     private readonly string? _systemPrompt;
 
     private const string SystemPrompt = @"{systemPrompt}
-Read the conversation so-far, and please summarise the User's ask into a single sentence.
+Read the conversation so-far, and summarise what the the user wants to achieve in a single sentence.
 ";
 
     public SummariseCurrentInformation(string systemPrompt, string conversation)

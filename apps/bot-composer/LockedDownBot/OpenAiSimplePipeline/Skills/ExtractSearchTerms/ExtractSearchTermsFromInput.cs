@@ -8,7 +8,7 @@ public record ExtractSearchTermsOutput(string? SuggestedTerms);
 public class ExtractSearchTermsFromInput : IChainableCall<ExtractSearchTermsOutput>
 {
     private const string SystemPrompt = @"{systemPrompt}
-Given the conversation, what search terms should we use to find the answer?";
+Given the user's input, what are the best words we should search on? Provide a list of words. Not phrases or sentences.";
 
     private readonly string _prompt;
     private readonly string _userInput;
