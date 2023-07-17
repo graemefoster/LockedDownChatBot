@@ -56,19 +56,6 @@ var tags = {
   'azd-env-name': environmentName
 }
 
-// Generate a unique token to be used in naming resources.
-// Remove linter suppression after using.
-#disable-next-line no-unused-vars
-var resourceToken = toLower(uniqueString(subscription().id, environmentName, location))
-
-// Name of the service defined in azure.yaml
-// A tag named azd-service-name with this value should be applied to the service host resource, such as:
-//   Microsoft.Web/sites for appservice, function
-// Example usage:
-//   tags: union(tags, { 'azd-service-name': apiServiceName })
-#disable-next-line no-unused-vars
-var apiServiceName = 'python-api'
-
 // Organize resources in a resource group
 resource rg 'Microsoft.Resources/resourceGroups@2022-09-01' existing = {
   name: '${abbrs.resourcesResourceGroups}${environmentName}'
@@ -78,6 +65,7 @@ resource rg 'Microsoft.Resources/resourceGroups@2022-09-01' existing = {
 var kvName = rg.tags['env-kv-name']
 
 var appName = '${abbrs.webSitesAppService}${resourceNameSuffix}-bot'
+var searchServicesAccountName = '${abbrs.searchSearchServices}${resourceNameSuffix}-bot'
 
 // Add resources to be provisioned below.
 // A full example that leverages azd bicep modules can be seen in the todo-python-mongo template:
@@ -181,7 +169,7 @@ module sampleApp 'sample-app/main.bicep' = {
 }
 
 
-module app 'app/bot-app.bicep' = {
+module app 'bot/bot-app.bicep' = {
   name: '${deployment().name}-app'
   scope: rg
   params: {
@@ -247,6 +235,19 @@ module gateway 'foundations/gateway.bicep' = if (deployEdgeSecurity) {
   }
 }
 
+module cogSearchIndex 'sample-search/cog-search.bicep' = {
+  name: '${deployment().name}-cogsearch'
+  scope: rg
+  params: {
+    location: location
+    cogSearchDnsZoneId: vnet.outputs.cogSearchPrivateDnsZoneId
+    cogServicesSearchName: searchServicesAccountName
+    privateEndpointSubnetId: vnet.outputs.privateEndpointSubnetId
+    logAnalyticsId: core.outputs.logAnalyticsId
+  }
+} 
+
+
 // Add outputs from the deployment here, if needed.
 //
 // This allows the outputs to be referenced by other bicep deployments in the deployment pipeline,
@@ -257,3 +258,9 @@ module gateway 'foundations/gateway.bicep' = if (deployEdgeSecurity) {
 // To see these outputs, run `azd env get-values`,  or `azd env get-values --output json` for json output.
 output AZURE_LOCATION string = location
 output AZURE_TENANT_ID string = tenant().tenantId
+
+output OUT_AZURE_SEARCH_ENDPOINT string = cogSearchIndex.outputs.searchEndpoint
+output OUT_AZURE_SEARCH_INDEX_NAME string = cogSearchIndex.outputs.indexName
+output OUT_AZURE_STORAGE_ACCOUNT_NAME string = cogSearchIndex.outputs.storageName
+output OUT_AZURE_STORAGE_CONTAINER_NAME string = cogSearchIndex.outputs.containerName
+output OUT_AZURE_RESOURCE_GROUP string = rg.name
