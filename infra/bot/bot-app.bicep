@@ -236,3 +236,5 @@ resource privateEndpoint 'Microsoft.Network/privateEndpoints@2022-11-01' = if (d
 
 output botIdentityName string = botIdentity.name
 output appName string = app.name
+output defaultHostName string = app.properties.defaultHostName
+

@@ -240,7 +240,7 @@ module bot 'bot/bot-service.bicep' = {
   scope: rg
   params: {
     botName: '${environmentName}-bot'
-    hostName: gatewayCustomHostName
+    hostName: deployEdgeSecurity ? gatewayCustomHostName : app.outputs.defaultHostName
     botIdentityName: app.outputs.botIdentityName
     logAnalyticsId: core.outputs.logAnalyticsId
     appInsightsInstrumentationKey: core.outputs.applicationInsightsInstrumentationKey
