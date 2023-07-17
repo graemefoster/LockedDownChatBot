@@ -98,7 +98,8 @@
               "intents": [
                 "Accounts",
                 "BranchInformation",
-                "EmployeeSite"
+                "EmployeeSite",
+                "Insurance"
               ]
             },
             {
@@ -227,6 +228,19 @@
                   },
                   "activityProcessed": true,
                   "dialog": "AuthExample"
+                }
+              ]
+            },
+            {
+              "value": "Insurance",
+              "actions": [
+                {
+                  "$kind": "Microsoft.BeginDialog",
+                  "$designer": {
+                    "id": "ELb2lT"
+                  },
+                  "activityProcessed": true,
+                  "dialog": "BranchInformation"
                 }
               ]
             }
