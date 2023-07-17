@@ -2,8 +2,10 @@
 [Bb]in/
 [Dd]ebug/
 [Oo]bj/
-DS_Store
+.DS_Store
 node_modules/
 dist/
 sample-teams-manifest/
 .pdf
+.bkp
+.dtmp
