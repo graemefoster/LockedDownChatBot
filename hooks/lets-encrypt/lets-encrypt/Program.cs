@@ -21,9 +21,6 @@ using Newtonsoft.Json;
 
 var deployEdgeSecurity = Environment.GetEnvironmentVariable("DEPLOY_EDGE_SECURITY");
 
-//Don't bother getting a LetsEncrypt cert if we aren't deploying the edge security pieces.
-if (!bool.Parse(deployEdgeSecurity)) { return;}
-
 var location = Environment.GetEnvironmentVariable("AZURE_LOCATION");
 var azdEnvironment = Environment.GetEnvironmentVariable("AZURE_ENV_NAME");
 var certificateName = Environment.GetEnvironmentVariable("CHAT_API_CUSTOM_HOST");
@@ -41,6 +38,8 @@ var armClient = new ArmClient(new AzureCliCredential());
 var subscriptionResource = armClient
     .GetDefaultSubscription();
 
+var tenantId = subscriptionResource.Get().Value.Data.TenantId!.Value;
+
 //check for KeyVault
 var expectedKvName =$"kv-{azdEnvironment.Replace("-", "").Replace("_", "").ToLowerInvariant()}";
 
@@ -57,13 +56,6 @@ var rg = subscriptionResource
             }
         })
     .Value;
-
-Console.WriteLine($"Looking for Dns Zone: {dnsResourceGroup}/{dnsSuffix}");
-var dnsResource = subscriptionResource
-    .GetResourceGroup(dnsResourceGroup)
-    .Value.GetDnsZone(dnsSuffix).Value;
-
-var tenantId = subscriptionResource.Get().Value.Data.TenantId!.Value;
 
 Console.WriteLine($"Checking for KeyVault: {expectedKvName}");
 var kv = rg.GetKeyVaults()
@@ -84,6 +76,16 @@ var kv = rg.GetKeyVaults()
             }
         )
     ).Value;
+
+
+//Don't bother getting a LetsEncrypt cert if we aren't deploying the edge security pieces.
+if (!bool.Parse(deployEdgeSecurity)) { return;}
+
+
+Console.WriteLine($"Looking for Dns Zone: {dnsResourceGroup}/{dnsSuffix}");
+var dnsResource = subscriptionResource
+    .GetResourceGroup(dnsResourceGroup)
+    .Value.GetDnsZone(dnsSuffix).Value;
 
 var client = new HttpClient();
 var token = await cred.GetTokenAsync(new TokenRequestContext(new[] { "https://management.azure.com/" }));

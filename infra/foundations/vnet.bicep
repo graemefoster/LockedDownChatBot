@@ -52,7 +52,9 @@ resource vnet 'Microsoft.Network/virtualNetworks@2022-11-01' = {
           addressPrefix: cidrSubnet(vnetCidr, 24, 4)
           privateEndpointNetworkPolicies: 'Enabled'
           privateLinkServiceNetworkPolicies: 'Enabled'
-          networkSecurityGroup: gwayNsg
+          networkSecurityGroup: {
+            id: gwayNsg.id
+          }
         }
       }
       {
