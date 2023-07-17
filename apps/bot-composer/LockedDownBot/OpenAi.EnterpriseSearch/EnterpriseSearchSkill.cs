@@ -3,6 +3,7 @@ using Azure.Search.Documents.Models;
 using OpenAiSimplePipeline.OpenAI;
 using OpenAiSimplePipeline.OpenAI.Chains;
 using OpenAiSimplePipeline.Skills.ExtractSearchTerms;
+using OpenAiSimplePipeline.Skills.SummariseContentSkill;
 using OpenAiSimplePipeline.Skills.SummariseInputSkill;
 
 namespace OpenAi.EnterpriseSearch;
@@ -28,11 +29,11 @@ public class EnterpriseSearchSkill : IChainableCall<EnterpriseSearchOutput>
         return new EnterpriseSearchOutput(searchResult.Document.GetString("content"));
     }
 
-    public static IChainableCall<SummariseInputOutput> PerformSearch(SearchClient client, string systemPrompt, string userInput)
+    public static IChainableCall<SummariseContentOutput> PerformSearch(SearchClient client, string systemPrompt, string userInput)
     {
         return new ExtractSearchTermsFromInput(systemPrompt, userInput)
             .Then(x => new EnterpriseSearchSkill(client, x.SuggestedTerms!))
-            .Then(x => new SummariseCurrentInformation(systemPrompt, x.Response!));
+            .Then(x => new SummariseContent(systemPrompt, x.Response!));
     }
 
 }
