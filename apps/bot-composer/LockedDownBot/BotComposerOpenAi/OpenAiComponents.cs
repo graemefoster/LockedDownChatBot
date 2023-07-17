@@ -1,5 +1,6 @@
 using Azure.AI.OpenAI;
 using BotComposerOpenAi.ChatCompletionWithSystemPromptAndUserInput;
+using BotComposerOpenAi.EnterpriseSearch;
 using BotComposerOpenAi.SuggestFunctionCall;
 using BotComposerOpenAi.TryToFindUserIntent;
 using Microsoft.Bot.Builder;
@@ -26,6 +27,7 @@ public class OpenAiComponents : BotComponent
     {
         // Anything that could be done in Startup.ConfigureServices can be done here.
         services.AddSingleton<OpenAiClientFactory>();
+        services.AddSingleton<DeclarativeType>(sp => new DeclarativeType<EnterpriseSearchActivity>(EnterpriseSearchActivity.Kind));
         services.AddSingleton<DeclarativeType>(sp => new DeclarativeType<OpenAiResponseWithSystemPrompt>(OpenAiResponseWithSystemPrompt.Kind));
         services.AddSingleton<DeclarativeType>(sp => new DeclarativeType<OpenAiDetectIntent>(OpenAiDetectIntent.Kind));
         services.AddSingleton<DeclarativeType>(sp => new DeclarativeType<OpenAiSuggestFunctionCall>(OpenAiSuggestFunctionCall.Kind));

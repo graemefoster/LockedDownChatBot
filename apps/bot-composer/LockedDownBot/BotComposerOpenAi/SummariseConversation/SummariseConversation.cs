@@ -3,7 +3,7 @@ using AdaptiveExpressions.Properties;
 using Microsoft.Bot.Builder.Dialogs;
 using Newtonsoft.Json;
 using OpenAiSimplePipeline.OpenAI;
-using OpenAiSimplePipeline.Prompts.SummariseCurrentConversation;
+using OpenAiSimplePipeline.Skills.SummariseInputSkill;
 
 namespace BotComposerOpenAi.SummariseConversation;
 

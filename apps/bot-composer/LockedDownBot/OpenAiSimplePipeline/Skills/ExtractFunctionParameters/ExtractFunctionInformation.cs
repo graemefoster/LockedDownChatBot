@@ -2,7 +2,7 @@ using Newtonsoft.Json;
 using OpenAiSimplePipeline.OpenAI;
 using OpenAiSimplePipeline.OpenAI.Chains;
 
-namespace OpenAiSimplePipeline.Prompts.ExtractFunctionParameters;
+namespace OpenAiSimplePipeline.Skills.ExtractFunctionParameters;
 
 public class ExtractFunctionInformation : IChainableCall<ExtractFunctionInformationOutput>
 {

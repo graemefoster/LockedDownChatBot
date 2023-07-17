@@ -4,7 +4,7 @@ using Microsoft.Bot.Builder.Dialogs;
 using Newtonsoft.Json;
 using OpenAiSimplePipeline.OpenAI;
 using OpenAiSimplePipeline.OpenAI.Chains;
-using OpenAiSimplePipeline.Prompts.ExtractFunctionParameters;
+using OpenAiSimplePipeline.Skills.ExtractFunctionParameters;
 
 namespace BotComposerOpenAi.SuggestFunctionCall;
 

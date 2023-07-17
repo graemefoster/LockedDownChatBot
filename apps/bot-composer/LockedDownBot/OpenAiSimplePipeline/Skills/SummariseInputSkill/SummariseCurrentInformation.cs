@@ -1,11 +1,11 @@
 ﻿using OpenAiSimplePipeline.OpenAI;
 using OpenAiSimplePipeline.OpenAI.Chains;
 
-namespace OpenAiSimplePipeline.Prompts.SummariseCurrentConversation;
+namespace OpenAiSimplePipeline.Skills.SummariseInputSkill;
 
-public record SummariseCurrentInformationOutput(string Summary);
+public record SummariseInputOutput(string Summary);
 
-public class SummariseCurrentInformation : IChainableCall<SummariseCurrentInformationOutput>
+public class SummariseCurrentInformation : IChainableCall<SummariseInputOutput>
 {
     private readonly string _conversation;
     private readonly string? _systemPrompt;
@@ -20,7 +20,7 @@ Read the conversation so-far, and please summarise the User's ask into a single 
         _conversation = conversation;
     }
 
-    public async Task<SummariseCurrentInformationOutput> Execute(IOpenAiClient client, CancellationToken token)
+    public async Task<SummariseInputOutput> Execute(IOpenAiClient client, CancellationToken token)
     {
         var systemPrompt = SystemPrompt.
                 Replace("{systemPrompt}", _systemPrompt);
@@ -31,6 +31,6 @@ Read the conversation so-far, and please summarise the User's ask into a single 
             token
         );
 
-        return new SummariseCurrentInformationOutput(result);
+        return new SummariseInputOutput(result);
     }
 }

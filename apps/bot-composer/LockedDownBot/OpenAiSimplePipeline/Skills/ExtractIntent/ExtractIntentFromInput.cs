@@ -1,7 +1,7 @@
 using OpenAiSimplePipeline.OpenAI;
 using OpenAiSimplePipeline.OpenAI.Chains;
 
-namespace OpenAiSimplePipeline.Prompts.ExtractIntent;
+namespace OpenAiSimplePipeline.Skills.ExtractIntent;
 
 public record ExtractIntentOutput(bool Unknown, string? Intent, string? SuggestedPrompt);
 

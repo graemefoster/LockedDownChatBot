@@ -3,6 +3,7 @@ param cogServicesSearchName string
 param cogSearchDnsZoneId string
 param privateEndpointSubnetId string
 param logAnalyticsId string
+param appServiceIdentityPrincipalId string
 param location string = resourceGroup().location
 
 resource cogSearch 'Microsoft.Search/searchServices@2022-09-01' = {
@@ -71,6 +72,20 @@ resource privateEndpoint 'Microsoft.Network/privateEndpoints@2022-11-01' = {
         }
       ]
     }
+  }
+}
+
+resource searchRole 'Microsoft.Authorization/roleDefinitions@2022-04-01' existing = {
+  name: '1407120a-92aa-4202-b7e9-c0e197c71c8f'
+}
+
+resource appServiceRbac 'Microsoft.Authorization/roleAssignments@2022-04-01' = {
+  name: guid('${appServiceIdentityPrincipalId}-search-${cogSearch.id}')
+  scope: cogSearch
+  properties: {
+    roleDefinitionId: searchRole.id
+    principalId: appServiceIdentityPrincipalId
+    principalType: 'ServicePrincipal'
   }
 }
 

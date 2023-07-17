@@ -194,6 +194,8 @@ module app 'bot/bot-app.bicep' = {
     aspId: core.outputs.aspId
     apiUrl: sampleApp.outputs.appUrl
     deployEdgeSecurity: deployEdgeSecurity
+    searchEndpointUrl: cogSearchIndex.outputs.searchEndpoint
+    searchIndexName: cogSearchIndex.outputs.indexName
   }
 }
 
@@ -244,6 +246,7 @@ module cogSearchIndex 'sample-search/cog-search.bicep' = {
     cogServicesSearchName: searchServicesAccountName
     privateEndpointSubnetId: vnet.outputs.privateEndpointSubnetId
     logAnalyticsId: core.outputs.logAnalyticsId
+    appServiceIdentityPrincipalId: managedIdentities.outputs.aspIdentityPrincipalId
   }
 } 
 

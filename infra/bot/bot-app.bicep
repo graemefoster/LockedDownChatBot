@@ -18,6 +18,8 @@ param cosmosContainerId string
 param applicationInsightsConnectionString string
 param aspId string
 param apiUrl string
+param searchEndpointUrl string
+param searchIndexName string
 
 //If set to true then lock the web-app down to private endpoint
 param deployEdgeSecurity bool
@@ -124,6 +126,18 @@ resource app 'Microsoft.Web/sites@2022-09-01' = {
         {
           name: 'AzureBotTokenService_AUTHENTICATION_SECRET'
           value: 'IGNORE-THIS-IS-NEVER-USED'
+        }
+        {
+          name: 'COGNITIVE_SEARCH_URL'
+          value: searchEndpointUrl
+        }
+        {
+          name: 'COGNITIVE_SEARCH_INDEX'
+          value: searchIndexName
+        }
+        {
+          name: 'COGNITIVE_SEARCH_IDENTITY_ID'
+          value: botIdentity.properties.principalId
         }
       ]
     }
