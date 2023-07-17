@@ -137,7 +137,7 @@ resource app 'Microsoft.Web/sites@2022-09-01' = {
         }
         {
           name: 'COGNITIVE_SEARCH_IDENTITY_ID'
-          value: botIdentity.properties.principalId
+          value: botIdentity.properties.clientId
         }
       ]
     }
