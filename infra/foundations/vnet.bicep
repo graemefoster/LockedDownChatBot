@@ -155,6 +155,22 @@ resource cogSearchPrivateDnsZone 'Microsoft.Network/privateDnsZones@2020-06-01' 
   }
 }
 
+resource storagePrivateDnsZone 'Microsoft.Network/privateDnsZones@2020-06-01' = {
+  name: 'privatelink.blob.${environment().suffixes.storage}'
+  location: 'global'
+
+  resource vnetLink 'virtualNetworkLinks@2020-06-01' = {
+    name: 'privatelink.blob.${environment().suffixes.storage}-link'
+    location: 'global'
+    properties: {
+      registrationEnabled: false
+      virtualNetwork: {
+        id: vnet.id
+      }
+    }
+  }
+}
+
 output firewallSubnetId string = filter(vnet.properties.subnets, subnet => subnet.name == 'AzureFirewallSubnet')[0].id
 output firewallManagementSubnetId string = filter(vnet.properties.subnets, subnet => subnet.name == 'AzureFirewallManagementSubnet')[0].id
 output privateEndpointSubnetId string = filter(vnet.properties.subnets, subnet => subnet.name == 'PrivateEndpoints')[0].id
@@ -164,3 +180,4 @@ output privateDnsZoneId string = privateDnsZone.id
 output openAiPrivateDnsZoneId string = openAiPrivateDnsZone.id
 output cosmosPrivateDnsZoneId string = cosmosPrivateDnsZone.id
 output cogSearchPrivateDnsZoneId string = cogSearchPrivateDnsZone.id
+output storagePrivateDnsZoneId string =  storagePrivateDnsZone.id

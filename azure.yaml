@@ -28,3 +28,7 @@ services:
     language: dotnet
     project: ./apps/bot-composer/LockedDownBot/LockedDownBot/LockedDownBot.csproj
     host: appservice
+  document-cracker:
+    language: dotnet
+    project: ./apps/content-splitter-function/ContentSplitter/ContentSplitter.csproj
+    host: appservice

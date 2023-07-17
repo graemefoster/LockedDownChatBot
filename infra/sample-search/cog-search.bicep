@@ -89,35 +89,6 @@ resource appServiceRbac 'Microsoft.Authorization/roleAssignments@2022-04-01' = {
   }
 }
 
-var storageName = substring(replace(replace(toLower(cogServicesSearchName), '-', ''), '_', ''), 0, 23)
-
-resource searchStorage 'Microsoft.Storage/storageAccounts@2022-09-01' = {
-  name: storageName
-  location: location
-  kind: 'StorageV2'
-  sku: {
-    name: 'Standard_LRS'
-  }
-  properties: {
-    allowBlobPublicAccess: true
-  }
-}
-
-
-var containerName = 'sample-documents'
-resource blobServices 'Microsoft.Storage/storageAccounts/blobServices@2022-09-01' = {
-  name: 'default'
-  parent: searchStorage
-
-  resource container 'containers@2022-09-01' = {
-    name: containerName
-    properties: {
-      publicAccess: 'None'
-    }
-  }
-}
 
 output searchEndpoint string = 'https://${cogSearch.name}.search.windows.net'
-output storageName string = storageName
-output containerName string = containerName
 output indexName string = 'info-idx'

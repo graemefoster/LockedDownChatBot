@@ -65,6 +65,7 @@ resource rg 'Microsoft.Resources/resourceGroups@2022-09-01' existing = {
 var kvName = rg.tags['env-kv-name']
 
 var appName = '${abbrs.webSitesAppService}${resourceNameSuffix}-bot'
+var functionName = '${abbrs.webSitesAppService}${resourceNameSuffix}-crkr'
 var searchServicesAccountName = '${abbrs.searchSearchServices}${resourceNameSuffix}-bot'
 
 // Add resources to be provisioned below.
@@ -139,6 +140,19 @@ module firewall 'foundations/firewall.bicep' = if (deployEdgeSecurity) {
   }
 }
 
+module storage 'foundations/storage.bicep' = {
+  name: '${deployment().name}-stg'
+  scope: rg
+  params: {
+    appServiceIdentityPrincipalId: managedIdentities.outputs.aspIdentityPrincipalId
+    cogServicesSearchName: searchServicesAccountName
+    kvName: core.outputs.kvName
+    privateEndpointSubnetId: vnet.outputs.privateEndpointSubnetId
+    storageDnsZoneId: vnet.outputs.storagePrivateDnsZoneId
+    location: location
+  }
+}
+
 module database 'foundations/database.bicep' = {
   name: '${deployment().name}-db'
   scope: rg
@@ -196,6 +210,26 @@ module app 'bot/bot-app.bicep' = {
     deployEdgeSecurity: deployEdgeSecurity
     searchEndpointUrl: cogSearchIndex.outputs.searchEndpoint
     searchIndexName: cogSearchIndex.outputs.indexName
+  }
+}
+
+module documentCracker 'sample-search/document-cracker.bicep' = {
+  name: '${deployment().name}-cracker'
+  scope: rg
+  params: {
+    functionAppName: functionName
+    botCustomHostName: chatApiCustomHost
+    location: location
+    privateEndpointSubnetId: vnet.outputs.privateEndpointSubnetId
+    vnetIntegrationSubnetId: vnet.outputs.vnetIntegrationSubnetId
+    privateDnsZoneId: vnet.outputs.privateDnsZoneId
+    tags: tags
+    logAnalyticsId: core.outputs.logAnalyticsId
+    kvName: core.outputs.kvName
+    appServiceManagedIdentityName: managedIdentities.outputs.aspIdentityName
+    aspId: core.outputs.aspId
+    storageConnectionStringSecretName: storage.outputs.storageAccountSecretName
+    appInsightsConnectionString: core.outputs.applicationInsightsConnectionString
   }
 }
 
@@ -264,6 +298,6 @@ output AZURE_TENANT_ID string = tenant().tenantId
 
 output OUT_AZURE_SEARCH_ENDPOINT string = cogSearchIndex.outputs.searchEndpoint
 output OUT_AZURE_SEARCH_INDEX_NAME string = cogSearchIndex.outputs.indexName
-output OUT_AZURE_STORAGE_ACCOUNT_NAME string = cogSearchIndex.outputs.storageName
-output OUT_AZURE_STORAGE_CONTAINER_NAME string = cogSearchIndex.outputs.containerName
+output OUT_AZURE_STORAGE_ACCOUNT_NAME string = storage.outputs.storageAccountName
+output OUT_AZURE_STORAGE_CONTAINER_NAME string = storage.outputs.documentsToIndexContainerName
 output OUT_AZURE_RESOURCE_GROUP string = rg.name
