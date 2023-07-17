@@ -24,7 +24,13 @@ public class EnterpriseSearchSkill : IChainableCall<EnterpriseSearchOutput>
     public async Task<EnterpriseSearchOutput> Execute(IOpenAiClient client, CancellationToken token)
     {
         var searchResult = (await _client
-            .SearchAsync<SearchDocument>(_userInput, new SearchOptions() { Size = 1 }, token)).Value.GetResults().First();
+            .SearchAsync<SearchDocument>(
+                _userInput, 
+                new SearchOptions()
+                {
+                    Size = 1,
+                    SemanticConfigurationName = "default"
+                }, token)).Value.GetResults().First();
         
         return new EnterpriseSearchOutput(searchResult.Document.GetString("content"));
     }
