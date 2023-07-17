@@ -22,9 +22,9 @@ resource cogSearch 'Microsoft.Search/searchServices@2022-09-01' = {
       }
     }
     hostingMode: 'default'
-    
+
 #disable-next-line BCP037
-    semanticSearch: 'enabled'
+    semanticSearch: 'free'
   }
 
 }
