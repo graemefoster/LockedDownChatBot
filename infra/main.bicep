@@ -218,7 +218,6 @@ module documentCracker 'sample-search/document-cracker.bicep' = {
   scope: rg
   params: {
     functionAppName: functionName
-    botCustomHostName: chatApiCustomHost
     location: location
     privateEndpointSubnetId: vnet.outputs.privateEndpointSubnetId
     vnetIntegrationSubnetId: vnet.outputs.vnetIntegrationSubnetId

@@ -86,6 +86,20 @@ resource gwayNsg 'Microsoft.Network/networkSecurityGroups@2022-11-01' = {
           destinationAddressPrefix: '*'
         }
       }
+      {
+        name: 'AllowAppGWayMgmt'
+        properties: {
+          access: 'Allow'
+          direction: 'Inbound'
+          priority: 999
+          protocol: '*'
+          description: 'Let Mgmt traffic in'
+          sourcePortRange: '*'
+          destinationPortRange: '65200-65535'
+          sourceAddressPrefix: '*'
+          destinationAddressPrefix: '*'
+        }
+      }
     ]
   }
 }

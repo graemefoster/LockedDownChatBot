@@ -1,5 +1,4 @@
 param functionAppName string
-param botCustomHostName string
 param privateEndpointSubnetId string
 param vnetIntegrationSubnetId string
 param privateDnsZoneId string
@@ -93,7 +92,7 @@ resource diagnostics 'Microsoft.Insights/diagnosticSettings@2021-05-01-preview' 
 }
 
 resource privateEndpoint 'Microsoft.Network/privateEndpoints@2022-11-01' = {
-  name: '${botCustomHostName}-private-endpoint'
+  name: '${functionAppName}-private-endpoint'
   location: location
   properties: {
     subnet: {
@@ -101,7 +100,7 @@ resource privateEndpoint 'Microsoft.Network/privateEndpoints@2022-11-01' = {
     }
     privateLinkServiceConnections: [
       {
-        name: '${botCustomHostName}-private-link-service-connection'
+        name: '${functionAppName}-private-link-service-connection'
         properties: {
           privateLinkServiceId: app.id
           groupIds: [
@@ -113,11 +112,11 @@ resource privateEndpoint 'Microsoft.Network/privateEndpoints@2022-11-01' = {
   }
 
   resource dnsGroup 'privateDnsZoneGroups@2022-11-01' = {
-    name: '${botCustomHostName}-private-endpoint-dns'
+    name: '${functionAppName}-private-endpoint-dns'
     properties: {
       privateDnsZoneConfigs: [
         {
-          name: '${botCustomHostName}-private-endpoint-cfg'
+          name: '${functionAppName}-private-endpoint-cfg'
           properties: {
             privateDnsZoneId: privateDnsZoneId
           }
