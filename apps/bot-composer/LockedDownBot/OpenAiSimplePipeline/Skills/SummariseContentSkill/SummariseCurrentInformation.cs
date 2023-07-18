@@ -1,26 +1,25 @@
 ﻿using OpenAiSimplePipeline.OpenAI;
 using OpenAiSimplePipeline.OpenAI.Chains;
 
-namespace OpenAiSimplePipeline.Skills.SummariseInputSkill;
+namespace OpenAiSimplePipeline.Skills.SummariseContentSkill;
 
-public record SummariseInputOutput(string Summary);
+public record SummariseContentOutput(string Summary);
 
-public class SummariseCurrentInformation : IChainableCall<SummariseInputOutput>
+public class SummariseContent : IChainableCall<SummariseContentOutput>
 {
     private readonly string _conversation;
     private readonly string? _systemPrompt;
 
     private const string SystemPrompt = @"{systemPrompt}
-Read the conversation so-far, and summarise what the the user wants to achieve in a single sentence.
-";
+Please summarise the information entered. Do not make anything up.";
 
-    public SummariseCurrentInformation(string systemPrompt, string conversation)
+    public SummariseContent(string systemPrompt, string conversation)
     {
         _systemPrompt = systemPrompt;
         _conversation = conversation;
     }
 
-    public async Task<SummariseInputOutput> Execute(IOpenAiClient client, CancellationToken token)
+    public async Task<SummariseContentOutput> Execute(IOpenAiClient client, CancellationToken token)
     {
         var systemPrompt = SystemPrompt.
                 Replace("{systemPrompt}", _systemPrompt);
@@ -31,6 +30,6 @@ Read the conversation so-far, and summarise what the the user wants to achieve i
             token
         );
 
-        return new SummariseInputOutput(result);
+        return new SummariseContentOutput(result);
     }
 }

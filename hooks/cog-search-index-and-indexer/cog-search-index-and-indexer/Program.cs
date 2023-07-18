@@ -40,6 +40,19 @@ var index = new SearchIndex(expectedIndexName)
             { IsFilterable = true, IsSearchable = false, IsSortable = true },
         new SearchField("metadata_storage_content_type", SearchFieldDataType.String)
             { IsFilterable = true, IsSearchable = false, IsSortable = true },
+    },
+    SemanticSettings = new SemanticSettings()
+    {
+        Configurations =
+        {
+            new SemanticConfiguration("default", new PrioritizedFields()
+            {
+                TitleField = new SemanticField() { FieldName = "metadata_storage_name" },
+                ContentFields = { new SemanticField() { FieldName = "content" } },
+                KeywordFields = { new SemanticField() { FieldName = "content" } }
+            })
+        },
+        DefaultConfiguration = "default"
     }
 };
 var indexDataSource = new SearchIndexerDataSourceConnection(
