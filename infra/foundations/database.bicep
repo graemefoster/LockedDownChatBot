@@ -60,6 +60,26 @@ resource sqlContainer 'Microsoft.DocumentDB/databaseAccounts/sqlDatabases/contai
   }
 }
 
+
+//Used to demonstrate vector search / embeddings.
+var sampleVectorContainer = 'vector-container'
+resource vectorContainer 'Microsoft.DocumentDB/databaseAccounts/sqlDatabases/containers@2023-04-15' = {
+  parent: db
+  name: sampleVectorContainer
+  location: location
+  properties: {
+    resource: {
+      id: sampleVectorContainer
+      partitionKey: {
+        paths: [
+          '/id'
+        ]
+        kind: 'Hash'
+      }
+    }
+  }
+}
+
 resource privateEndpoint 'Microsoft.Network/privateEndpoints@2022-11-01' = {
   name: '${databaseName}-private-endpoint'
   location: location
