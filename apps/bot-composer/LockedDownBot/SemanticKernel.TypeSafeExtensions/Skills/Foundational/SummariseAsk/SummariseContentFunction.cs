@@ -3,9 +3,9 @@ using Microsoft.SemanticKernel;
 using Microsoft.SemanticKernel.Orchestration;
 using Microsoft.SemanticKernel.SkillDefinition;
 
-namespace LockedDownBotSemanticKernel.Skills.Foundational.SummariseInput;
+namespace LockedDownBotSemanticKernel.Skills.Foundational.SummariseAsk;
 
-public static class SummariseContentFunction
+public static class SummariseAskFunction
 {
     public record Input(string Context, string Content);
     public record Output(string Summarisation);
@@ -15,7 +15,7 @@ public static class SummariseContentFunction
         public static string Prompt = """
 {{$Context}}
 
-Given the following information, summarise all of the it in a single paragraph.
+Read the following dialogue. Summarise the key ask of the User into a single sentence.
 
 --- INFORMATION FOLLOWS
 {{$Content}}

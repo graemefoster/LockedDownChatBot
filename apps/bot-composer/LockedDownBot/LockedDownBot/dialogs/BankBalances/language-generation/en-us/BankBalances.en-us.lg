@@ -29,7 +29,7 @@
 # SendActivity_rxznMd_text()
 - ${dialog.formattedAccountData}
 # TextInput_Prompt_tnJNIB()
-- ${dialog.suggestedAction.SuggestedPrompt}
+- ${dialog.suggestedAction.Suggestion}
 # SendActivity_mrf57L()
 [Activity
     Text = ${SendActivity_mrf57L_text()}

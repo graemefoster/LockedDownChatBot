@@ -1,7 +1,7 @@
 using System.Runtime.CompilerServices;
 using AdaptiveExpressions.Properties;
 using LockedDownBotSemanticKernel.Primitives;
-using LockedDownBotSemanticKernel.Skills.Foundational.SummariseInput;
+using LockedDownBotSemanticKernel.Skills.Foundational.SummariseAsk;
 using Microsoft.Bot.Builder.Dialogs;
 using Newtonsoft.Json;
 
@@ -44,8 +44,8 @@ public class SummariseConversation : Dialog
         var input = string.Join('\n', Conversation.GetValue(dc.State));
 
         var response = await
-            new SummariseContentFunction.Function()
-                .Execute(client, new SummariseContentFunction.Input(prompt, input), cancellationToken);
+            new SummariseAskFunction.Function()
+                .Execute(client, new SummariseAskFunction.Input(prompt, input), cancellationToken);
 
         dc.State.SetValue(ResultProperty.GetValue(dc.State), response.Summarisation);
         return await dc.EndDialogAsync(result: response, cancellationToken);

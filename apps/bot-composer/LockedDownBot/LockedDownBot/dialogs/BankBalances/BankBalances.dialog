@@ -63,7 +63,7 @@
               "$designer": {
                 "id": "T0N2Dp"
               },
-              "condition": "=dialog.suggestedAction.Complete",
+              "condition": "=dialog.suggestedAction.MatchedAllInputParameters",
               "actions": [
                 {
                   "$kind": "Microsoft.BreakLoop",
@@ -112,7 +112,7 @@
           "$designer": {
             "id": "nBg2vk"
           },
-          "condition": "=dialog.suggestedAction.Complete",
+          "condition": "=dialog.suggestedAction.MatchedAllInputParameters",
           "actions": [
             {
               "$kind": "Microsoft.HttpRequest",
@@ -122,7 +122,7 @@
               },
               "resultProperty": "dialog.accountDataResponse",
               "method": "GET",
-              "url": "${settings.ACCOUNTS_BASE_URL}account/${dialog.suggestedAction.Response.accountNumber}/${dialog.suggestedAction.Response.service}",
+              "url": "${settings.ACCOUNTS_BASE_URL}account/${dialog.suggestedAction.ParameterValues.accountNumber}/${dialog.suggestedAction.ParameterValues.service}",
               "responseType": "json"
             },
             {
