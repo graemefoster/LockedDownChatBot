@@ -8,10 +8,9 @@ namespace LockedDownBotSemanticKernel.Skills.Functions.FunctionCalling;
 
 public static class ExtractInformationToCallFunction
 {
-    public record ExtractFunctionInformationOutput(bool Complete, HashSet<string> MissingParameters, Dictionary<string, object> Response, string SuggestedPrompt);
+    record GptOutput(Dictionary<string, string> Parameters);
     public record Input(string SystemPrompt, string UserInput, JsonSchemaFunctionInput FunctionDefinition);    
     public record Output(JsonSchemaFunctionInput FunctionDefinition, bool MatchedAllInputParameters,  HashSet<string> MissingParameters, Dictionary<string, string> ParameterValues, string? Suggestion);
-    public record GptOutput(Dictionary<string, string> Parameters);
     public record JsonSchemaFunctionInput(JsonSchemaFunctionInputParameters Parameters);
     public record JsonSchemaFunctionInputParameters(Dictionary<string, object> Properties);
     
