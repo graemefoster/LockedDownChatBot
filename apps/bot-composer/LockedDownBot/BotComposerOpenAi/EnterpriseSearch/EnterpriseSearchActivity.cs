@@ -54,11 +54,11 @@ public class EnterpriseSearchActivity : Dialog
         var response = await
             new ExtractKeyTermsFunction.Function()
                 .Then(
-                    (_, output) => new CognitiveSearchFunction.Input(string.Join(' ', output.KeyTerms)),
-                    _ => new CognitiveSearchFunction.Function(searchClient))
+                    _ => new CognitiveSearchFunction.Function(searchClient),
+                    (_, output) => new CognitiveSearchFunction.Input(string.Join(' ', output.KeyTerms)))
                 .Then(
-                    (_, output) => new SummariseContentFunction.Input(prompt, output.Result),
-                    s =>s.Resolve<SummariseContentFunction.Function>())
+                    s =>s.Resolve<SummariseContentFunction.Function>(),
+                    (_, output) => new SummariseContentFunction.Input(prompt, output.Result))
                 .Execute(
                     client,
                     new ExtractKeyTermsFunction.Input(prompt, input),

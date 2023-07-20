@@ -70,8 +70,8 @@ public static class ChainEx
 
     public static IChainableSkill<TInput, TOutput2> Then<TInput, TOutput, TInput2, TOutput2>(
         this IChainableSkill<TInput, TOutput> startSkill,
-        Func<TInput, TOutput, TInput2> inputFactory,
-        Func<ISkillResolver, IChainableSkill<TInput2, TOutput2>> transform
+        Func<ISkillResolver, IChainableSkill<TInput2, TOutput2>> transform,
+        Func<TInput, TOutput, TInput2> inputFactory
     )
     {
         return new ChainableCall<TInput, TOutput, TInput2, TOutput2>(
