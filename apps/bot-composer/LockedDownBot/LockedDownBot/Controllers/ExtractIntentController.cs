@@ -24,7 +24,7 @@ namespace LockedDownBot.Controllers
             _config = config;
         }
 
-        public async Task<InputOutputs.DetectIntentOutput> Get(string input, CancellationToken token)
+        public async Task<ExtractIntentFromInputFunction.Output> Get(string input, CancellationToken token)
         {
             var kernel = new SemanticKernelWrapperFactory().GetFromSettings(
                 _config["OPENAI_ENDPOINT"],
@@ -36,8 +36,8 @@ namespace LockedDownBot.Controllers
             var context = "You are a bank teller";
 
             var result = await
-                new ExtractIntentFromInputFunction()
-                    .Execute(kernel, new InputOutputs.DetectIntentInput(context, intents, input), token);
+                new ExtractIntentFromInputFunction.Function()
+                    .Execute(kernel, new ExtractIntentFromInputFunction.Input(context, intents, input), token);
 
             return result;
         }

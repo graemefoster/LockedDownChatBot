@@ -44,16 +44,16 @@ public class OpenAiSuggestFunctionCall : Dialog
         var userInput = string.Join('\n', Inputs.GetValue(dc.State));
 
         var result = await 
-            new ExtractInformationToCallFunctionFunction()
+            new ExtractInformationToCallFunction.Function()
                 .ThenIf(output => output.MissingParameters.Any(),
-                    () => new GetMoreInputFromCustomerToCallFunctionFunction()
+                    () => new GetMoreInputFromCustomerToCallInputFunction.Function()
                 )
             .Execute(
                     client, 
-                    new InputOutputs.ExtractInformationToCallFunctionFunctionInput(
+                    new ExtractInformationToCallFunction.Input(
                         prompt, 
                         userInput, 
-                        JsonConvert.DeserializeObject<InputOutputs.JsonSchemaFunctionInput>(function)!), 
+                        JsonConvert.DeserializeObject<ExtractInformationToCallFunction.JsonSchemaFunctionInput>(function)!), 
                     cancellationToken);
         
         dc.State.SetValue(ResultProperty.GetValue(dc.State), result);

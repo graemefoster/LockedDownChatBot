@@ -17,7 +17,7 @@
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\LockedDownBotSemanticKernel\LockedDownBotSemanticKernel.csproj" />
+      <ProjectReference Include="..\SemanticKernel.TypeSafeExtensions\SemanticKernel.TypeSafeExtensions.csproj" />
     </ItemGroup>
 
 </Project>

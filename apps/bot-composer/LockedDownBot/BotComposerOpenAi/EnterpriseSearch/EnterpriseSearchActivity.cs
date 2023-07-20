@@ -9,7 +9,6 @@ using LockedDownBotSemanticKernel.Skills.Foundational.ExtractKeyTerms;
 using LockedDownBotSemanticKernel.Skills.Foundational.SummariseInput;
 using Microsoft.Bot.Builder.Dialogs;
 using Newtonsoft.Json;
-using InputOutputs = LockedDownBotSemanticKernel.Skills.EnterpriseSearch.InputOutputs;
 
 namespace BotComposerOpenAi.EnterpriseSearch;
 
@@ -53,16 +52,16 @@ public class EnterpriseSearchActivity : Dialog
         var input = string.Join('\n', Inputs.GetValue(dc.State));
 
         var response = await
-            new ExtractKeyTermsFunction()
+            new ExtractKeyTermsFunction.Function()
                 .Then(
-                    (_, output) => new InputOutputs.SearchInput(string.Join(' ', output.KeyTerms)),
-                    () => new CognitiveSearchFunction(searchClient))
+                    (_, output) => new CognitiveSearchFunction.Input(string.Join(' ', output.KeyTerms)),
+                    () => new CognitiveSearchFunction.Function(searchClient))
                 .Then(
-                    (_, output) => new LockedDownBotSemanticKernel.Skills.Foundational.SummariseInput.InputOutputs.SummariseContent(prompt, output.Result),
-                    () => new SummariseContentFunction())
+                    (_, output) => new SummariseContentFunction.Input(prompt, output.Result),
+                    () => new SummariseContentFunction.Function())
                 .Execute(
-                    client, 
-                    new LockedDownBotSemanticKernel.Skills.Foundational.ExtractKeyTerms.InputOutputs.ExtractKeyTermsInput(prompt, input), 
+                    client,
+                    new ExtractKeyTermsFunction.Input(prompt, input),
                     cancellationToken);
 
         dc.State.SetValue(ResultProperty.GetValue(dc.State), response);

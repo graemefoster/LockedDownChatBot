@@ -56,26 +56,27 @@ namespace LockedDownBot.Controllers
 }
 """;
 
-        public async Task<InputOutputs.ExtractInformationToCallFunctionFunctionOutput> Get(string input, CancellationToken token)
+        public async Task<ExtractInformationToCallFunction.Output> Get(string input, CancellationToken token)
         {
             var client = new SemanticKernelWrapperFactory().GetFromSettings(
                 _config["OPENAI_ENDPOINT"],
                 _config["OPENAI_KEY"],
                 _config["OPENAI_MODEL"]);
 
-            var result = await 
-                new ExtractInformationToCallFunctionFunction()
+            var result = await
+                new ExtractInformationToCallFunction.Function()
                     .ThenIf(output => output.MissingParameters.Any(),
-                        () => new GetMoreInputFromCustomerToCallFunctionFunction()
+                        () => new GetMoreInputFromCustomerToCallInputFunction.Function()
                     )
                     .Execute(
-                        client, 
-                        new InputOutputs.ExtractInformationToCallFunctionFunctionInput(
-                            "You are a bank teller", 
-                            input, 
-                            JsonConvert.DeserializeObject<InputOutputs.JsonSchemaFunctionInput>(Function)!), 
+                        client,
+                        new ExtractInformationToCallFunction.Input(
+                            "You are a bank teller",
+                            input,
+                            JsonConvert.DeserializeObject<ExtractInformationToCallFunction.JsonSchemaFunctionInput>(
+                                Function)!),
                         token);
-            
+
             return result;
         }
     }

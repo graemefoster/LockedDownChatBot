@@ -6,7 +6,6 @@ using LockedDownBotSemanticKernel.Skills.Intent.DetectIntent;
 using LockedDownBotSemanticKernel.Skills.Intent.DetectIntentNextResponse;
 using Microsoft.Bot.Builder.Dialogs;
 using Newtonsoft.Json;
-using InputOutputs = LockedDownBotSemanticKernel.Skills.Intent.DetectIntent.InputOutputs;
 
 namespace BotComposerOpenAi.TryToFindUserIntent;
 
@@ -48,10 +47,10 @@ public class OpenAiDetectIntent : Dialog
         var intents = Intents.GetValue(dc.State)?.ToArray() ?? Array.Empty<string>();
 
         var result = await
-            new ExtractIntentFromInputFunction()
+            new ExtractIntentFromInputFunction.Function()
                 .ThenIf(x => !x.FoundIntent,
-                    () => new GetMoreInputFromCustomerToDetectIntentFunction())
-                .Execute(client, new InputOutputs.DetectIntentInput(prompt, intents, input), cancellationToken);
+                    () => new GetMoreInputFromCustomerToDetectIntentInputFunction())
+                .Execute(client, new ExtractIntentFromInputFunction.Input(prompt, intents, input), cancellationToken);
 
         dc.State.SetValue(ResultProperty.GetValue(dc.State), result);
         return await dc.EndDialogAsync(result: result, cancellationToken);
