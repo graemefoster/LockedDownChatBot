@@ -4,6 +4,7 @@
     <TargetFramework>net6.0</TargetFramework>
     <AspNetCoreHostingModel>OutOfProcess</AspNetCoreHostingModel>
     <UserSecretsId>57317160-e6b6-4bb5-9b07-f3dc470a776f</UserSecretsId>
+    <LangVersion>default</LangVersion>
   </PropertyGroup>
   <ItemGroup>
     <Content Include="**/*.blu;**/*.dialog;**/*.lg;**/*.lu;**/*.model;**/*.onnx;**/*.qna;**/*.txt" Exclude="$(BaseOutputPath)/**;$(BaseIntermediateOutputPath)/**;wwwroot/**">
@@ -20,5 +21,6 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\BotComposerOpenAi\BotComposerOpenAi.csproj" />
+    <ProjectReference Include="..\LockedDownBotSemanticKernel\LockedDownBotSemanticKernel.csproj" />
   </ItemGroup>
 </Project>

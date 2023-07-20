@@ -48,4 +48,4 @@
 ]
 
 # TextInput_Prompt_oat8VZ_text()
-- ${dialog.intent.SuggestedPrompt}
+- ${dialog.intent.NextRecommendation}

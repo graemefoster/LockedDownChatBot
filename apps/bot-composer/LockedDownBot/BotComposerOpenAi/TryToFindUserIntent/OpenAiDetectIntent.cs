@@ -1,9 +1,12 @@
 using System.Runtime.CompilerServices;
 using AdaptiveExpressions.Properties;
+using LockedDownBotSemanticKernel.Primitives;
+using LockedDownBotSemanticKernel.Primitives.Chains;
+using LockedDownBotSemanticKernel.Skills.Intent.DetectIntent;
+using LockedDownBotSemanticKernel.Skills.Intent.DetectIntentNextResponse;
 using Microsoft.Bot.Builder.Dialogs;
 using Newtonsoft.Json;
-using OpenAiSimplePipeline.OpenAI;
-using OpenAiSimplePipeline.Skills.ExtractIntent;
+using InputOutputs = LockedDownBotSemanticKernel.Skills.Intent.DetectIntent.InputOutputs;
 
 namespace BotComposerOpenAi.TryToFindUserIntent;
 
@@ -12,7 +15,7 @@ namespace BotComposerOpenAi.TryToFindUserIntent;
 /// </summary>
 public class OpenAiDetectIntent : Dialog
 {
-    private readonly OpenAiClientFactory _openAiClientFactory;
+    private readonly SemanticKernelWrapperFactory _openAiClientFactory;
 
     [JsonConstructor]
     public OpenAiDetectIntent(
@@ -20,7 +23,7 @@ public class OpenAiDetectIntent : Dialog
         [CallerLineNumber] int sourceLineNumber = 0)
         : base()
     {
-        _openAiClientFactory = new OpenAiClientFactory();
+        _openAiClientFactory = new SemanticKernelWrapperFactory();
         RegisterSourceLocation(sourceFilePath, sourceLineNumber);
     }
 
@@ -37,17 +40,20 @@ public class OpenAiDetectIntent : Dialog
     public override async Task<DialogTurnResult> BeginDialogAsync(DialogContext dc, object options = null,
         CancellationToken cancellationToken = new())
     {
-        var client = _openAiClientFactory.GetFromSettings((IDictionary<string, object>)dc.State["settings"], out var model);
+        var client =
+            _openAiClientFactory.GetFromSettings((IDictionary<string, object>)dc.State["settings"], out var model);
 
         var prompt = SystemPrompt.GetValue(dc.State);
-        var input = string.Join('\n', Inputs.GetValue(dc.State));
+        var input = string.Join(Environment.NewLine, Inputs.GetValue(dc.State));
         var intents = Intents.GetValue(dc.State)?.ToArray() ?? Array.Empty<string>();
 
-        var response = await
-            new ExtractIntentFromInput(prompt, intents, input)
-                .Execute(client, cancellationToken);
+        var result = await
+            new ExtractIntentFromInputFunction()
+                .ThenIf(x => !x.FoundIntent,
+                    () => new GetMoreInputFromCustomerToDetectIntentFunction())
+                .Execute(client, new InputOutputs.DetectIntentInput(prompt, intents, input), cancellationToken);
 
-        dc.State.SetValue(ResultProperty.GetValue(dc.State), response);
-        return await dc.EndDialogAsync(result: response, cancellationToken);
+        dc.State.SetValue(ResultProperty.GetValue(dc.State), result);
+        return await dc.EndDialogAsync(result: result, cancellationToken);
     }
 }

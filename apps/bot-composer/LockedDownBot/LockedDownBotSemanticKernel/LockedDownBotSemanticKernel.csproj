@@ -8,19 +8,17 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <PackageReference Include="Azure.AI.OpenAI" Version="1.0.0-beta.5" />
-      <PackageReference Include="Azure.Core" Version="1.30.0" />
+      <PackageReference Include="Azure.Search.Documents" Version="11.5.0-beta.3" />
       <PackageReference Include="Microsoft.SemanticKernel" Version="0.17.230718.1-preview" />
-      <PackageReference Include="Microsoft.SemanticKernel.Abstractions" Version="0.17.230718.1-preview" />
+      <PackageReference Include="Microsoft.SemanticKernel.Connectors.AI.OpenAI" Version="0.17.230718.1-preview" />
       <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
     </ItemGroup>
 
     <ItemGroup>
-      <None Remove="Prompts\ExtractFunctionParameters\FindFunctionParameters.json" />
+      <None Remove="Skills\Intents\ExtractIntentFromInput\config.json" />
+      <None Remove="Skills\Intents\ExtractIntentFromInput\skprompt.txt" />
     </ItemGroup>
 
-    <ItemGroup>
-      <ProjectReference Include="..\LockedDownBotSemanticKernel\LockedDownBotSemanticKernel.csproj" />
-    </ItemGroup>
+
 
 </Project>

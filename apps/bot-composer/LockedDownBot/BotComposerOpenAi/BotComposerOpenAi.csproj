@@ -12,11 +12,12 @@
       <PackageReference Include="Azure.AI.OpenAI" Version="1.0.0-beta.5" />
       <PackageReference Include="Azure.Search.Documents" Version="11.5.0-beta.3" />
         <PackageReference Include="Microsoft.Bot.Builder.Dialogs.Adaptive.Runtime" Version="4.18.1" />
+        <PackageReference Include="Microsoft.SemanticKernel" Version="0.17.230718.1-preview" />
+        <PackageReference Include="Microsoft.SemanticKernel.Core" Version="0.17.230718.1-preview" />
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\OpenAi.EnterpriseSearch\OpenAi.EnterpriseSearch.csproj" />
-      <ProjectReference Include="..\OpenAiSimplePipeline\OpenAiSimplePipeline.csproj" />
+      <ProjectReference Include="..\LockedDownBotSemanticKernel\LockedDownBotSemanticKernel.csproj" />
     </ItemGroup>
 
 </Project>

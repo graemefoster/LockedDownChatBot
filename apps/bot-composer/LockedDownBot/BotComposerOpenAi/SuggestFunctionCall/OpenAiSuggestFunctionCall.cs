@@ -1,10 +1,10 @@
 using System.Runtime.CompilerServices;
 using AdaptiveExpressions.Properties;
+using LockedDownBotSemanticKernel.Primitives;
+using LockedDownBotSemanticKernel.Primitives.Chains;
+using LockedDownBotSemanticKernel.Skills.Functions.FunctionCalling;
 using Microsoft.Bot.Builder.Dialogs;
 using Newtonsoft.Json;
-using OpenAiSimplePipeline.OpenAI;
-using OpenAiSimplePipeline.OpenAI.Chains;
-using OpenAiSimplePipeline.Skills.ExtractFunctionParameters;
 
 namespace BotComposerOpenAi.SuggestFunctionCall;
 
@@ -13,16 +13,15 @@ namespace BotComposerOpenAi.SuggestFunctionCall;
 /// </summary>
 public class OpenAiSuggestFunctionCall : Dialog
 {
-    private readonly OpenAiClientFactory _openAiClientFactory;
+    private readonly SemanticKernelWrapperFactory _openAiClientFactory;
 
     [JsonConstructor]
     public OpenAiSuggestFunctionCall(
-        OpenAiClientFactory openAiClientFactory,
         [CallerFilePath] string sourceFilePath = "",
         [CallerLineNumber] int sourceLineNumber = 0)
         : base()
     {
-        _openAiClientFactory = new OpenAiClientFactory();
+        _openAiClientFactory = new SemanticKernelWrapperFactory();
         RegisterSourceLocation(sourceFilePath, sourceLineNumber);
     }
 
@@ -45,11 +44,17 @@ public class OpenAiSuggestFunctionCall : Dialog
         var userInput = string.Join('\n', Inputs.GetValue(dc.State));
 
         var result = await 
-            new ExtractFunctionInformation(prompt, function, userInput)
+            new ExtractInformationToCallFunctionFunction()
                 .ThenIf(output => output.MissingParameters.Any(),
-                    result => new AskForMissingInformation(prompt, function, userInput, result)
+                    () => new GetMoreInputFromCustomerToCallFunctionFunction()
                 )
-            .Execute(client, cancellationToken);
+            .Execute(
+                    client, 
+                    new InputOutputs.ExtractInformationToCallFunctionFunctionInput(
+                        prompt, 
+                        userInput, 
+                        JsonConvert.DeserializeObject<InputOutputs.JsonSchemaFunctionInput>(function)!), 
+                    cancellationToken);
         
         dc.State.SetValue(ResultProperty.GetValue(dc.State), result);
         return await dc.EndDialogAsync(result: result, cancellationToken);

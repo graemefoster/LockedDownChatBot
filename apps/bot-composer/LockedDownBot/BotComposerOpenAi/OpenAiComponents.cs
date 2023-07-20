@@ -1,13 +1,11 @@
-using Azure.AI.OpenAI;
-using BotComposerOpenAi.ChatCompletionWithSystemPromptAndUserInput;
 using BotComposerOpenAi.EnterpriseSearch;
 using BotComposerOpenAi.SuggestFunctionCall;
 using BotComposerOpenAi.TryToFindUserIntent;
+using LockedDownBotSemanticKernel.Primitives;
 using Microsoft.Bot.Builder;
 using Microsoft.Bot.Builder.Dialogs.Declarative;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using OpenAiSimplePipeline.OpenAI;
 
 namespace BotComposerOpenAi;
 
@@ -26,9 +24,8 @@ public class OpenAiComponents : BotComponent
     public override void ConfigureServices(IServiceCollection services, IConfiguration configuration)
     {
         // Anything that could be done in Startup.ConfigureServices can be done here.
-        services.AddSingleton<OpenAiClientFactory>();
+        services.AddSingleton<SemanticKernelWrapperFactory>();
         services.AddSingleton<DeclarativeType>(sp => new DeclarativeType<EnterpriseSearchActivity>(EnterpriseSearchActivity.Kind));
-        services.AddSingleton<DeclarativeType>(sp => new DeclarativeType<OpenAiResponseWithSystemPrompt>(OpenAiResponseWithSystemPrompt.Kind));
         services.AddSingleton<DeclarativeType>(sp => new DeclarativeType<OpenAiDetectIntent>(OpenAiDetectIntent.Kind));
         services.AddSingleton<DeclarativeType>(sp => new DeclarativeType<OpenAiSuggestFunctionCall>(OpenAiSuggestFunctionCall.Kind));
         services.AddSingleton<DeclarativeType>(sp => new DeclarativeType<SummariseConversation.SummariseConversation>(SummariseConversation.SummariseConversation.Kind));
