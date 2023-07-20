@@ -1,5 +1,4 @@
 ﻿using System.Reflection;
-using Azure.AI.OpenAI;
 using LockedDownBotSemanticKernel.Primitives.Chains;
 using Microsoft.SemanticKernel;
 using Microsoft.SemanticKernel.Orchestration;
@@ -7,7 +6,7 @@ using Microsoft.SemanticKernel.SkillDefinition;
 
 namespace LockedDownBotSemanticKernel.Primitives;
 
-public class SemanticKernelWrapper
+public class SemanticKernelWrapper: ISkillResolver
 {
     private readonly IKernel _kernel;
     private readonly Dictionary<Type, ISKFunction?> _register = new();
@@ -40,7 +39,7 @@ public class SemanticKernelWrapper
                      .Where(x => x.GetMethod("Register", BindingFlags.Public | BindingFlags.Static, new [] { typeof(IKernel)}) != null))
         {
             var registrationMethod = type.GetMethod("Register", BindingFlags.Public | BindingFlags.Static, new [] { typeof(IKernel)});
-            _register[type] = (ISKFunction)registrationMethod!.Invoke(null, new[] {_kernel});
+            _register[type] = (ISKFunction)registrationMethod!.Invoke(null, new object [] {_kernel})!;
         }
     }
 
@@ -59,5 +58,13 @@ public class SemanticKernelWrapper
         var function = semanticKernelFunction.Register(_kernel);
         _register[semanticKernelFunction.GetType()] = function;
         return function;
+    }
+
+    /// <summary>
+    /// TODO Bring in proper container
+    /// </summary>
+    public T Resolve<T>() where T:new()
+    {
+        return new T();
     }
 }

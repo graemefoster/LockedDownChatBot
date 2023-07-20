@@ -55,10 +55,10 @@ public class EnterpriseSearchActivity : Dialog
             new ExtractKeyTermsFunction.Function()
                 .Then(
                     (_, output) => new CognitiveSearchFunction.Input(string.Join(' ', output.KeyTerms)),
-                    () => new CognitiveSearchFunction.Function(searchClient))
+                    _ => new CognitiveSearchFunction.Function(searchClient))
                 .Then(
                     (_, output) => new SummariseContentFunction.Input(prompt, output.Result),
-                    () => new SummariseContentFunction.Function())
+                    s =>s.Resolve<SummariseContentFunction.Function>())
                 .Execute(
                     client,
                     new ExtractKeyTermsFunction.Input(prompt, input),

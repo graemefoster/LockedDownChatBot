@@ -5,14 +5,14 @@ public class
 {
     private readonly IChainableSkill<TInput,  TOutput> _input;
     private readonly Func<TOutput, bool> _predicate;
-    private readonly Func<TInput, TOutput, IChainableSkill<TFalseInput, TFalseOutput>> _falsePrompt;
-    private readonly Func<TInput, TOutput, IChainableSkill<TTrueInput, TTrueOutput>> _truePrompt;
+    private readonly Func<ISkillResolver, IChainableSkill<TFalseInput, TFalseOutput>> _falsePrompt;
+    private readonly Func<ISkillResolver, IChainableSkill<TTrueInput, TTrueOutput>> _truePrompt;
 
     public EitherChainableCall(
         IChainableSkill<TInput, TOutput> input,
         Func<TOutput, bool> predicate,
-        Func<TInput, TOutput, IChainableSkill<TFalseInput, TFalseOutput>> falsePrompt,
-        Func<TInput, TOutput, IChainableSkill<TTrueInput, TTrueOutput>> truePrompt
+        Func<ISkillResolver, IChainableSkill<TFalseInput, TFalseOutput>> falsePrompt,
+        Func<ISkillResolver, IChainableSkill<TTrueInput, TTrueOutput>> truePrompt
     )
     {
         _input = input;
@@ -32,10 +32,10 @@ public class
             return Either<
                 IChainableSkill<TFalseInput, TFalseOutput>, 
                 IChainableSkill<TTrueInput, TTrueOutput>>.True(
-                _truePrompt(input, initialOutput));
+                _truePrompt(client));
         } 
 
         return Either<IChainableSkill<TFalseInput, TFalseOutput>, IChainableSkill<TTrueInput, TTrueOutput>>.False(
-            _falsePrompt(input, initialOutput));
+            _falsePrompt(client));
     }
 }

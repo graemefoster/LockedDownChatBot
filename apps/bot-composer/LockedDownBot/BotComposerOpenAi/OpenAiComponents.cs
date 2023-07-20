@@ -25,10 +25,10 @@ public class OpenAiComponents : BotComponent
     {
         // Anything that could be done in Startup.ConfigureServices can be done here.
         services.AddSingleton<SemanticKernelWrapperFactory>();
-        services.AddSingleton<DeclarativeType>(sp => new DeclarativeType<EnterpriseSearchActivity>(EnterpriseSearchActivity.Kind));
-        services.AddSingleton<DeclarativeType>(sp => new DeclarativeType<OpenAiResponseWithSystemPrompt.OpenAiResponseWithSystemPrompt>(OpenAiResponseWithSystemPrompt.OpenAiResponseWithSystemPrompt.Kind));
-        services.AddSingleton<DeclarativeType>(sp => new DeclarativeType<OpenAiDetectIntent>(OpenAiDetectIntent.Kind));
-        services.AddSingleton<DeclarativeType>(sp => new DeclarativeType<OpenAiSuggestFunctionCall>(OpenAiSuggestFunctionCall.Kind));
-        services.AddSingleton<DeclarativeType>(sp => new DeclarativeType<SummariseConversation.SummariseConversation>(SummariseConversation.SummariseConversation.Kind));
+        services.AddSingleton<DeclarativeType>(_ => new DeclarativeType<EnterpriseSearchActivity>(EnterpriseSearchActivity.Kind));
+        services.AddSingleton<DeclarativeType>(_ => new DeclarativeType<OpenAiResponseWithSystemPrompt.OpenAiResponseWithSystemPrompt>(OpenAiResponseWithSystemPrompt.OpenAiResponseWithSystemPrompt.Kind));
+        services.AddSingleton<DeclarativeType>(_ => new DeclarativeType<OpenAiDetectIntent>(OpenAiDetectIntent.Kind));
+        services.AddSingleton<DeclarativeType>(_ => new DeclarativeType<OpenAiSuggestFunctionCall>(OpenAiSuggestFunctionCall.Kind));
+        services.AddSingleton<DeclarativeType>(_ => new DeclarativeType<SummariseConversation.SummariseConversation>(SummariseConversation.SummariseConversation.Kind));
     }
 }

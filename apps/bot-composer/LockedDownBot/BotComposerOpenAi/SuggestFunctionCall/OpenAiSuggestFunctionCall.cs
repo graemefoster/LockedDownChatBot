@@ -46,7 +46,7 @@ public class OpenAiSuggestFunctionCall : Dialog
         var result = await 
             new ExtractInformationToCallFunction.Function()
                 .ThenIf(output => output.MissingParameters.Any(),
-                    () => new GetMoreInputFromCustomerToCallInputFunction.Function()
+                    s => s.Resolve<GetMoreInputFromCustomerToCallInputFunction.Function>()
                 )
             .Execute(
                     client, 

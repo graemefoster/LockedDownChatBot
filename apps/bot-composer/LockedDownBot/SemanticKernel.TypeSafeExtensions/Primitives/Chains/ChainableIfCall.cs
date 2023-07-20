@@ -5,13 +5,13 @@ public class ChainableIfCall<TInput, TInput2, TOutput> : IChainableSkill<TInput,
     private readonly IChainableSkill<TInput, TOutput> _input;
     private readonly Func<TOutput, bool>? _predicate;
     private readonly Func<TInput, TOutput, TInput2> _inputFactory;
-    private readonly Func<IChainableSkill<TInput2, TOutput>> _truePrompt;
+    private readonly Func<ISkillResolver, IChainableSkill<TInput2, TOutput>> _truePrompt;
 
     public ChainableIfCall(
         IChainableSkill<TInput, TOutput> input,
         Func<TOutput,bool>? predicate, 
         Func<TInput, TOutput, TInput2> inputFactory,
-        Func<IChainableSkill<TInput2, TOutput>> truePrompt)
+        Func<ISkillResolver, IChainableSkill<TInput2, TOutput>> truePrompt)
     {
         _input = input;
         _predicate = predicate;
@@ -25,7 +25,7 @@ public class ChainableIfCall<TInput, TInput2, TOutput> : IChainableSkill<TInput,
         if (_predicate == null || _predicate(initialOutput))
         {
             var newInput = _inputFactory(input, initialOutput);
-            return await _truePrompt().Execute(client, newInput, token);
+            return await _truePrompt(client).Execute(client, newInput, token);
         } 
         return initialOutput;
     }

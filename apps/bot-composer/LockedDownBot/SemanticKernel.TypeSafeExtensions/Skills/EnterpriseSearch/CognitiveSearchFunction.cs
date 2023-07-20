@@ -7,6 +7,8 @@ namespace LockedDownBotSemanticKernel.Skills.EnterpriseSearch;
 
 public static class CognitiveSearchFunction
 {
+    public class InputSample : IAmExecutedByFunction<Function, Output> { }
+
     public record Input(string SearchText);
     public record Output(string Result);
 
@@ -33,4 +35,8 @@ public static class CognitiveSearchFunction
             return new Output(searchResult.Document.GetString("content"));
         }
     }
+}
+
+public interface IAmExecutedByFunction<T, TOut>
+{
 }

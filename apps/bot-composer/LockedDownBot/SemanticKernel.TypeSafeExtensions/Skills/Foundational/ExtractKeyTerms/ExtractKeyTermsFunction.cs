@@ -1,13 +1,11 @@
 ﻿using LockedDownBotSemanticKernel.Primitives;
-using Microsoft.SemanticKernel;
 using Microsoft.SemanticKernel.Orchestration;
-using Microsoft.SemanticKernel.SkillDefinition;
 
 namespace LockedDownBotSemanticKernel.Skills.Foundational.ExtractKeyTerms;
 
 public static class ExtractKeyTermsFunction
 {
-    public record Input(string Context, string UserInput);
+    public record Input(string Content, string UserInput);
 
     public record Output(string[] KeyTerms);
 
