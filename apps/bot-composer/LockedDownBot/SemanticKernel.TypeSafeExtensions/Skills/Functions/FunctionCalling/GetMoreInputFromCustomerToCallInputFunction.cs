@@ -1,8 +1,5 @@
-﻿using LockedDownBotSemanticKernel.Primitives;
-using LockedDownBotSemanticKernel.Skills.Foundational.ResponseToUserSuggestion;
-using Microsoft.SemanticKernel;
+﻿using LockedDownBotSemanticKernel.Skills.Foundational.ResponseToUserSuggestion;
 using Microsoft.SemanticKernel.Orchestration;
-using Microsoft.SemanticKernel.SkillDefinition;
 using Newtonsoft.Json;
 
 namespace LockedDownBotSemanticKernel.Skills.Functions.FunctionCalling;
@@ -17,12 +14,6 @@ public static class GetMoreInputFromCustomerToCallInputFunction
             string suggestion)
         {
             return input with { Suggestion = suggestion };
-        }
-
-        public static ISKFunction? Register(IKernel kernel)
-        {
-            return SemanticKernelFunction<ExtractInformationToCallFunction.Input,
-                ExtractInformationToCallFunction.Output>.Register(kernel, Prompt);
         }
 
         protected override string DescribeSituation(SKContext context, ExtractInformationToCallFunction.Output input)

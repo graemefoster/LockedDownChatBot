@@ -49,4 +49,15 @@ public class SemanticKernelWrapper
         return chain.Execute(this, input, cancellationToken);
     }
 
+    public ISKFunction GetOrRegister(IAmAnSkFunction semanticKernelFunction)
+    {
+        if (_register.TryGetValue(semanticKernelFunction.GetType(), out var skFunction))
+        {
+            return skFunction!;
+        }
+
+        var function = semanticKernelFunction.Register(_kernel);
+        _register[semanticKernelFunction.GetType()] = function;
+        return function;
+    }
 }

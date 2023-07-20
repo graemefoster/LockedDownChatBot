@@ -30,7 +30,7 @@ public static class ExtractIntentFromInputFunction
 
     public class Function : SemanticKernelFunction<Input, Output>
     {
-        public static string Prompt = """
+        public override string Prompt => """
 {{$Context}}
 
 You must find the INTENT of the user's input. 
@@ -44,11 +44,6 @@ Respond with the intent as a single word.
 
 {{$UserInput}}
 """;
-
-        public static ISKFunction? Register(IKernel kernel)
-        {
-            return SemanticKernelFunction<Input, Output>.Register(kernel, Prompt);
-        }
 
         protected override Output FromResult(Input detectIntentInput, SKContext context)
         {

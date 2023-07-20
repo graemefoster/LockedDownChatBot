@@ -13,7 +13,7 @@ public static class ExtractKeyTermsFunction
 
     public class Function : SemanticKernelFunction<Input, Output>
     {
-        public static string Prompt = """
+        public override string Prompt => """
 {{$Context}}
 
 Given the user input, extract the key terms as a list of words from it
@@ -21,11 +21,6 @@ Given the user input, extract the key terms as a list of words from it
 --- USER INPUT FOLLOWS
 {{$UserInput}}
 """;
-
-        public static ISKFunction? Register(IKernel kernel)
-        {
-            return SemanticKernelFunction<Input, Output>.Register(kernel, Prompt);
-        }
 
         protected override Output FromResult(Input input, SKContext context)
         {

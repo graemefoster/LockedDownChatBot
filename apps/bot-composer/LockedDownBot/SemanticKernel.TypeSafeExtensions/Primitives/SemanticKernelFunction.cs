@@ -8,11 +8,11 @@ using Newtonsoft.Json;
 
 namespace LockedDownBotSemanticKernel.Primitives;
 
-public abstract class SemanticKernelFunction<TInput, TOutput> : IChainableSkill<TInput, TOutput>
+public abstract class SemanticKernelFunction<TInput, TOutput> : IChainableSkill<TInput, TOutput>, IAmAnSkFunction
     where TInput : notnull
     where TOutput : notnull
 {
-    internal static ISKFunction? Register(IKernel kernel, string prompt)
+    public ISKFunction Register(IKernel kernel)
     {
         var promptTemplateConfig = new PromptTemplateConfig()
         {
@@ -26,10 +26,12 @@ public abstract class SemanticKernelFunction<TInput, TOutput> : IChainableSkill<
             }
         };
 
-        var promptTemplate = new PromptTemplate(prompt, promptTemplateConfig, kernel);
+        var promptTemplate = new PromptTemplate(Prompt, promptTemplateConfig, kernel);
         var functionConfig = new SemanticFunctionConfig(promptTemplateConfig, promptTemplate);
         return kernel.RegisterSemanticFunction("Intents", "ExtractMoreInformationToDetectIntent", functionConfig);
     }
+    
+    public abstract string Prompt { get;}
 
     protected virtual void PopulateContext(SKContext context, TInput input)
     {
@@ -53,8 +55,7 @@ public abstract class SemanticKernelFunction<TInput, TOutput> : IChainableSkill<
     {
         var context = wrapper.CreateNewContext(token);
         PopulateContext(context, input);
-
-        var skFunction = wrapper.Get(GetType());
+        var skFunction = wrapper.GetOrRegister(this);
         var kernelResult = await skFunction.InvokeAsync(context);
         return FromResult(input, kernelResult);
     }

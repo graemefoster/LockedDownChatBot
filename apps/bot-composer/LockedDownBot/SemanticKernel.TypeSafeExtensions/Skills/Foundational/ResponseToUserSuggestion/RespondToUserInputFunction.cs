@@ -5,20 +5,9 @@ namespace LockedDownBotSemanticKernel.Skills.Foundational.ResponseToUserSuggesti
 
 public static class RespondToUserInputFunction
 {
-    public interface IExplainCurrentSituation
-    {
-        string CurrentSituation { get; set; }
-        string Context { get; set; }
-    }
-
-    public interface IResponseToUser
-    {
-        string SuggestedResponse { get; set; }
-    }
-
     public abstract class Function<TRequest, TResponse> : SemanticKernelFunction<TRequest, TResponse> where TRequest : notnull where TResponse : notnull
     {
-        public static string Prompt = """
+        public override string Prompt => """
 {{$Context}}
 
 {{$CurrentSituation}}

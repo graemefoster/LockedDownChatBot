@@ -12,7 +12,7 @@ public static class SummariseContentFunction
     
     public class Function : SemanticKernelFunction<Input, Output>
     {
-        public static string Prompt = """
+        public override string Prompt => """
 {{$Context}}
 
 Given the following information, summarise all of the it in a single paragraph.
@@ -21,15 +21,8 @@ Given the following information, summarise all of the it in a single paragraph.
 {{$Content}}
 """;
 
-        public static ISKFunction? Register(IKernel kernel)
-        {
-            return SemanticKernelFunction<Input, Output>.Register(
-                kernel, Prompt);
-        }
-
         protected override Output FromResult(Input input, SKContext context)
         {
-            var suggestion = context.Result;
             return new Output(context.Result);
         }
     }

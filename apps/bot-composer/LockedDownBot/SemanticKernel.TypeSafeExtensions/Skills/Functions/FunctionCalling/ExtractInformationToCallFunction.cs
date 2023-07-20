@@ -16,7 +16,7 @@ public static class ExtractInformationToCallFunction
     
     public class Function :  SemanticKernelFunction<Input, Output>
     {
-        public static string Prompt = """
+        public override string Prompt => """
 Read the users input and respond in JSON with arguments extracted from the user's input to call the function detailed below.
 
 - DO NOT show emotion.
@@ -41,11 +41,6 @@ Read the users input and respond in JSON with arguments extracted from the user'
 --- USER INPUT FOLLOWS
 {{$UserInput}}
 """;
-
-        public static ISKFunction? Register(IKernel kernel)
-        {
-            return SemanticKernelFunction<Input, Output>.Register(kernel, Prompt);
-        }
 
         protected override void PopulateContext(SKContext context, Input input)
         {

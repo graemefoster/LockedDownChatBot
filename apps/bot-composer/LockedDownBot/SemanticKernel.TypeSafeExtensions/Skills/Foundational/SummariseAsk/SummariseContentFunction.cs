@@ -12,7 +12,7 @@ public static class SummariseAskFunction
     
     public class Function : SemanticKernelFunction<Input, Output>
     {
-        public static string Prompt = """
+        public override string Prompt => """
 {{$Context}}
 
 Read the following dialogue. Summarise the key ask of the User into a single sentence.
@@ -20,12 +20,6 @@ Read the following dialogue. Summarise the key ask of the User into a single sen
 --- INFORMATION FOLLOWS
 {{$Content}}
 """;
-
-        public static ISKFunction? Register(IKernel kernel)
-        {
-            return SemanticKernelFunction<Input, Output>.Register(
-                kernel, Prompt);
-        }
 
         protected override Output FromResult(Input input, SKContext context)
         {

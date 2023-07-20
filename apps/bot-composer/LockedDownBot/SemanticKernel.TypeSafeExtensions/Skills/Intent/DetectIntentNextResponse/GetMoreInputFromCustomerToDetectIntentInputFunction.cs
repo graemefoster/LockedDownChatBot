@@ -1,17 +1,11 @@
 ﻿using LockedDownBotSemanticKernel.Skills.Foundational.ResponseToUserSuggestion;
 using LockedDownBotSemanticKernel.Skills.Intent.DetectIntent;
-using Microsoft.SemanticKernel;
 using Microsoft.SemanticKernel.Orchestration;
-using Microsoft.SemanticKernel.SkillDefinition;
 
 namespace LockedDownBotSemanticKernel.Skills.Intent.DetectIntentNextResponse;
 
 public class GetMoreInputFromCustomerToDetectIntentInputFunction : RespondToUserInputFunction.Function<ExtractIntentFromInputFunction.Input, ExtractIntentFromInputFunction.Output>
 {
-    public static ISKFunction? Register(IKernel kernel)
-    {
-        return RespondToUserInputFunction.Function<ExtractIntentFromInputFunction.Input, ExtractIntentFromInputFunction.Output>.Register(kernel, Prompt);
-    }
     protected override ExtractIntentFromInputFunction.Output FromResult(ExtractIntentFromInputFunction.Input detectIntentInput, SKContext context)
     {
         return new ExtractIntentFromInputFunction.Output
