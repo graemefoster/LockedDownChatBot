@@ -38,7 +38,7 @@ public class OpenAiSuggestFunctionCall : Dialog
     public override async Task<DialogTurnResult> BeginDialogAsync(DialogContext dc, object options = null,
         CancellationToken cancellationToken = new())
     {
-        var client = _openAiClientFactory.GetFromSettings((IDictionary<string, object>)dc.State["settings"], out var model);
+        var client = _openAiClientFactory.GetFromSettings((IDictionary<string, object>)dc.State["settings"]);
         var prompt = SystemPrompt.GetValue(dc.State);
         var function = Function.GetValue(dc.State);
         var userInput = string.Join('\n', Inputs.GetValue(dc.State));

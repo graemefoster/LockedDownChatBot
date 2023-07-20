@@ -1,4 +1,5 @@
 ﻿using System.Reflection;
+using Azure.AI.OpenAI;
 using LockedDownBotSemanticKernel.Primitives.Chains;
 using Microsoft.SemanticKernel;
 using Microsoft.SemanticKernel.Orchestration;

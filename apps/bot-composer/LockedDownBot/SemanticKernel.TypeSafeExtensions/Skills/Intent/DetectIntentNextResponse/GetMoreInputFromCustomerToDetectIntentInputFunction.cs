@@ -37,7 +37,7 @@ public class GetMoreInputFromCustomerToDetectIntentInputFunction : RespondToUser
         var intents = string.Join("\n", input.Intents.Select(x => $"- {x}"));
         
         return $"""
-You are trying to detect the user's intent from: 
+You are trying to detect the user's intent from. Respond with something to get the user to clarify their intent. 
 
 {intents}
 """;

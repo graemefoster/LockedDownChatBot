@@ -41,7 +41,7 @@ public class EnterpriseSearchActivity : Dialog
         CancellationToken cancellationToken = new())
     {
         var client =
-            _openAiClientFactory.GetFromSettings((IDictionary<string, object>)dc.State["settings"], out var model);
+            _openAiClientFactory.GetFromSettings((IDictionary<string, object>)dc.State["settings"]);
         var searchClient = new SearchClient(new Uri(SearchUrl.GetValue(dc.State)), Index.GetValue(dc.State),
             new DefaultAzureCredential(new DefaultAzureCredentialOptions()
             {

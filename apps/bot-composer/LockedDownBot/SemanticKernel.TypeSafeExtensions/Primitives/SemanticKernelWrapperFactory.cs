@@ -1,4 +1,6 @@
-﻿using Microsoft.SemanticKernel;
+﻿using Azure;
+using Azure.AI.OpenAI;
+using Microsoft.SemanticKernel;
 
 namespace LockedDownBotSemanticKernel.Primitives;
 
@@ -6,11 +8,11 @@ public class SemanticKernelWrapperFactory
 {
     private SemanticKernelWrapper? _client;
 
-    public SemanticKernelWrapper GetFromSettings(IDictionary<string, object> config, out string model)
+    public SemanticKernelWrapper GetFromSettings(IDictionary<string, object> config)
     {
         var endpoint = (string)config["OPENAI_ENDPOINT"];
         var key = (string)config["OPENAI_KEY"];
-        model = (string)config["OPENAI_MODEL"];
+        var model = (string)config["OPENAI_MODEL"];
         return GetFromSettings(endpoint, key, model);
     }
 
@@ -26,4 +28,11 @@ public class SemanticKernelWrapperFactory
         return _client;
     }
 
+    public OpenAIClient GetRawClientFromSettings(IDictionary<string,object> config, out string model)
+    {
+        var endpoint = (string)config["OPENAI_ENDPOINT"];
+        var key = (string)config["OPENAI_KEY"];
+        model = (string)config["OPENAI_MODEL"];
+        return new OpenAIClient(new Uri(endpoint), new AzureKeyCredential(key));
+    }
 }

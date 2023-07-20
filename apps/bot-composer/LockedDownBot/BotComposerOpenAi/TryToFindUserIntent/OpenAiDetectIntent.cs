@@ -40,7 +40,7 @@ public class OpenAiDetectIntent : Dialog
         CancellationToken cancellationToken = new())
     {
         var client =
-            _openAiClientFactory.GetFromSettings((IDictionary<string, object>)dc.State["settings"], out var model);
+            _openAiClientFactory.GetFromSettings((IDictionary<string, object>)dc.State["settings"]);
 
         var prompt = SystemPrompt.GetValue(dc.State);
         var input = string.Join(Environment.NewLine, Inputs.GetValue(dc.State));
