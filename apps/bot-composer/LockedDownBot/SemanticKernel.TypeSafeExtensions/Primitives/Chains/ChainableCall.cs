@@ -1,5 +1,3 @@
-using Microsoft.SemanticKernel;
-
 namespace LockedDownBotSemanticKernel.Primitives.Chains;
 
 public class ChainableCall<TInput, TOutput, TInput2, TOutput2> : IChainableSkill<TInput, TOutput2>
@@ -18,10 +16,10 @@ public class ChainableCall<TInput, TOutput, TInput2, TOutput2> : IChainableSkill
         _nextSkillFactory = nextSkillFactory;
     }
 
-    public async Task<TOutput2> Execute(SemanticKernelWrapper client, TInput input, CancellationToken token)
+    public async Task<TOutput2> ExecuteChain(SemanticKernelWrapper client, TInput input, CancellationToken token)
     {
-        var result  = await _startSkill.Execute(client, input, token);
+        var result  = await _startSkill.ExecuteChain(client, input, token);
         var nextInput = _inputFactory(input, result);
-        return await _nextSkillFactory(client).Execute(client, nextInput, token);
+        return await _nextSkillFactory(client).ExecuteChain(client, nextInput, token);
     }
 }

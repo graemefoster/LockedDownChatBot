@@ -19,13 +19,13 @@ public class ChainableIfCall<TInput, TInput2, TOutput> : IChainableSkill<TInput,
         _truePrompt = truePrompt;
     }
 
-    public async Task<TOutput> Execute(SemanticKernelWrapper client, TInput input, CancellationToken token)
+    public async Task<TOutput> ExecuteChain(SemanticKernelWrapper client, TInput input, CancellationToken token)
     {
-        var initialOutput = await client.Execute(_input, input, token);
+        var initialOutput = await client.RunSkill(_input, input, token);
         if (_predicate == null || _predicate(initialOutput))
         {
             var newInput = _inputFactory(input, initialOutput);
-            return await _truePrompt(client).Execute(client, newInput, token);
+            return await _truePrompt(client).ExecuteChain(client, newInput, token);
         } 
         return initialOutput;
     }

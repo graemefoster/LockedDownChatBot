@@ -7,15 +7,14 @@ public static class ChainEx
         return new NoOpChainableCall<TInput, TResponse>(output);
     }
 
-    public static IChainableSkill<TInput,
-            Either<
-                IChainableSkill<TFalseInput, TFalseOutput>,
-                IChainableSkill<TTrueInput, TTrueOutput>>>
+    public static IChainableSkill<TInput, Either<TFalseOutput, TTrueOutput>>
         ThenEither<TInput, TOutput, TFalseInput, TFalseOutput, TTrueInput, TTrueOutput>(
             this IChainableSkill<TInput, TOutput> prompt,
             Func<TOutput, bool> predicate,
             Func<ISkillResolver, IChainableSkill<TFalseInput, TFalseOutput>> falsePrompt,
-            Func<ISkillResolver, IChainableSkill<TTrueInput, TTrueOutput>> truePrompt
+            Func<TInput, TOutput, TFalseInput> falseInputFactory,
+            Func<ISkillResolver, IChainableSkill<TTrueInput, TTrueOutput>> truePrompt,
+            Func<TInput, TOutput, TTrueInput> trueInputFactory
         ) 
         where TFalseOutput : class
         where TTrueOutput : class
@@ -25,7 +24,9 @@ public static class ChainEx
             prompt,
             predicate,
             falsePrompt,
-            truePrompt);
+            falseInputFactory,
+            truePrompt,
+            trueInputFactory);
     }
 
     public static IChainableSkill<TInput, TOutput> ThenIf<TInput, TOutput>(
@@ -76,5 +77,18 @@ public static class ChainEx
     {
         return new ChainableCall<TInput, TOutput, TInput2, TOutput2>(
             startSkill, inputFactory, transform);
+    }
+
+    public static IChainableSkill<TInput, TNewOutput> Combine<TInput, TFalseOutput, TTrueOutput, TNewInput, TNewOutput>(
+        this IChainableSkill<TInput, Either<TFalseOutput, TTrueOutput>> either,
+        Func<TInput, TFalseOutput, TNewInput> newFalseInputFactory,
+        Func<TInput, TTrueOutput, TNewInput> newTrueInputFactory,
+        Func<ISkillResolver, IChainableSkill<TNewInput, TNewOutput>> skill) where TFalseOutput : class where TTrueOutput : class
+    {
+        return new CombineChainableCall<TInput, TFalseOutput, TTrueOutput, TNewInput, TNewOutput>(
+            either,
+            newFalseInputFactory,
+            newTrueInputFactory,
+            skill);
     }
 }

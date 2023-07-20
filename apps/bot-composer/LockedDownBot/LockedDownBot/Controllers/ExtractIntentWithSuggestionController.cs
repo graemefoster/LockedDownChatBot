@@ -43,7 +43,7 @@ namespace LockedDownBot.Controllers
                 new ExtractIntentFromInputFunction.Function().ThenIf(
                         r => !r.FoundIntent,
                         s => s.Resolve<GetMoreInputFromCustomerToDetectIntentInputFunction>())
-                    .Execute(kernel, new ExtractIntentFromInputFunction.Input(context, intents, input), token);
+                    .ExecuteChain(kernel, new ExtractIntentFromInputFunction.Input(context, intents, input), token);
 
             return result;
         }

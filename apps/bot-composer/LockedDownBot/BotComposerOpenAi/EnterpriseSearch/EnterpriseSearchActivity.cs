@@ -59,7 +59,7 @@ public class EnterpriseSearchActivity : Dialog
                 .Then(
                     s =>s.Resolve<SummariseContentFunction.Function>(),
                     (_, output) => new SummariseContentFunction.Input(prompt, output.Result))
-                .Execute(
+                .ExecuteChain(
                     client,
                     new ExtractKeyTermsFunction.Input(prompt, input),
                     cancellationToken);

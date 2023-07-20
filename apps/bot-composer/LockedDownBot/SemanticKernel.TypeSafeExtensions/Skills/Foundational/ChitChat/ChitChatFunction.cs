@@ -19,7 +19,7 @@ public static class ChitChatFunction
             _openAiClient = openAiClient;
             _model = model;
         }
-        public async Task<Output> Execute(SemanticKernelWrapper wrapper, Input input, CancellationToken token)
+        public async Task<Output> ExecuteChain(SemanticKernelWrapper wrapper, Input input, CancellationToken token)
         {
             var options = new ChatCompletionsOptions();
             foreach(var msg in input.Messages) options.Messages.Add(msg);

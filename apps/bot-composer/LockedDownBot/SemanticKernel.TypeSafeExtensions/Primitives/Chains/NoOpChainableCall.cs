@@ -9,7 +9,7 @@ public class NoOpChainableCall<TInput, TOutput> : IChainableSkill<TInput, TOutpu
     {
         _output = output;
     }
-    public Task<TOutput> Execute(SemanticKernelWrapper client, TInput input, CancellationToken token)
+    public Task<TOutput> ExecuteChain(SemanticKernelWrapper client, TInput input, CancellationToken token)
     {
         return Task.FromResult(_output);
     }

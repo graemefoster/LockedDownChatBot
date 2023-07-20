@@ -43,9 +43,9 @@ public class SemanticKernelWrapper: ISkillResolver
         }
     }
 
-    public Task<TOutput> Execute<TInput, TOutput>(IChainableSkill<TInput, TOutput> chain, TInput input, CancellationToken cancellationToken)
+    public Task<TOutput> RunSkill<TInput, TOutput>(IChainableSkill<TInput, TOutput> chain, TInput input, CancellationToken cancellationToken)
     {
-        return chain.Execute(this, input, cancellationToken);
+        return chain.ExecuteChain(this, input, cancellationToken);
     }
 
     public ISKFunction GetOrRegister(IAmAnSkFunction semanticKernelFunction)

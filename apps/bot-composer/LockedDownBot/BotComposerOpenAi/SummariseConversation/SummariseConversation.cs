@@ -45,7 +45,7 @@ public class SummariseConversation : Dialog
 
         var response = await
             new SummariseAskFunction.Function()
-                .Execute(client, new SummariseAskFunction.Input(prompt, input), cancellationToken);
+                .ExecuteChain(client, new SummariseAskFunction.Input(prompt, input), cancellationToken);
 
         dc.State.SetValue(ResultProperty.GetValue(dc.State), response.Summarisation);
         return await dc.EndDialogAsync(result: response, cancellationToken);
