@@ -19,7 +19,7 @@ public class CombineChainableCall<TInput, TFalseOutput, TTrueOutput, TNewInput, 
         _skill = skill;
     }
 
-    public async Task<TNewOutput> ExecuteChain(SemanticKernelWrapper wrapper, TInput input, CancellationToken token)
+    public async Task<TNewOutput> Run(SemanticKernelWrapper wrapper, TInput input, CancellationToken token)
     {
         var result = await wrapper.RunSkill(_either, input, token);
         
@@ -27,6 +27,6 @@ public class CombineChainableCall<TInput, TFalseOutput, TTrueOutput, TNewInput, 
             ? _newTrueInputFactory(input, result.ItemTrue!)
             : _newFalseInputFactory(input, result.ItemFalse!);
 
-        return await _skill(wrapper).ExecuteChain(wrapper, newInput, token);
+        return await _skill(wrapper).Run(wrapper, newInput, token);
     }
 }

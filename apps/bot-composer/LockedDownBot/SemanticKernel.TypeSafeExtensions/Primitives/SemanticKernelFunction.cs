@@ -51,7 +51,7 @@ public abstract class SemanticKernelFunction<TInput, TOutput> : IChainableSkill<
 
     protected abstract TOutput FromResult(TInput input, SKContext context);
 
-    public async Task<TOutput> ExecuteChain(SemanticKernelWrapper wrapper, TInput input, CancellationToken token)
+    public async Task<TOutput> Run(SemanticKernelWrapper wrapper, TInput input, CancellationToken token)
     {
         var context = wrapper.CreateNewContext(token);
         PopulateContext(context, input);

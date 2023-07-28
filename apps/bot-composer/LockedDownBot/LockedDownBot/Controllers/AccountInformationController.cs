@@ -68,7 +68,7 @@ namespace LockedDownBot.Controllers
                     .ThenIf(output => output.MissingParameters.Any(),
                         s => s.Resolve<GetMoreInputFromCustomerToCallInputFunction.Function>()
                     )
-                    .ExecuteChain(
+                    .Run(
                         client,
                         new ExtractInformationToCallFunction.Input(
                             "You are a bank teller",

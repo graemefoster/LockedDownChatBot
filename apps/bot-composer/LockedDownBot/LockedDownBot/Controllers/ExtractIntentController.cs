@@ -58,7 +58,7 @@ namespace LockedDownBot.Controllers
                         (i, output) => new ExtractIntentFromInputFunction.Input(context, intents, input),
                         r => r.Resolve<ExtractIntentFromInputFunction.Function>()
                         )
-                    .ExecuteChain(
+                    .Run(
                         kernel, 
                         new ExtractIntentFromInputFunction.Input(context, intents, input), 
                         token)

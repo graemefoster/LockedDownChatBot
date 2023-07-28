@@ -28,7 +28,7 @@ public class
         _trueInputFactory = trueInputFactory;
     }
 
-    public async Task<Either<TFalseOutput, TTrueOutput>> ExecuteChain(
+    public async Task<Either<TFalseOutput, TTrueOutput>> Run(
         SemanticKernelWrapper client,
         TInput input,
         CancellationToken token)
@@ -41,7 +41,7 @@ public class
             return Either<
                 TFalseOutput, 
                 TTrueOutput>.True(
-                await next.ExecuteChain(client, trueInput, token));
+                await next.Run(client, trueInput, token));
         } 
 
         var falseInput = _falseInputFactory(input, initialOutput);
@@ -49,6 +49,6 @@ public class
         return Either<
             TFalseOutput, 
             TTrueOutput>.False(
-            await falseNext.ExecuteChain(client, falseInput, token));
+            await falseNext.Run(client, falseInput, token));
     }
 }

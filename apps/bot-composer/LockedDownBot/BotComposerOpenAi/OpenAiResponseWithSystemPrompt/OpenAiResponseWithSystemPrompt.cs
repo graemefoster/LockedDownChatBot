@@ -43,7 +43,7 @@ public class OpenAiResponseWithSystemPrompt : Dialog
         var input = string.Join('\n', Inputs.GetValue(dc.State));
 
         var response = await new ChitChatFunction.Function(rawClient, model)
-            .ExecuteChain(client, new ChitChatFunction.Input(
+            .Run(client, new ChitChatFunction.Input(
                 new[]
                 {
                     new ChatMessage(ChatRole.System, SystemPrompt.GetValue(dc.State)),

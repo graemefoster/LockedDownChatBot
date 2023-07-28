@@ -21,7 +21,7 @@ public static class CognitiveSearchFunction
             _client = client;
         }
 
-        public async Task<Output> ExecuteChain(SemanticKernelWrapper wrapper, Input input, CancellationToken token)
+        public async Task<Output> Run(SemanticKernelWrapper wrapper, Input input, CancellationToken token)
         {
             var searchResult = (await _client
                 .SearchAsync<SearchDocument>(
