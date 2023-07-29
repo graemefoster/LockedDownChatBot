@@ -50,7 +50,7 @@ public class OpenAiResponseWithSystemPrompt : Dialog
                     new ChatMessage(ChatRole.User, input)
                 }), cancellationToken);
 
-        var result = response;
+        var result = response.Response;
 
         if (this.ResultProperty != null)
         {
