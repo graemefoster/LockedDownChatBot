@@ -19,8 +19,6 @@ param dnsResourceGroupName string
 @description('Name of a public DNS to register domains against')
 param dnsResourceName string
 
-param kvGroupObjectId string
-
 @description('Custom Host name to be added to custom domain suffix')
 param chatApiCustomHost string
 
@@ -111,7 +109,6 @@ module core 'foundations/keyvault.bicep' = {
   scope: rg
   params: {
     location: location
-    kvGroupObjectId: kvGroupObjectId
     kvName: kvName
     logAnalyticsName: '${abbrs.operationalInsightsWorkspaces}-${environmentName}-logs'
     openAiKey: openAiKey

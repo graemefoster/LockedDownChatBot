@@ -71,8 +71,8 @@ var indexer = new SearchIndexer(
     Schedule = new IndexingSchedule(TimeSpan.FromHours(1)),
 };
 
-var indexCreateResponse = await searchIndexClient.CreateOrUpdateIndexAsync(index);
-var createDataSourceResponse = await searchIndexerClient.CreateOrUpdateDataSourceConnectionAsync(indexDataSource);
-var createIndexerResponse = await searchIndexerClient.CreateOrUpdateIndexerAsync(indexer);
+await searchIndexClient.CreateOrUpdateIndexAsync(index);
+await searchIndexerClient.CreateOrUpdateDataSourceConnectionAsync(indexDataSource);
+await searchIndexerClient.CreateOrUpdateIndexerAsync(indexer);
 
 Console.WriteLine("Successfully configured Index and Indexer for Cognitive Search Service");

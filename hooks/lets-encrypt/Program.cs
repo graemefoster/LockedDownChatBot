@@ -17,6 +17,7 @@ using Azure.ResourceManager.KeyVault.Models;
 using Azure.ResourceManager.Resources;
 using Azure.ResourceManager.Resources.Models;
 using Azure.Security.KeyVault.Certificates;
+using LetsEncrypt;
 using Newtonsoft.Json;
 
 var deployEdgeSecurity = Environment.GetEnvironmentVariable("DEPLOY_EDGE_SECURITY");
@@ -27,7 +28,6 @@ var certificateName = Environment.GetEnvironmentVariable("CHAT_API_CUSTOM_HOST")
 var dnsSuffix = Environment.GetEnvironmentVariable("DNS_RESOURCE_NAME")!;
 var dnsResourceGroup = Environment.GetEnvironmentVariable("DNS_RESOURCE_RG")!;
 var certContact = Environment.GetEnvironmentVariable("ACME_CONTACT")!;
-var secretsOfficersGroup = Environment.GetEnvironmentVariable("SECRETS_OFFICER_AAD_GROUP_OBJECTID");
 var resourceGroup = $"rg-{azdEnvironment}";
 
 var cred = new AzureCliCredential();
@@ -57,7 +57,13 @@ var rg = subscriptionResource
         })
     .Value;
 
-Console.WriteLine($"Checking for KeyVault: {expectedKvName}");
+//get the principal Id of the user
+var graphClient = new Microsoft.Graph.GraphServiceClient(cred);
+var me = await graphClient.Me.GetAsync();
+var meObjectId = me!.Id;
+Console.WriteLine($"Found current Principal Id: {meObjectId}");
+
+Console.WriteLine($"Ensuring KeyVault exists: {expectedKvName}");
 var kv = rg.GetKeyVaults()
     .CreateOrUpdate(
         WaitUntil.Completed,
@@ -66,7 +72,7 @@ var kv = rg.GetKeyVaults()
             azureLocation,
             new KeyVaultProperties(tenantId, new KeyVaultSku(KeyVaultSkuFamily.A, KeyVaultSkuName.Standard))
             {
-                AccessPolicies = { new KeyVaultAccessPolicy(tenantId, secretsOfficersGroup, new IdentityAccessPermissions()
+                AccessPolicies = { new KeyVaultAccessPolicy(tenantId, meObjectId, new IdentityAccessPermissions()
                 {
                     Certificates = { IdentityAccessCertificatePermission.All },
                     Keys = { IdentityAccessKeyPermission.All },
@@ -79,8 +85,15 @@ var kv = rg.GetKeyVaults()
 
 
 //Don't bother getting a LetsEncrypt cert if we aren't deploying the edge security pieces.
+//And they default to false.
 if (!bool.Parse(deployEdgeSecurity)) { return;}
 
+if (string.IsNullOrWhiteSpace(dnsResourceGroup) || string.IsNullOrWhiteSpace(dnsSuffix))
+{
+    Console.WriteLine("You use pre-configure 'DNS_RESOURCE_RG' and 'DNS_RESOURCE_NAME' to enable edge security.");
+    Console.WriteLine("  azd env set DNS_RESOURCE_RG <dns-resource-group-name>");
+    Console.WriteLine("  azd env set DNS_RESOURCE_NAME <dns-resource-name>");
+}
 
 Console.WriteLine($"Looking for Dns Zone: {dnsResourceGroup}/{dnsSuffix}");
 var dnsResource = subscriptionResource
@@ -91,11 +104,9 @@ var client = new HttpClient();
 var token = await cred.GetTokenAsync(new TokenRequestContext(new[] { "https://management.azure.com/" }));
 var kvClient = new CertificateClient(kv.Data.Properties.VaultUri, cred);
 
-var password = "p@ssw0rd";
-
 try
 {
-    var cert = await kvClient.GetCertificateAsync(certificateName);
+    await kvClient.GetCertificateAsync(certificateName);
     Console.WriteLine("Certificate already exists");
     return;
 }
@@ -244,8 +255,9 @@ if (order.Payload.Status == "valid")
     var cert = await acme.GetOrderCertificateAsync(order);
     var x509Cert = X509Certificate2.CreateFromPem(Encoding.UTF8.GetString(cert), keyPair.ExportRSAPrivateKeyPem());
 
+
+    var password = Guid.NewGuid().ToString().ToUpperInvariant();
     var certificate = x509Cert.Export(X509ContentType.Pfx, password);
-    Console.WriteLine(password);
 
     var response = kvClient.ImportCertificate(
         new ImportCertificateOptions(
@@ -263,11 +275,9 @@ else
 }
 
 
-Dns01ChallengeValidationDetails ResolveChallengeForDns01(
-    ACMESharp.Protocol.Resources.Authorization authz, Challenge challenge, IJwsTool signer)
+Dns01ChallengeValidationDetails ResolveChallengeForDns01(Authorization authz, Challenge challenge, IJwsTool signer)
 {
-    var keyAuthzDigested = JwsHelper.ComputeKeyAuthorizationDigest(
-        signer, challenge.Token);
+    var keyAuthzDigested = JwsHelper.ComputeKeyAuthorizationDigest(signer, challenge.Token);
 
     return new Dns01ChallengeValidationDetails
     {
@@ -276,16 +286,4 @@ Dns01ChallengeValidationDetails ResolveChallengeForDns01(
         DnsRecordType = Dns01ChallengeValidationDetails.DnsRecordTypeDefault,
         DnsRecordValue = keyAuthzDigested,
     };
-}
-
-public class GoogleDnsResponse
-{
-    public int Status { get; set; }
-    public Answer[] Answer { get; set; }
-}
-
-public class Answer
-{
-    public string Name { get; set; }
-    public string Data { get; set; }
 }

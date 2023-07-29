@@ -1,6 +1,5 @@
 param kvName string
 param location string = resourceGroup().location
-param kvGroupObjectId string
 param logAnalyticsName string
 param aspName string
 param appName string
@@ -34,16 +33,6 @@ resource keyvault 'Microsoft.KeyVault/vaults@2023-02-01' = {
     }
     tenantId: subscription().tenantId
     accessPolicies: [
-      {
-        objectId: kvGroupObjectId
-        tenantId: subscription().tenantId
-        permissions: {
-          certificates: [ 'all' ]
-          keys: [ 'all' ]
-          secrets: [ 'all' ]
-          storage: [ 'all' ]
-        }
-      }
       {
         objectId: gatewayIdentityId
         tenantId: subscription().tenantId

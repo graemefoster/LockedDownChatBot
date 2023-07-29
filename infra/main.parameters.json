@@ -14,9 +14,6 @@
     "dnsResourceGroupName": {
       "value": "${DNS_RESOURCE_RG}"
     },
-    "kvGroupObjectId": {
-      "value": "${SECRETS_OFFICER_AAD_GROUP_OBJECTID}"
-    },
     "chatApiCustomHost": {
       "value": "${CHAT_API_CUSTOM_HOST}"
     },
