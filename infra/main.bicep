@@ -205,7 +205,7 @@ module app 'bot/bot-app.bicep' = {
     privateDnsZoneId: vnet.outputs.privateDnsZoneId
     tags: tags
     logAnalyticsId: core.outputs.logAnalyticsId
-    openAiModel: openAiModel
+    openAiModel: openAiCalculatedModelName
     openAiEndpoint: openAi.outputs.openAiEndpoint
     kvName: core.outputs.kvName
     openAiSecretName: core.outputs.openAiSecretName
