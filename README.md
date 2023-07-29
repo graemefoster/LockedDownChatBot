@@ -10,11 +10,37 @@ A sample application showing a secure setup with
 
 TLDR;
 ```bash
-gh repo clone graemefoster/LockedDownChatBot
-cd LockedDownChatBot
+azd init -t graemefoster/LockedDownChatBot
+#add env variables as necessary to tweak the deployment
 azd up
 ```
 
+To use an existing Open AI deployment (GPT 3.5-turbo 0613 recommended)
+```bash
+azd env set OPENAI_RESOURCE_RG <open-ai-resource-group>
+azd env set OPENAI_RESOURCE_NAME <open-ai-resource-name>
+azd env set OPENAI_MODEL <pre-existing-open-api-model-name>
+```
+
+To add a Firewall and Application Gateway
+```bash
+azd env set DEPLOY_EDGE_SECURITY true
+# DNS used to provision a LetsEncrypt TLS certificate
+azd env set DNS_RESOURCE_RG <dns-resource-group-name>
+azd env set DNS_RESOURCE_NAME <dns-resource-name>
+```
+
+To enable local BOT development
+```bash
+# Local Bots cannot use Managed Identity.
+azd env set LOCAL_BOT_AAD_ID <aad-application-id>
+azd env set LOCAL_BOT_AAD_TenantType <either MultiTenant or SingleTenant>
+```
+
+When you're ready to deploy:
+```bash
+azd up
+```
 
 # Learnings
 
@@ -72,8 +98,7 @@ We support the Azure Developer CLI (azd). To get started you'll need a few thing
   - Your application needs a redirect to https://token.botframework.com/.auth/web/redirect 
 
 ```bash
-gh repo clone graemefoster/LockedDownChatBot
-cd LockedDownChatBot
+azd init -t graemefoster/LockedDownChatBot
 azd up
 ```
 

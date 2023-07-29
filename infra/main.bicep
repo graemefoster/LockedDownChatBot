@@ -22,11 +22,9 @@ param dnsResourceName string
 @description('Custom Host name to be added to custom domain suffix')
 param chatApiCustomHost string
 
-param openAiResourceId string
+param openAiResourceGroupName string
+param openAiResourceName string
 param openAiModel string
-@secure()
-param openAiKey string
-param openAiEndpoint string
 
 param localBotAadId string = ''
 @description('Required for SingleTenant bot. Else can be empty')
@@ -42,7 +40,8 @@ param optionalAadClientSecret string
 param optionalAadRequiredScopes string
 
 //When set to true, deploys Basic Firewall and Application Gateway
-param deployEdgeSecurity bool = false
+param deployEdgeSecurity string
+var parsedDeployEdgeSecurity = bool(empty(deployEdgeSecurity) ? 'false' : deployEdgeSecurity)
 
 var abbrs = loadJsonContent('./abbreviations.json')
 
@@ -65,6 +64,10 @@ var kvName = rg.tags['env-kv-name']
 var appName = '${abbrs.webSitesAppService}${resourceNameSuffix}-bot'
 var functionName = '${abbrs.webSitesAppService}${resourceNameSuffix}-crkr'
 var searchServicesAccountName = '${abbrs.searchSearchServices}${resourceNameSuffix}-bot'
+var existingOpenAi = !empty(openAiResourceGroupName)
+var openAiCalculatedName = existingOpenAi ? openAiResourceName : toLower('${abbrs.cognitiveServicesAccounts}${resourceNameSuffix}-bot')
+var openAiCalculatedModelName = existingOpenAi ? openAiModel : 'Gpt35Turbo0613'
+var openAiCalculatedRgName = existingOpenAi ? openAiResourceGroupName : rg.name
 
 // Add resources to be provisioned below.
 // A full example that leverages azd bicep modules can be seen in the todo-python-mongo template:
@@ -82,12 +85,22 @@ module vnet 'foundations/vnet.bicep' = {
   }
 }
 
+module openAi 'open-ai/main.bicep' = {
+  name: '${deployment().name}-openai'
+  scope: resourceGroup(openAiCalculatedRgName)
+  params: {
+    existing: existingOpenAi
+    openAiModelName: openAiCalculatedModelName
+    openAiResourceName: openAiCalculatedName
+  }
+}
+
 module openAiPrivateEndpoint 'foundations/openai-private-endpoint.bicep' = {
   name: '${deployment().name}-openaipe'
   scope: rg
   params: {
     location: location
-    openAiResourceId: openAiResourceId
+    openAiResourceId: openAi.outputs.id
     privateDnsZoneId: vnet.outputs.openAiPrivateDnsZoneId
     privateEndpointSubnetId: vnet.outputs.privateEndpointSubnetId
   }
@@ -111,7 +124,8 @@ module core 'foundations/keyvault.bicep' = {
     location: location
     kvName: kvName
     logAnalyticsName: '${abbrs.operationalInsightsWorkspaces}-${environmentName}-logs'
-    openAiKey: openAiKey
+    openAiRg: openAiCalculatedRgName
+    openAiName: openAi.outputs.openAiName
     gatewayIdentityId: managedIdentities.outputs.gwayIdentityPrincipalId
     appServiceIdentityId: managedIdentities.outputs.aspIdentityPrincipalId
     appName: appName
@@ -121,7 +135,7 @@ module core 'foundations/keyvault.bicep' = {
 
 var fwallPolicyName = '${abbrs.networkFirewallPolicies}${resourceNameSuffix}'
 
-module firewall 'foundations/firewall.bicep' = if (deployEdgeSecurity) {
+module firewall 'foundations/firewall.bicep' = if (parsedDeployEdgeSecurity) {
   name: '${deployment().name}-fwall'
   scope: rg
   params: {
@@ -179,7 +193,6 @@ module sampleApp 'sample-app/main.bicep' = {
   }
 }
 
-
 module app 'bot/bot-app.bicep' = {
   name: '${deployment().name}-app'
   scope: rg
@@ -193,7 +206,7 @@ module app 'bot/bot-app.bicep' = {
     tags: tags
     logAnalyticsId: core.outputs.logAnalyticsId
     openAiModel: openAiModel
-    openAiEndpoint: openAiEndpoint
+    openAiEndpoint: openAi.outputs.openAiEndpoint
     kvName: core.outputs.kvName
     openAiSecretName: core.outputs.openAiSecretName
     appServiceManagedIdentityName: managedIdentities.outputs.aspIdentityName
@@ -204,7 +217,7 @@ module app 'bot/bot-app.bicep' = {
     applicationInsightsConnectionString: core.outputs.applicationInsightsConnectionString
     aspId: core.outputs.aspId
     apiUrl: sampleApp.outputs.appUrl
-    deployEdgeSecurity: deployEdgeSecurity
+    deployEdgeSecurity: parsedDeployEdgeSecurity
     searchEndpointUrl: cogSearchIndex.outputs.searchEndpoint
     searchIndexName: cogSearchIndex.outputs.indexName
   }
@@ -236,7 +249,7 @@ module bot 'bot/bot-service.bicep' = {
   scope: rg
   params: {
     botName: '${environmentName}-bot'
-    hostName: deployEdgeSecurity ? gatewayCustomHostName : app.outputs.defaultHostName
+    hostName: parsedDeployEdgeSecurity ? gatewayCustomHostName : app.outputs.defaultHostName
     botIdentityName: app.outputs.botIdentityName
     logAnalyticsId: core.outputs.logAnalyticsId
     appInsightsInstrumentationKey: core.outputs.applicationInsightsInstrumentationKey
@@ -250,7 +263,7 @@ module bot 'bot/bot-service.bicep' = {
   }
 }
 
-module gateway 'foundations/gateway.bicep' = if (deployEdgeSecurity) {
+module gateway 'foundations/gateway.bicep' = if (parsedDeployEdgeSecurity) {
   name: '${deployment().name}-gway'
   scope: rg
   params: {
@@ -278,8 +291,7 @@ module cogSearchIndex 'sample-search/cog-search.bicep' = {
     logAnalyticsId: core.outputs.logAnalyticsId
     appServiceIdentityPrincipalId: managedIdentities.outputs.aspIdentityPrincipalId
   }
-} 
-
+}
 
 // Add outputs from the deployment here, if needed.
 //

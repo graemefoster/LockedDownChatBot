@@ -20,14 +20,13 @@ using Azure.Security.KeyVault.Certificates;
 using LetsEncrypt;
 using Newtonsoft.Json;
 
-var deployEdgeSecurity = Environment.GetEnvironmentVariable("DEPLOY_EDGE_SECURITY");
+var deployEdgeSecurity = bool.Parse(Environment.GetEnvironmentVariable("DEPLOY_EDGE_SECURITY") ?? "false");
 
 var location = Environment.GetEnvironmentVariable("AZURE_LOCATION");
 var azdEnvironment = Environment.GetEnvironmentVariable("AZURE_ENV_NAME");
 var certificateName = Environment.GetEnvironmentVariable("CHAT_API_CUSTOM_HOST");
 var dnsSuffix = Environment.GetEnvironmentVariable("DNS_RESOURCE_NAME")!;
 var dnsResourceGroup = Environment.GetEnvironmentVariable("DNS_RESOURCE_RG")!;
-var certContact = Environment.GetEnvironmentVariable("ACME_CONTACT")!;
 var resourceGroup = $"rg-{azdEnvironment}";
 
 var cred = new AzureCliCredential();
@@ -86,7 +85,7 @@ var kv = rg.GetKeyVaults()
 
 //Don't bother getting a LetsEncrypt cert if we aren't deploying the edge security pieces.
 //And they default to false.
-if (!bool.Parse(deployEdgeSecurity)) { return;}
+if (!deployEdgeSecurity) { return;}
 
 if (string.IsNullOrWhiteSpace(dnsResourceGroup) || string.IsNullOrWhiteSpace(dnsSuffix))
 {
@@ -136,7 +135,7 @@ await acme.GetNonceAsync();
 
 if (account == null || accountSigner == null)
 {
-    account = await acme.CreateAccountAsync(new[] { certContact }.Select(x => "mailto:" + x), true);
+    account = await acme.CreateAccountAsync(new[] { me.UserPrincipalName }.Select(x => "mailto:" + x), true);
     account.Payload.TermsOfServiceAgreed = true;
     accountSigner = acme.Signer;
     acme.Account = account;

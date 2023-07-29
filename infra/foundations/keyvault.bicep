@@ -4,13 +4,19 @@ param logAnalyticsName string
 param aspName string
 param appName string
 
-@secure()
-param openAiKey string
-
 param gatewayIdentityId string
 param appServiceIdentityId string
 
+param openAiRg string
+param openAiName string
+
+
 var openAiSecretName = 'OpenAiKey'
+
+resource openAi 'Microsoft.CognitiveServices/accounts@2023-05-01' existing = {
+  scope: resourceGroup(openAiRg)
+  name: openAiName
+}
 
 resource lanalytics 'Microsoft.OperationalInsights/workspaces@2022-10-01' = {
   name: logAnalyticsName
@@ -52,7 +58,7 @@ resource keyvault 'Microsoft.KeyVault/vaults@2023-02-01' = {
   resource openAiSecret 'secrets@2023-02-01' = {
     name: openAiSecretName
     properties: {
-      value: openAiKey
+      value: openAi.listKeys().key1
       contentType: 'text/plain'
     }
   }

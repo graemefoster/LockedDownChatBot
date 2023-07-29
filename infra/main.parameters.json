@@ -17,17 +17,14 @@
     "chatApiCustomHost": {
       "value": "${CHAT_API_CUSTOM_HOST}"
     },
-    "openAiResourceId": {
-      "value": "${OPENAI_RESOURCE_ID}"
+    "openAiResourceGroupName": {
+      "value": "${OPENAI_RESOURCE_RG}"
+    },
+    "openAiResourceName": {
+      "value": "${OPENAI_RESOURCE_NAME}"
     },
     "openAiModel": {
       "value": "${OPENAI_MODEL}"
-    },
-    "openAiKey": {
-      "value": "${OPENAI_KEY}"
-    },
-    "openAiEndpoint": {
-      "value": "${OPENAI_ENDPOINT}"
     },
     "localBotAadId": {
       "value": "${LOCAL_BOT_AAD_ID}"
