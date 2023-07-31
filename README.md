@@ -28,6 +28,7 @@ azd env set DEPLOY_EDGE_SECURITY true
 # DNS used to provision a LetsEncrypt TLS certificate
 azd env set DNS_RESOURCE_RG <dns-resource-group-name>
 azd env set DNS_RESOURCE_NAME <dns-resource-name>
+azd env set CHAT_API_CUSTOM_HOST <host-name-to-provision-cert-for>
 ```
 
 To enable local BOT development
