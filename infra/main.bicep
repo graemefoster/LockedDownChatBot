@@ -132,7 +132,7 @@ module core 'foundations/keyvault.bicep' = {
 }
 
 module apps 'foundations/apps.bicep' = {
-  name: '${deployment().name}-core'
+  name: '${deployment().name}-apps'
   scope: rg
   params: {
     location: location
