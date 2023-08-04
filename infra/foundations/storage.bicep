@@ -15,7 +15,7 @@ resource searchStorage 'Microsoft.Storage/storageAccounts@2022-09-01' = {
     name: 'Standard_LRS'
   }
   properties: {
-    allowBlobPublicAccess: true
+    allowBlobPublicAccess: false
   }
 }
 
