@@ -33,7 +33,7 @@ resource deploymentNew 'Microsoft.CognitiveServices/accounts/deployments@2023-05
   parent: openAiNew
   sku: {
     name: 'Standard'
-    capacity: 100
+    capacity: 20
   }
   properties: {
     model: {
