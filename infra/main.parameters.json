@@ -52,6 +52,9 @@
     },
     "deployEdgeSecurity": {
       "value": "${DEPLOY_EDGE_SECURITY}"
+    },
+    "openAiLocation": {
+      "value": "${OPENAI_LOCATION}"
     }
   }
 }

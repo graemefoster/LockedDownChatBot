@@ -4,6 +4,7 @@ param openAiResourceName string
 param openAiModelName string
 param openAiEmbeddingModelName string
 param managedIdentityPrincipalId string
+param openAiLocation string
 
 resource openAiExisting 'Microsoft.CognitiveServices/accounts@2023-05-01' existing = if (existing) {
   name: openAiResourceName
@@ -21,7 +22,7 @@ resource embeddingDeployment 'Microsoft.CognitiveServices/accounts/deployments@2
 
 resource openAiNew 'Microsoft.CognitiveServices/accounts@2023-05-01' = if (!existing) {
   name: openAiResourceName
-  location: 'eastus' //hardcode for now
+  location: openAiLocation
   kind: 'OpenAI'
   identity: {
     type: 'SystemAssigned'

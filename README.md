@@ -15,6 +15,11 @@ azd init -t graemefoster/LockedDownChatBot
 azd up
 ```
 
+To use a different location (**eastus** default) for a new OpenAI service
+```bash
+azd env set OPENAI_LOCATION <open-ai-location>
+```
+
 To use an existing Open AI deployment (GPT 3.5-turbo 0613 recommended)
 ```bash
 azd env set OPENAI_RESOURCE_RG <open-ai-resource-group>

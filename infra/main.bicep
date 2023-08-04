@@ -26,6 +26,7 @@ param openAiResourceGroupName string
 param openAiResourceName string
 param openAiEmbeddingModel string
 param openAiModel string
+param openAiLocation string
 
 param localBotAadId string = ''
 @description('Required for SingleTenant bot. Else can be empty')
@@ -39,6 +40,7 @@ param optionalAadClientId string
 @secure()
 param optionalAadClientSecret string
 param optionalAadRequiredScopes string
+
 
 //When set to true, deploys Basic Firewall and Application Gateway
 param deployEdgeSecurity string
@@ -70,6 +72,7 @@ var openAiCalculatedName = existingOpenAi ? openAiResourceName : toLower('${abbr
 var openAiCalculatedModelName = existingOpenAi ? openAiModel : 'Gpt35Turbo0613'
 var openAiCalculatedEmbeddingModelName = existingOpenAi ? openAiEmbeddingModel : 'Ada002Embedding'
 var openAiCalculatedRgName = existingOpenAi ? openAiResourceGroupName : rg.name
+var calculatedOpenAiLocation = empty(openAiLocation) ? 'eastus' : openAiLocation
 
 // Add resources to be provisioned below.
 // A full example that leverages azd bicep modules can be seen in the todo-python-mongo template:
@@ -92,6 +95,7 @@ module openAi 'open-ai/main.bicep' = {
   scope: resourceGroup(openAiCalculatedRgName)
   params: {
     existing: existingOpenAi
+    openAiLocation: calculatedOpenAiLocation
     openAiModelName: openAiCalculatedModelName
     openAiEmbeddingModelName: openAiCalculatedEmbeddingModelName
     openAiResourceName: openAiCalculatedName
