@@ -29,7 +29,7 @@ resource blobServices 'Microsoft.Storage/storageAccounts/blobServices@2022-09-01
   resource containerIn 'containers@2022-09-01' = {
     name: containerInName
     properties: {
-      publicAccess: 'Blob' //allow you to put documents in from the portal
+      publicAccess: 'None' //allow you to put documents in from the portal
     }
   }
 
