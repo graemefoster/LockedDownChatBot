@@ -128,6 +128,15 @@ module core 'foundations/keyvault.bicep' = {
     openAiName: openAi.outputs.openAiName
     gatewayIdentityId: managedIdentities.outputs.gwayIdentityPrincipalId
     appServiceIdentityId: managedIdentities.outputs.aspIdentityPrincipalId
+  }
+}
+
+module apps 'foundations/apps.bicep' = {
+  name: '${deployment().name}-apps'
+  scope: rg
+  params: {
+    location: location
+    logAnalyticsName: '${abbrs.operationalInsightsWorkspaces}-${environmentName}-logs'
     appName: appName
     aspName: '${abbrs.webServerFarms}${resourceNameSuffix}'
   }
@@ -183,8 +192,8 @@ module sampleApp 'sample-app/main.bicep' = {
   scope: rg
   params: {
     logAnalyticsId: core.outputs.logAnalyticsId
-    appInsightsConnectionString: core.outputs.applicationInsightsConnectionString
-    aspId: core.outputs.aspId
+    appInsightsConnectionString: apps.outputs.applicationInsightsConnectionString
+    aspId: apps.outputs.aspId
     privateDnsZoneId: vnet.outputs.privateDnsZoneId
     privateEndpointSubnetId: vnet.outputs.privateEndpointSubnetId
     sampleAppName: sampleApiName
@@ -214,8 +223,8 @@ module app 'bot/bot-app.bicep' = {
     cosmosContainerId: database.outputs.containerName
     cosmosDatabaseId: database.outputs.databaseName
     cosmosEndpoint: database.outputs.cosmosUrl
-    applicationInsightsConnectionString: core.outputs.applicationInsightsConnectionString
-    aspId: core.outputs.aspId
+    applicationInsightsConnectionString: apps.outputs.applicationInsightsConnectionString
+    aspId: apps.outputs.aspId
     apiUrl: sampleApp.outputs.appUrl
     deployEdgeSecurity: parsedDeployEdgeSecurity
     searchEndpointUrl: cogSearchIndex.outputs.searchEndpoint
@@ -236,9 +245,9 @@ module documentCracker 'sample-search/document-cracker.bicep' = {
     logAnalyticsId: core.outputs.logAnalyticsId
     kvName: core.outputs.kvName
     appServiceManagedIdentityName: managedIdentities.outputs.aspIdentityName
-    aspId: core.outputs.aspId
+    aspId: apps.outputs.aspId
     storageConnectionStringSecretName: storage.outputs.storageAccountSecretName
-    appInsightsConnectionString: core.outputs.applicationInsightsConnectionString
+    appInsightsConnectionString: apps.outputs.applicationInsightsConnectionString
   }
 }
 
@@ -252,7 +261,7 @@ module bot 'bot/bot-service.bicep' = {
     hostName: parsedDeployEdgeSecurity ? gatewayCustomHostName : app.outputs.defaultHostName
     botIdentityName: app.outputs.botIdentityName
     logAnalyticsId: core.outputs.logAnalyticsId
-    appInsightsInstrumentationKey: core.outputs.applicationInsightsInstrumentationKey
+    appInsightsInstrumentationKey: apps.outputs.applicationInsightsInstrumentationKey
     localBotAadId: localBotAadId
     localBotAadTenant: localBotAadTenant
     localBotAadTenantType: localBotAadTenantType
