@@ -92,6 +92,7 @@ module openAi 'open-ai/main.bicep' = {
     existing: existingOpenAi
     openAiModelName: openAiCalculatedModelName
     openAiResourceName: openAiCalculatedName
+    managedIdentityPrincipalId: managedIdentities.outputs.aspIdentityPrincipalId
   }
 }
 
@@ -248,6 +249,9 @@ module documentCracker 'sample-search/document-cracker.bicep' = {
     aspId: apps.outputs.aspId
     storageConnectionStringSecretName: storage.outputs.storageAccountSecretName
     appInsightsConnectionString: apps.outputs.applicationInsightsConnectionString
+    openAiHostName: openAi.outputs.openAiEndpoint
+    openAiModelName: openAi.outputs.embeddingModelName
+    openAiSecretName: core.outputs.openAiSecretName
   }
 }
 
