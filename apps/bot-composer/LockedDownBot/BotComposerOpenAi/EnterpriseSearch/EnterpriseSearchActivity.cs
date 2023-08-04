@@ -46,12 +46,12 @@ public class EnterpriseSearchActivity : Dialog
         var client =
             _openAiClientFactory.GetFromSettings(settings);
 
-        var cogSearchKey = settings["COGNITIVE_SEARCH_KEY"] as string;
+        var usingKey = settings.TryGetValue("COGNITIVE_SEARCH_KEY", out var cogSearchKey);
         var endpoint = new Uri(SearchUrl.GetValue(dc.State));
         var indexName = Index.GetValue(dc.State);
-        var searchClient = cogSearchKey == null
+        var searchClient = !usingKey
             ? new SearchClient(endpoint, indexName, new ManagedIdentityCredential(ManagedIdentityId.GetValue(dc.State)))
-            : new SearchClient(endpoint, indexName, new AzureKeyCredential(cogSearchKey));
+            : new SearchClient(endpoint, indexName, new AzureKeyCredential((string)cogSearchKey!));
 
         var prompt = SystemPrompt.GetValue(dc.State);
         var input = string.Join('\n', Inputs.GetValue(dc.State));
