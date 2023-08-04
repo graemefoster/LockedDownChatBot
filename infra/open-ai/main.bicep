@@ -30,7 +30,14 @@ resource openAiNew 'Microsoft.CognitiveServices/accounts@2023-05-01' = if (!exis
     name: 'S0'
   }
   properties: {
-    publicNetworkAccess: 'Disabled'
+    publicNetworkAccess: 'Enabled'
+    networkAcls: {
+      defaultAction: 'Deny'
+      ipRules: [
+      ]
+      virtualNetworkRules: [
+      ]
+    }
     customSubDomainName: openAiResourceName
   }
 }
