@@ -9,6 +9,8 @@ param aspId string
 param kvName string
 param storageConnectionStringSecretName string
 param appInsightsConnectionString string
+param openAiHostName string
+param openAiEmbeddingModelName string
 
 param location string = resourceGroup().location
 
@@ -70,6 +72,18 @@ resource app 'Microsoft.Web/sites@2022-09-01' = {
         }
         {
           name: 'XDT_MicrosoftApplicationInsights_Mode'
+          value: 'recommended'
+        }
+        {
+          name: 'AzureOpenAIHost'
+          value: openAiHostName
+        }
+        {
+          name: 'AzureOpenAIEmbeddingModel'
+          value: openAiEmbeddingModelName
+        }
+        {
+          name: 'AzureOpenAISecret'
           value: 'recommended'
         }
       ]

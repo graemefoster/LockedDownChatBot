@@ -5,6 +5,7 @@
       <UserSecretsId>cb2fe84c-1b02-43ec-8125-15a41f591611</UserSecretsId>
   </PropertyGroup>
     <ItemGroup>
+        <PackageReference Include="Azure.AI.OpenAI" Version="1.0.0-beta.6" />
         <PackageReference Include="Microsoft.Azure.WebJobs.Extensions.Storage.Blobs" Version="5.0.0" />
         <PackageReference Include="Microsoft.NET.Sdk.Functions" Version="4.1.1" />
         <PackageReference Include="PdfPig" Version="0.1.8" />

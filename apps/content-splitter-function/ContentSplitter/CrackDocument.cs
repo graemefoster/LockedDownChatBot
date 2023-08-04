@@ -1,7 +1,11 @@
 ﻿using System;
 using System.IO;
+using System.Linq;
 using System.Text.Json;
 using System.Threading.Tasks;
+using Azure;
+using Azure.AI.OpenAI;
+using Azure.Identity;
 using Azure.Storage.Blobs;
 using Azure.Storage.Blobs.Specialized;
 using Microsoft.Azure.WebJobs;
@@ -25,19 +29,44 @@ public static class CrackDocument
         var outputClient =
             new BlobContainerClient(Environment.GetEnvironmentVariable("BlobStorageAccount"), "sample-documents");
 
+        var embeddingModelName = Environment.GetEnvironmentVariable("AzureOpenAIEmbeddingModel")!;
+        var openAiHost = new Uri(Environment.GetEnvironmentVariable("AzureOpenAIHost")!);
+        OpenAIClient client = string.IsNullOrWhiteSpace(Environment.GetEnvironmentVariable("AzureOpenAISecret"))
+            ? new OpenAIClient(openAiHost, new DefaultAzureCredential())
+            : new OpenAIClient(openAiHost,
+                new AzureKeyCredential(Environment.GetEnvironmentVariable("AzureOpenAISecret")!));
+
         using var document = PdfDocument.Open(inputBlob);
+
         foreach (var page in document.GetPages())
         {
             string pageText = page.Text;
 
             //look for new line characters. We'll index each paragraph
             var lineNumber = 0;
-            foreach (var line in pageText.Split('\n'))
+            foreach (var contentPiece in pageText.Split('\n'))
             {
                 lineNumber++;
                 var fileName = $"{Path.GetFileNameWithoutExtension(name)}-page-{page.Number}-line-{lineNumber}.json";
-                await outputClient.UploadBlobAsync(fileName, new BinaryData(line));
+                
+                var embeddings = await client.GetEmbeddingsAsync(
+                    embeddingModelName,
+                    new EmbeddingsOptions(contentPiece));
+                
+                var document = new InputBlob()
+                {
+                    Content = contentPiece,
+                    ContentVector = embeddings.Value.Data.SelectMany(x => x.Embedding).ToArray()
+                }
+
+                await outputClient.UploadBlobAsync(fileName, new BinaryData(contentPiece));
             }
         }
     }
+}
+
+public class InputBlob
+{
+    public string Content { get; set; }
+    public float[] ContentVector  { get; set; }
 }

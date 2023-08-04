@@ -24,6 +24,7 @@ param chatApiCustomHost string
 
 param openAiResourceGroupName string
 param openAiResourceName string
+param openAiEmbeddingModel string
 param openAiModel string
 
 param localBotAadId string = ''
@@ -67,6 +68,7 @@ var searchServicesAccountName = '${abbrs.searchSearchServices}${resourceNameSuff
 var existingOpenAi = !empty(openAiResourceGroupName)
 var openAiCalculatedName = existingOpenAi ? openAiResourceName : toLower('${abbrs.cognitiveServicesAccounts}${resourceNameSuffix}-bot')
 var openAiCalculatedModelName = existingOpenAi ? openAiModel : 'Gpt35Turbo0613'
+var openAiCalculatedEmbeddingModelName = existingOpenAi ? openAiEmbeddingModel : 'Ada002Embedding'
 var openAiCalculatedRgName = existingOpenAi ? openAiResourceGroupName : rg.name
 
 // Add resources to be provisioned below.
@@ -91,6 +93,7 @@ module openAi 'open-ai/main.bicep' = {
   params: {
     existing: existingOpenAi
     openAiModelName: openAiCalculatedModelName
+    openAiEmbeddingModelName: openAiCalculatedEmbeddingModelName
     openAiResourceName: openAiCalculatedName
     managedIdentityPrincipalId: managedIdentities.outputs.aspIdentityPrincipalId
   }
@@ -250,8 +253,7 @@ module documentCracker 'sample-search/document-cracker.bicep' = {
     storageConnectionStringSecretName: storage.outputs.storageAccountSecretName
     appInsightsConnectionString: apps.outputs.applicationInsightsConnectionString
     openAiHostName: openAi.outputs.openAiEndpoint
-    openAiModelName: openAi.outputs.embeddingModelName
-    openAiSecretName: core.outputs.openAiSecretName
+    openAiEmbeddingModelName: openAi.outputs.embeddingModelName
   }
 }
 

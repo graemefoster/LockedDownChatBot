@@ -26,6 +26,9 @@
     "openAiModel": {
       "value": "${OPENAI_MODEL}"
     },
+    "openAiEmbeddingModel": {
+      "value": "${OPENAI_EMBEDDING_MODEL}"
+    },
     "localBotAadId": {
       "value": "${LOCAL_BOT_AAD_ID}"
     },

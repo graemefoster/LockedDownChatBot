@@ -19,7 +19,8 @@ To use an existing Open AI deployment (GPT 3.5-turbo 0613 recommended)
 ```bash
 azd env set OPENAI_RESOURCE_RG <open-ai-resource-group>
 azd env set OPENAI_RESOURCE_NAME <open-ai-resource-name>
-azd env set OPENAI_MODEL <pre-existing-open-api-model-name>
+azd env set OPENAI_MODEL <pre-existing-gpt35turbo0613-model-name>
+azd env set OPENAI_EMBEDDING_MODEL <pre-existing-ada-002-model-name>
 ```
 
 To add a Firewall and Application Gateway
