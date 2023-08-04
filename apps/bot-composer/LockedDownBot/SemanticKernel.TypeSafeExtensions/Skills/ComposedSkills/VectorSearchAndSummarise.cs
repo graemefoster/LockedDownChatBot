@@ -1,12 +1,10 @@
 using Azure.AI.OpenAI;
 using Azure.Search.Documents;
-using Azure.Search.Documents.Models;
 using LockedDownBotSemanticKernel.Primitives;
 using LockedDownBotSemanticKernel.Primitives.Chains;
 using LockedDownBotSemanticKernel.Skills.EnterpriseSearch;
 using LockedDownBotSemanticKernel.Skills.Foundational.ExtractKeyTerms;
 using LockedDownBotSemanticKernel.Skills.Foundational.GetEmbeddings;
-using LockedDownBotSemanticKernel.Skills.Foundational.SummariseAsk;
 using LockedDownBotSemanticKernel.Skills.Foundational.SummariseContent;
 
 namespace LockedDownBotSemanticKernel.Skills.ComposedSkills;
@@ -38,7 +36,7 @@ public static class VectorSearchAndSummarise
                 .Then(_ => new CognitiveSearchVectorIndexFunction.Function(_cognitiveSearchClient),
                     (i, o) => new CognitiveSearchVectorIndexFunction.Input(o.Content, o.Embeddings.ToArray()))
                 .Then(_ => new SummariseContentFunction.Function(),
-                    (i, o) => new SummariseContentFunction.Input(input.Context, o.Result))
+                    (i, o) => new SummariseContentFunction.Input(input.Context, o.OriginalInput.SearchText, o.Result))
                 .Run(wrapper, new ExtractKeyTermsFunction.Input(input.Context, input.SearchText), token);
 
             return new Output(output.Summarisation);

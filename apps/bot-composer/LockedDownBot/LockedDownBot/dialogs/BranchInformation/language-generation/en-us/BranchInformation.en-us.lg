@@ -6,7 +6,7 @@
 ]
 
 # SendActivity_tKct2A_text()
-- ${dialog.searchOutput.Summary}
+- ${dialog.searchOutput}
 # SendActivity_qn18zx()
 [Activity
     Text = ${SendActivity_qn18zx_text()}

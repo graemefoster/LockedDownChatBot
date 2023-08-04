@@ -5,7 +5,7 @@ namespace LockedDownBotSemanticKernel.Skills.Foundational.SummariseContent;
 
 public static class SummariseContentFunction
 {
-    public record Input(string Context, string Content);
+    public record Input(string Context, string OriginalAsk, string Content);
     public record Output(string Summarisation);
     
     public class Function : SemanticKernelFunction<Input, Output>
@@ -13,7 +13,10 @@ public static class SummariseContentFunction
         public override string Prompt => """
 {{$Context}}
 
-Given the following information, summarise all of the it in a single paragraph.
+The user asked this:
+{{$OriginalAsk}}
+
+Using ONLY the following information, reply to the user with what they need to know.
 
 --- INFORMATION FOLLOWS
 {{$Content}}

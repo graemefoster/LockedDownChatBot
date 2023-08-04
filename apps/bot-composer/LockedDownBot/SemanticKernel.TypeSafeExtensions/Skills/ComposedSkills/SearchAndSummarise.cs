@@ -31,7 +31,7 @@ public static class SearchAndSummarise
                 .Then(_ => new CognitiveSearchFunction.Function(_cognitiveSearchClient),
                     (i, o) => new CognitiveSearchFunction.Input(string.Join(' ', o.KeyTerms)))
                 .Then(_ => new SummariseContentFunction.Function(),
-                    (i, o) => new SummariseContentFunction.Input(input.Context, o.Result))
+                    (i, o) => new SummariseContentFunction.Input(input.Context, o.OriginalInput.SearchText, o.Result))
                 .Run(wrapper, new ExtractKeyTermsFunction.Input(input.Context, input.SearchText), token);
 
             return new Output(embedding.Summarisation);

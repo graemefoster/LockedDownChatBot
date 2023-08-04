@@ -1,5 +1,6 @@
 using System.Runtime.CompilerServices;
 using AdaptiveExpressions.Properties;
+using Azure;
 using Azure.Identity;
 using Azure.Search.Documents;
 using LockedDownBotSemanticKernel.Primitives;
@@ -41,13 +42,16 @@ public class EnterpriseSearchActivity : Dialog
     public override async Task<DialogTurnResult> BeginDialogAsync(DialogContext dc, object options = null,
         CancellationToken cancellationToken = new())
     {
+        var settings = (IDictionary<string, object>)dc.State["settings"];
         var client =
-            _openAiClientFactory.GetFromSettings((IDictionary<string, object>)dc.State["settings"]);
-        var searchClient = new SearchClient(new Uri(SearchUrl.GetValue(dc.State)), Index.GetValue(dc.State),
-            new DefaultAzureCredential(new DefaultAzureCredentialOptions()
-            {
-                ManagedIdentityClientId = ManagedIdentityId.GetValue(dc.State)
-            }));
+            _openAiClientFactory.GetFromSettings(settings);
+
+        var cogSearchKey = settings["COGNITIVE_SEARCH_KEY"] as string;
+        var endpoint = new Uri(SearchUrl.GetValue(dc.State));
+        var indexName = Index.GetValue(dc.State);
+        var searchClient = cogSearchKey == null
+            ? new SearchClient(endpoint, indexName, new ManagedIdentityCredential(ManagedIdentityId.GetValue(dc.State)))
+            : new SearchClient(endpoint, indexName, new AzureKeyCredential(cogSearchKey));
 
         var prompt = SystemPrompt.GetValue(dc.State);
         var input = string.Join('\n', Inputs.GetValue(dc.State));
@@ -56,7 +60,7 @@ public class EnterpriseSearchActivity : Dialog
             new SearchAndSummarise.Function(searchClient)
                 .Run(client, new SearchAndSummarise.Input(prompt, input), cancellationToken);
 
-        dc.State.SetValue(ResultProperty.GetValue(dc.State), response);
+        dc.State.SetValue(ResultProperty.GetValue(dc.State), response.Result);
         return await dc.EndDialogAsync(result: response, cancellationToken);
     }
 }

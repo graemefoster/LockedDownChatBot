@@ -12,13 +12,13 @@ public class SemanticKernelWrapperFactory
     public SemanticKernelWrapper GetFromSettings(IDictionary<string, object> config)
     {
         var endpoint = (string)config["OPENAI_ENDPOINT"];
-        var key = (string)config["OPENAI_KEY"];
         var model = (string)config["OPENAI_MODEL"];
-        var clientId = (string)config["OPENAI_MANAGED_IDENTITY_CLIENT_ID"];
+        var key = config["OPENAI_KEY"] as string;
+        var clientId = config["OPENAI_MANAGED_IDENTITY_CLIENT_ID"] as string;
         return GetFromSettings(endpoint, key, clientId, model);
     }
 
-    public SemanticKernelWrapper GetFromSettings(string endpoint, string key, string clientId, string model)
+    public SemanticKernelWrapper GetFromSettings(string endpoint, string? key, string? clientId, string model)
     {
         if (_client == null)
         {
@@ -27,7 +27,7 @@ public class SemanticKernelWrapperFactory
             _client = useManagedIdentity
                 ? new SemanticKernelWrapper(new KernelBuilder()
                     .WithAzureChatCompletionService(model, endpoint, new ManagedIdentityCredential(clientId)).Build())
-                : new SemanticKernelWrapper(new KernelBuilder().WithAzureChatCompletionService(model, endpoint, key)
+                : new SemanticKernelWrapper(new KernelBuilder().WithAzureChatCompletionService(model, endpoint, key!)
                     .Build());
 
             _client.ImportSkills(typeof(SemanticKernelWrapperFactory).Assembly);
@@ -40,14 +40,14 @@ public class SemanticKernelWrapperFactory
         out string embeddingModel)
     {
         var endpoint = (string)config["OPENAI_ENDPOINT"];
-        var key = (string)config["OPENAI_KEY"];
-        var clientId = (string)config["OPENAI_MANAGED_IDENTITY_CLIENT_ID"];
+        var key = config["OPENAI_KEY"] as string;
+        var clientId = config["OPENAI_MANAGED_IDENTITY_CLIENT_ID"] as string;
         model = (string)config["OPENAI_MODEL"];
         embeddingModel = (string)config["OPENAI_EMBEDDING_MODEL"];
 
         var useManagedIdentity = string.IsNullOrWhiteSpace(key);
         return useManagedIdentity
             ? new OpenAIClient(new Uri(endpoint), new ManagedIdentityCredential(clientId))
-            : new OpenAIClient(new Uri(endpoint), new AzureKeyCredential(key));
+            : new OpenAIClient(new Uri(endpoint), new AzureKeyCredential(key!));
     }
 }

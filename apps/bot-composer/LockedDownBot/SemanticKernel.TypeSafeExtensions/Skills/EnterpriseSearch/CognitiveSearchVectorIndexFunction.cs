@@ -9,7 +9,7 @@ public static class CognitiveSearchVectorIndexFunction
 {
     public record Input(string SearchText, float[] Embeddings);
 
-    public record Output(string Result);
+    public record Output(Input OriginalInput, string Result);
 
     public class Function : IChainableSkill<Input, Output>
     {
@@ -28,7 +28,7 @@ public static class CognitiveSearchVectorIndexFunction
             {
                 Vector = vector,
                 Size = 5,
-                Select = { "metadata_storage_name", "Content" },
+                Select = { "metadata_storage_name", "content" },
             };
 
             var searchResult = (await _client
@@ -36,7 +36,7 @@ public static class CognitiveSearchVectorIndexFunction
                     input.SearchText,
                     searchOptions, token)).Value.GetResults().First();
 
-            return new Output(searchResult.Document.GetString("Content"));
+            return new Output(input, searchResult.Document.GetString("content"));
         }
     }
 }

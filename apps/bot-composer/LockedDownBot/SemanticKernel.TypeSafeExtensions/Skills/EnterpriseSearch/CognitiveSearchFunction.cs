@@ -9,7 +9,7 @@ public static class CognitiveSearchFunction
 {
 
     public record Input(string SearchText);
-    public record Output(string Result);
+    public record Output(Input OriginalInput, string Result);
 
     public class Function : IChainableSkill<Input, Output>
     {
@@ -31,7 +31,7 @@ public static class CognitiveSearchFunction
                         SemanticConfigurationName = "default"
                     }, token)).Value.GetResults().First();
 
-            return new Output(searchResult.Document.GetString("content"));
+            return new Output( input,searchResult.Document.GetString("content"));
         }
     }
 }
