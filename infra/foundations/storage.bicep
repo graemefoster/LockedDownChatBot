@@ -6,7 +6,7 @@ param kvName string
 param location string = resourceGroup().location
 
 var storageNameMaybe = replace(replace(toLower(cogServicesSearchName), '-', ''), '_', '')
-var storageName = substring(storageNameMaybe, 0, max(length(storageNameMaybe), 23))
+var storageName = substring(storageNameMaybe, 0, min(length(storageNameMaybe), 23))
 
 resource searchStorage 'Microsoft.Storage/storageAccounts@2022-09-01' = {
   name: storageName
