@@ -14,7 +14,7 @@ public static class ExtractKeyTermsFunction
         public override string Prompt => """
 {{$Context}}
 
-Given the user input, extract the key terms as a list of words from it
+Given the user input, extract the key terms separated by a newline from it.
 
 --- USER INPUT FOLLOWS
 {{$UserInput}}
