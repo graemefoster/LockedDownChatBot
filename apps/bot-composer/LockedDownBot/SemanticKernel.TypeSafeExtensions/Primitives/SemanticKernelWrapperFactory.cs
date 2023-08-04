@@ -13,9 +13,9 @@ public class SemanticKernelWrapperFactory
     {
         var endpoint = (string)config["OPENAI_ENDPOINT"];
         var model = (string)config["OPENAI_MODEL"];
-        var key = config["OPENAI_KEY"] as string;
+        var gotKey = config.TryGetValue("OPENAI_KEY", out var openAiKey);
         var clientId = config["OPENAI_MANAGED_IDENTITY_CLIENT_ID"] as string;
-        return GetFromSettings(endpoint, key, clientId, model);
+        return GetFromSettings(endpoint, gotKey ? openAiKey as string : null, clientId, model);
     }
 
     public SemanticKernelWrapper GetFromSettings(string endpoint, string? key, string? clientId, string model)
@@ -40,14 +40,14 @@ public class SemanticKernelWrapperFactory
         out string embeddingModel)
     {
         var endpoint = (string)config["OPENAI_ENDPOINT"];
-        var key = config["OPENAI_KEY"] as string;
+        var gotKey = config.TryGetValue("OPENAI_KEY", out var openAiKey);
         var clientId = config["OPENAI_MANAGED_IDENTITY_CLIENT_ID"] as string;
         model = (string)config["OPENAI_MODEL"];
         embeddingModel = (string)config["OPENAI_EMBEDDING_MODEL"];
 
-        var useManagedIdentity = string.IsNullOrWhiteSpace(key);
+        var useManagedIdentity = !gotKey;
         return useManagedIdentity
             ? new OpenAIClient(new Uri(endpoint), new ManagedIdentityCredential(clientId))
-            : new OpenAIClient(new Uri(endpoint), new AzureKeyCredential(key!));
+            : new OpenAIClient(new Uri(endpoint), new AzureKeyCredential((string)openAiKey!));
     }
 }
