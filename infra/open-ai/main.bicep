@@ -65,6 +65,9 @@ resource embeddingDeploymentNew 'Microsoft.CognitiveServices/accounts/deployment
       version: '2'
     }
   }
+  dependsOn: [
+    deploymentNew
+  ]
 }
 
 resource openAiRole 'Microsoft.Authorization/roleDefinitions@2022-05-01-preview' existing = {

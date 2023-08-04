@@ -83,8 +83,8 @@ resource app 'Microsoft.Web/sites@2022-09-01' = {
           value: openAiEmbeddingModelName
         }
         {
-          name: 'AzureOpenAISecret'
-          value: 'recommended'
+          name: 'AzureOpenAIIdentityClientId'
+          value: botIdentity.properties.clientId
         }
       ]
     }

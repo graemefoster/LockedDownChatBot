@@ -61,6 +61,7 @@ namespace LockedDownBot.Controllers
             var client = new SemanticKernelWrapperFactory().GetFromSettings(
                 _config["OPENAI_ENDPOINT"],
                 _config["OPENAI_KEY"],
+                _config["OPENAI_MANAGED_IDENTITY_CLIENT_ID"],
                 _config["OPENAI_MODEL"]);
 
             var result = await

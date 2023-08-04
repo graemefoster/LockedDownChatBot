@@ -5,10 +5,10 @@ using LockedDownBotSemanticKernel.Primitives.Chains;
 
 namespace LockedDownBotSemanticKernel.Skills.EnterpriseSearch;
 
-public static class CognitiveSearchFunction
+public static class CognitiveSearchVectorIndexFunction
 {
+    public record Input(string SearchText, float[] Embeddings);
 
-    public record Input(string SearchText);
     public record Output(string Result);
 
     public class Function : IChainableSkill<Input, Output>
@@ -22,16 +22,21 @@ public static class CognitiveSearchFunction
 
         public async Task<Output> Run(SemanticKernelWrapper wrapper, Input input, CancellationToken token)
         {
+            var vector = new SearchQueryVector
+                { KNearestNeighborsCount = 3, Fields = "contentVector", Value = input.Embeddings };
+            var searchOptions = new SearchOptions
+            {
+                Vector = vector,
+                Size = 5,
+                Select = { "metadata_storage_name", "Content" },
+            };
+
             var searchResult = (await _client
                 .SearchAsync<SearchDocument>(
                     input.SearchText,
-                    new SearchOptions()
-                    {
-                        Size = 1,
-                        SemanticConfigurationName = "default"
-                    }, token)).Value.GetResults().First();
+                    searchOptions, token)).Value.GetResults().First();
 
-            return new Output(searchResult.Document.GetString("content"));
+            return new Output(searchResult.Document.GetString("Content"));
         }
     }
 }

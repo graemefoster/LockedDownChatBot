@@ -1,9 +1,7 @@
 ﻿using LockedDownBotSemanticKernel.Primitives;
-using Microsoft.SemanticKernel;
 using Microsoft.SemanticKernel.Orchestration;
-using Microsoft.SemanticKernel.SkillDefinition;
 
-namespace LockedDownBotSemanticKernel.Skills.Foundational.SummariseInput;
+namespace LockedDownBotSemanticKernel.Skills.Foundational.SummariseContent;
 
 public static class SummariseContentFunction
 {

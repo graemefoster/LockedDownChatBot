@@ -1,0 +1,40 @@
+{
+    "$schema": "https://schemas.botframework.com/schemas/component/v1.0/component.schema",
+    "$role": "implements(Microsoft.IDialog)",
+    "title": "EnterpriseVectorSearchActivity",
+    "description": "Performs a vector search over a Cognitive Search Index with a summary of the current input, summarising the top result.",
+    "type": "object",
+    "additionalProperties": false,
+    "properties": {
+        "systemPrompt": {
+            "$ref": "schema:#/definitions/stringExpression",
+            "title": "SystemPrompt",
+            "description": "System Prompt"
+        },
+        "index": {
+            "$ref": "schema:#/definitions/stringExpression",
+            "title": "Index",
+            "description": "Search Index"
+        },
+        "searchServiceUrl": {
+            "$ref": "schema:#/definitions/stringExpression",
+            "title": "Search Service Url",
+            "description": "Search Service Url"
+        },
+        "managedIdentityId": {
+            "$ref": "schema:#/definitions/stringExpression",
+            "title": "User Assigned Managed Identity",
+            "description": "UAMI to perform search as"
+        },
+        "inputs": {
+            "$ref": "schema:#/definitions/arrayExpression",
+            "title": "Inputs to look for intent over",
+            "description": "Pass in any text entered by the User to look for intent within"
+        },
+        "resultProperty": {
+            "$ref": "schema:#/definitions/stringExpression",
+            "title": "Result",
+            "description": "Value from callers memory to store the result"
+        }
+    }
+}

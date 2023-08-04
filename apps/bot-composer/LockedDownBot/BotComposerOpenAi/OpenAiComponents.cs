@@ -1,4 +1,4 @@
-using BotComposerOpenAi.EnterpriseSearch;
+using BotComposerOpenAi.EnterpriseVectorSearch;
 using BotComposerOpenAi.SuggestFunctionCall;
 using BotComposerOpenAi.TryToFindUserIntent;
 using LockedDownBotSemanticKernel.Primitives;
@@ -25,6 +25,7 @@ public class OpenAiComponents : BotComponent
     {
         // Anything that could be done in Startup.ConfigureServices can be done here.
         services.AddSingleton<SemanticKernelWrapperFactory>();
+        services.AddSingleton<DeclarativeType>(_ => new DeclarativeType<EnterpriseVectorSearchActivity>(EnterpriseVectorSearchActivity.Kind));
         services.AddSingleton<DeclarativeType>(_ => new DeclarativeType<EnterpriseSearchActivity>(EnterpriseSearchActivity.Kind));
         services.AddSingleton<DeclarativeType>(_ => new DeclarativeType<OpenAiResponseWithSystemPrompt.OpenAiResponseWithSystemPrompt>(OpenAiResponseWithSystemPrompt.OpenAiResponseWithSystemPrompt.Kind));
         services.AddSingleton<DeclarativeType>(_ => new DeclarativeType<OpenAiDetectIntent>(OpenAiDetectIntent.Kind));

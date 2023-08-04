@@ -219,6 +219,7 @@ module app 'bot/bot-app.bicep' = {
     tags: tags
     logAnalyticsId: core.outputs.logAnalyticsId
     openAiModel: openAiCalculatedModelName
+    openAiEmbeddingModel: openAiCalculatedEmbeddingModelName
     openAiEndpoint: openAi.outputs.openAiEndpoint
     kvName: core.outputs.kvName
     openAiSecretName: core.outputs.openAiSecretName

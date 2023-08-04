@@ -37,9 +37,12 @@ public class OpenAiResponseWithSystemPrompt : Dialog
         CancellationToken cancellationToken = new())
     {
         var client = _openAiClientFactory.GetFromSettings((IDictionary<string, object>)dc.State["settings"]);
+        
         var rawClient =
             _openAiClientFactory.GetRawClientFromSettings((IDictionary<string, object>)dc.State["settings"],
-                out var model);
+                out var model,
+                out var embeddingModel);
+        
         var input = string.Join('\n', Inputs.GetValue(dc.State));
 
         var response = await new ChitChatFunction.Function(rawClient, model)

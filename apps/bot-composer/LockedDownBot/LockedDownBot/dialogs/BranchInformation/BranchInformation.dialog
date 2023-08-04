@@ -24,15 +24,14 @@
           "activity": "${SendActivity_qn18zx()}"
         },
         {
-          "$kind": "EnterpriseSearchActivity",
+          "$kind": "EnterpriseVectorSearchActivity",
           "$designer": {
-            "id": "OhUyxa"
+            "id": "jnwTQP"
           },
           "systemPrompt": "You are a bank teller",
           "index": "=settings.COGNITIVE_SEARCH_INDEX",
           "searchServiceUrl": "=settings.COGNITIVE_SEARCH_URL",
-          "managedIdentityId": "=settings.COGNITIVE_SEARCH_IDENTITY_ID",
-          "resultProperty": "dialog.searchOutput",
+          "managedIdentityId": "=settings.COGNITIVE_SEARCH_MANAGED_IDENTITY_CLIENT_ID",
           "inputs": "=createArray(conversation.intialAsk)"
         },
         {

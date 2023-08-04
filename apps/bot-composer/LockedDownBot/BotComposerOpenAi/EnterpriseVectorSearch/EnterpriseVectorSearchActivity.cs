@@ -16,12 +16,12 @@ namespace BotComposerOpenAi.EnterpriseVectorSearch;
 /// <summary>
 /// Simple dialog. Provide a system prompt and returns a response given the User's input.
 /// </summary>
-public class EnterpriseSearchActivity : Dialog
+public class EnterpriseVectorSearchActivity : Dialog
 {
     private readonly SemanticKernelWrapperFactory _openAiClientFactory;
 
     [JsonConstructor]
-    public EnterpriseSearchActivity(
+    public EnterpriseVectorSearchActivity(
         [CallerFilePath] string sourceFilePath = "",
         [CallerLineNumber] int sourceLineNumber = 0)
         : base()
@@ -30,7 +30,7 @@ public class EnterpriseSearchActivity : Dialog
         RegisterSourceLocation(sourceFilePath, sourceLineNumber);
     }
 
-    [JsonProperty("$kind")] public const string Kind = "EnterpriseSearchActivity";
+    [JsonProperty("$kind")] public const string Kind = "EnterpriseVectorSearchActivity";
     [JsonProperty("systemPrompt")] public StringExpression SystemPrompt { get; set; }
     [JsonProperty("index")] public StringExpression Index { get; set; }
     [JsonProperty("managedIdentityId")] public StringExpression ManagedIdentityId { get; set; }
@@ -43,6 +43,12 @@ public class EnterpriseSearchActivity : Dialog
     {
         var client =
             _openAiClientFactory.GetFromSettings((IDictionary<string, object>)dc.State["settings"]);
+
+        var openAiClient = _openAiClientFactory.GetRawClientFromSettings(
+            (IDictionary<string, object>)dc.State["settings"],
+            out string model,
+            out string embeddingMode);
+
         var searchClient = new SearchClient(new Uri(SearchUrl.GetValue(dc.State)), Index.GetValue(dc.State),
             new DefaultAzureCredential(new DefaultAzureCredentialOptions()
             {
@@ -53,8 +59,8 @@ public class EnterpriseSearchActivity : Dialog
         var input = string.Join('\n', Inputs.GetValue(dc.State));
 
         var response = await
-            new SearchAndSummarise.Function(searchClient)
-                .Run(client, new SearchAndSummarise.Input(prompt, input), cancellationToken);
+            new VectorSearchAndSummarise.Function(openAiClient, embeddingMode, searchClient)
+                .Run(client, new VectorSearchAndSummarise.Input(prompt, input), cancellationToken);
 
         dc.State.SetValue(ResultProperty.GetValue(dc.State), response);
         return await dc.EndDialogAsync(result: response, cancellationToken);

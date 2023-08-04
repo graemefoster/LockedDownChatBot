@@ -1,0 +1,25 @@
+{
+    "$schema": "https://schemas.botframework.com/schemas/component/v1.0/component.schema",
+    "$role": "implements(Microsoft.IDialog)",
+    "title": "OpenAiResponseWithSystemPrompt",
+    "description": "Returns a completion from OpenAI with a system prompt",
+    "type": "object",
+    "additionalProperties": false,
+    "properties": {
+        "systemPrompt": {
+            "$ref": "schema:#/definitions/stringExpression",
+            "title": "SystemPrompt",
+            "description": "System Prompt"
+        },
+      "inputs": {
+          "$ref": "schema:#/definitions/arrayExpression",
+          "title": "Inputs to look for intent over",
+          "description": "Pass in any text entered by the User to look for intent within"
+      },
+        "resultProperty": {
+            "$ref": "schema:#/definitions/stringExpression",
+            "title": "Result",
+            "description": "Value from callers memory to store the result"
+        }
+    }
+}

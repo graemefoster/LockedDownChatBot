@@ -26,12 +26,28 @@ var blobConnectionString = "DefaultEndpointsProtocol=https;AccountName=" + stora
 var searchIndexClient = new SearchIndexClient(new Uri(searchEndpoint), new DefaultAzureCredential());
 var searchIndexerClient = new SearchIndexerClient(new Uri(searchEndpoint), new DefaultAzureCredential());
 
+var vectorSearchConfig = new VectorSearch()
+{
+    AlgorithmConfigurations =
+    {
+        new HnswVectorSearchAlgorithmConfiguration("vector-search-config")
+    }
+};
+
 var index = new SearchIndex(expectedIndexName)
 {
+    VectorSearch = vectorSearchConfig,
     Fields = new List<SearchField>()
     {
         new SearchField("id", SearchFieldDataType.String)
             { IsKey = true, IsFilterable = false, IsSearchable = false },
+        new SearchField("contentVector", SearchFieldDataType.Collection(SearchFieldDataType.Single))
+        {
+            IsFilterable = false, IsSearchable = true, IsSortable = false, IsFacetable = false,
+            IsHidden = true,
+            VectorSearchConfiguration = "vector-search-config",
+            VectorSearchDimensions = 1536, //text-embedding-ada-002
+        },
         new SearchField("content", SearchFieldDataType.String)
             { IsFilterable = false, IsSearchable = true, IsSortable = false, IsFacetable = false },
         new SearchField("metadata_storage_name", SearchFieldDataType.String)
@@ -49,7 +65,8 @@ var index = new SearchIndex(expectedIndexName)
             {
                 TitleField = new SemanticField() { FieldName = "metadata_storage_name" },
                 ContentFields = { new SemanticField() { FieldName = "content" } },
-                KeywordFields = { new SemanticField() { FieldName = "content" } }
+                KeywordFields = { new SemanticField() { FieldName = "content" } },
+                
             })
         },
         DefaultConfiguration = "default"
@@ -69,6 +86,13 @@ var indexer = new SearchIndexer(
 )
 {
     Schedule = new IndexingSchedule(TimeSpan.FromHours(1)),
+    Parameters = new IndexingParameters()
+    {
+        IndexingParametersConfiguration = new IndexingParametersConfiguration()
+        {
+            ParsingMode = BlobIndexerParsingMode.Json
+        }
+    }
 };
 
 await searchIndexClient.CreateOrUpdateIndexAsync(index);

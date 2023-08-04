@@ -101,7 +101,8 @@
                 "EmployeeSite",
                 "Insurance",
                 "HR"
-              ]
+              ],
+              "disabled": true
             },
             {
               "$kind": "Microsoft.IfCondition",

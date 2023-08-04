@@ -139,7 +139,8 @@
                   },
                   "systemPrompt": "Take the following JSON object describing bank account information, and format it as a nice table.",
                   "inputs": "=createArray(string(dialog.accountDataResponse.content))",
-                  "resultProperty": "dialog.formattedAccountData"
+                  "resultProperty": "dialog.formattedAccountData",
+                  "disabled": true
                 },
                 {
                   "$kind": "Microsoft.SendActivity",

@@ -7,6 +7,7 @@ param tags object
 param location string = resourceGroup().location
 param logAnalyticsId string
 param openAiModel string
+param openAiEmbeddingModel string
 param openAiEndpoint string
 param kvName string
 param openAiSecretName string
@@ -96,6 +97,10 @@ resource app 'Microsoft.Web/sites@2022-09-01' = {
           value: openAiModel
         }
         {
+          name: 'OPENAI_EMBEDDING_MODEL'
+          value: openAiEmbeddingModel
+        }
+        {
           name: 'OPENAI_ENDPOINT'
           value: openAiEndpoint
         }
@@ -136,7 +141,11 @@ resource app 'Microsoft.Web/sites@2022-09-01' = {
           value: searchIndexName
         }
         {
-          name: 'COGNITIVE_SEARCH_IDENTITY_ID'
+          name: 'COGNITIVE_SEARCH_MANAGED_IDENTITY_CLIENT_ID'
+          value: botIdentity.properties.clientId
+        }
+        {
+          name: 'OPENAI_MANAGED_IDENTITY_CLIENT_ID'
           value: botIdentity.properties.clientId
         }
       ]

@@ -1,19 +1,15 @@
 ﻿using System;
 using System.IO;
 using System.Linq;
-using System.Text.Json;
 using System.Threading.Tasks;
 using Azure;
 using Azure.AI.OpenAI;
 using Azure.Identity;
 using Azure.Storage.Blobs;
-using Azure.Storage.Blobs.Specialized;
 using Microsoft.Azure.WebJobs;
-using Microsoft.Azure.WebJobs.Host;
+using Microsoft.DeepDev;
 using Microsoft.Extensions.Logging;
-using Microsoft.WindowsAzure.Storage.Blob;
 using UglyToad.PdfPig;
-using UglyToad.PdfPig.Content;
 
 namespace ContentSplitter;
 
@@ -29,44 +25,70 @@ public static class CrackDocument
         var outputClient =
             new BlobContainerClient(Environment.GetEnvironmentVariable("BlobStorageAccount"), "sample-documents");
 
+        var tokenCounter = await TokenizerBuilder.CreateByModelNameAsync("gpt-3.5-turbo");
+
         var embeddingModelName = Environment.GetEnvironmentVariable("AzureOpenAIEmbeddingModel")!;
         var openAiHost = new Uri(Environment.GetEnvironmentVariable("AzureOpenAIHost")!);
-        OpenAIClient client = string.IsNullOrWhiteSpace(Environment.GetEnvironmentVariable("AzureOpenAISecret"))
-            ? new OpenAIClient(openAiHost, new DefaultAzureCredential())
+        var accessOpenAiUsingManagedIdentity =
+            string.IsNullOrWhiteSpace(Environment.GetEnvironmentVariable("AzureOpenAISecret"));
+
+        OpenAIClient client = accessOpenAiUsingManagedIdentity
+            ? new OpenAIClient(openAiHost, new ManagedIdentityCredential(Environment.GetEnvironmentVariable("AzureOpenAIIdentityClientId")!))
             : new OpenAIClient(openAiHost,
                 new AzureKeyCredential(Environment.GetEnvironmentVariable("AzureOpenAISecret")!));
 
         using var document = PdfDocument.Open(inputBlob);
 
+        var chunkNumber = 0;
+        var content = string.Empty;
         foreach (var page in document.GetPages())
         {
             string pageText = page.Text;
 
-            //look for new line characters. We'll index each paragraph
-            var lineNumber = 0;
             foreach (var contentPiece in pageText.Split('\n'))
             {
-                lineNumber++;
-                var fileName = $"{Path.GetFileNameWithoutExtension(name)}-page-{page.Number}-line-{lineNumber}.json";
-                
-                var embeddings = await client.GetEmbeddingsAsync(
-                    embeddingModelName,
-                    new EmbeddingsOptions(contentPiece));
-                
-                var document = new InputBlob()
+                var potentialChunk = content + Environment.NewLine + contentPiece;
+                var tokens = tokenCounter.Encode(potentialChunk, new string[] { });
+                if (tokens.Count > 600)
                 {
-                    Content = contentPiece,
-                    ContentVector = embeddings.Value.Data.SelectMany(x => x.Embedding).ToArray()
+                    //tipped over the limit. Lock the chunk without the additional line
+                    await LockChunk(outputClient, client, embeddingModelName, name, chunkNumber, content);
+                    chunkNumber++;
+                    content = contentPiece; //didn't fit into this chunk
                 }
-
-                await outputClient.UploadBlobAsync(fileName, new BinaryData(contentPiece));
+                else
+                {
+                    content = potentialChunk;
+                }
             }
         }
-    }
-}
 
-public class InputBlob
-{
-    public string Content { get; set; }
-    public float[] ContentVector  { get; set; }
+        if (content != string.Empty)
+        {
+            await LockChunk(outputClient, client, embeddingModelName, name, chunkNumber, content);
+        }
+    }
+
+    private static async Task LockChunk(
+        BlobContainerClient blobContainerClient,
+        OpenAIClient client,
+        string embeddingModelName,
+        string documentName,
+        int chunkNumber,
+        string potentialChunk)
+    {
+        var fileName = $"{Path.GetFileNameWithoutExtension(documentName)}-chunk-{chunkNumber}.json";
+
+        var embeddings = await client.GetEmbeddingsAsync(
+            embeddingModelName,
+            new EmbeddingsOptions(potentialChunk));
+
+        var documentWithEmbeddings = new InputBlob()
+        {
+            Content = potentialChunk,
+            ContentVector = embeddings.Value.Data.First().Embedding.ToArray()
+        };
+
+        await blobContainerClient.UploadBlobAsync(fileName, new BinaryData(documentWithEmbeddings));
+    }
 }
