@@ -21,6 +21,11 @@ resource cogSearch 'Microsoft.Search/searchServices@2022-09-01' = {
         aadAuthFailureMode: 'http403'
       }
     }
+    publicNetworkAccess: 'enabled'
+    networkRuleSet: {
+      ipRules: [
+      ]
+    }
     hostingMode: 'default'
 
 #disable-next-line BCP037
