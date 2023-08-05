@@ -98,9 +98,7 @@
               "intents": [
                 "Accounts",
                 "Product Information",
-                "EmployeeSite",
-                "Insurance",
-                "HR"
+                "EmployeeSite"
               ],
               "disabled": true
             },
