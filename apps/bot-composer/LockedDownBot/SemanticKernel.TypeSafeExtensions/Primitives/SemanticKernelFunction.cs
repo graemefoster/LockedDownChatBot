@@ -57,6 +57,10 @@ public abstract class SemanticKernelFunction<TInput, TOutput> : IChainableSkill<
         PopulateContext(context, input);
         var skFunction = wrapper.GetOrRegister(this);
         var kernelResult = await skFunction.InvokeAsync(context);
+        if (kernelResult.ErrorOccurred)
+        {
+            throw new InvalidOperationException(kernelResult.LastException!.ToString());
+        }
         return FromResult(input, kernelResult);
     }
 }

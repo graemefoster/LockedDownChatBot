@@ -49,3 +49,10 @@
 
 # TextInput_Prompt_oat8VZ_text()
 - ${dialog.intent.NextRecommendation}
+# SendActivity_q9Wdc4()
+[Activity
+    Text = ${SendActivity_q9Wdc4_text()}
+]
+
+# SendActivity_q9Wdc4_text()
+- Detected intent ${dialog.intent.intent}

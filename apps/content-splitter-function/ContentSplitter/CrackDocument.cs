@@ -81,7 +81,7 @@ public static class CrackDocument
 
         var embeddings = await client.GetEmbeddingsAsync(
             embeddingModelName,
-            new EmbeddingsOptions(potentialChunk));
+            new EmbeddingsOptions(potentialChunk.ReplaceLineEndings(" ")));
 
         var documentWithEmbeddings = new InputBlob()
         {

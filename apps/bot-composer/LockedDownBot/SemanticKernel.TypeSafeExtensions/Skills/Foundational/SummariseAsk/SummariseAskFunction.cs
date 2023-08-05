@@ -17,7 +17,11 @@ public static class SummariseAskFunction
 
 Read the following dialogue. Summarise the key ask of the User into a single sentence.
 
---- INFORMATION FOLLOWS
+--EXAMPLES
+User: When can I go to the branch?
+Response: Opening hours of branches?
+
+--- USER ASK FOLLOWS
 {{$Content}}
 """;
 
