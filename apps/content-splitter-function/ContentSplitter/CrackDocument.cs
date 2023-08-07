@@ -33,7 +33,8 @@ public static class CrackDocument
             string.IsNullOrWhiteSpace(Environment.GetEnvironmentVariable("AzureOpenAISecret"));
 
         OpenAIClient client = accessOpenAiUsingManagedIdentity
-            ? new OpenAIClient(openAiHost, new ManagedIdentityCredential(Environment.GetEnvironmentVariable("AzureOpenAIIdentityClientId")!))
+            ? new OpenAIClient(openAiHost,
+                new ManagedIdentityCredential(Environment.GetEnvironmentVariable("AzureOpenAIIdentityClientId")!))
             : new OpenAIClient(openAiHost,
                 new AzureKeyCredential(Environment.GetEnvironmentVariable("AzureOpenAISecret")!));
 
@@ -75,17 +76,24 @@ public static class CrackDocument
         string embeddingModelName,
         string documentName,
         int chunkNumber,
-        string potentialChunk)
+        string chunk)
     {
         var fileName = $"{Path.GetFileNameWithoutExtension(documentName)}-chunk-{chunkNumber}.json";
+        var titleBits = documentName.Split(' ');
+        var embeddingChunk = chunk;
+        foreach (var titleBit in titleBits)
+        {
+            //Skewed searches when words which are implicit (such as the title) appear multiple times in the content. Remove and just add the title once to each embedded...
+            embeddingChunk = embeddingChunk.Replace(titleBit, "");
+        }
 
         var embeddings = await client.GetEmbeddingsAsync(
             embeddingModelName,
-            new EmbeddingsOptions(potentialChunk.ReplaceLineEndings(" ")));
+            new EmbeddingsOptions(documentName + " " + embeddingChunk.ReplaceLineEndings(" ")));
 
         var documentWithEmbeddings = new InputBlob()
         {
-            Content = potentialChunk,
+            Content = chunk,
             ContentVector = embeddings.Value.Data.First().Embedding.ToArray()
         };
 

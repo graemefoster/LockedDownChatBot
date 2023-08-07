@@ -65,7 +65,11 @@ public class EnterpriseVectorSearchActivity : Dialog
             new VectorSearchAndSummarise.Function(openAiClient, embeddingMode, searchClient)
                 .Run(client, new VectorSearchAndSummarise.Input(prompt, input), cancellationToken);
 
-        dc.State.SetValue(ResultProperty.GetValue(dc.State), response.Result);
+        if (ResultProperty != null)
+        {
+            dc.State.SetValue(ResultProperty.GetValue(dc.State), response.Result);
+        }
+
         return await dc.EndDialogAsync(result: response, cancellationToken);
     }
 }

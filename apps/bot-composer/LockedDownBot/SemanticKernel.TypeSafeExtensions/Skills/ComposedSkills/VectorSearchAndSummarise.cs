@@ -31,14 +31,14 @@ public static class VectorSearchAndSummarise
 
         public async Task<Output> Run(SemanticKernelWrapper wrapper, Input input, CancellationToken token)
         {
-            var output = await new SummariseAskFunction.Function()
+            var output = await new ExtractKeyTermsFunction.Function()
                 .Then(_ => new GetEmbeddingsFunction.Function(_openAiClient, _embeddingsModel),
-                    (i, o) => new GetEmbeddingsFunction.Input(string.Join(' ', o.Summarisation)))
+                    (i, o) => new GetEmbeddingsFunction.Input(string.Join(' ', o.KeyTerms)))
                 .Then(_ => new CognitiveSearchVectorIndexFunction.Function(_cognitiveSearchClient),
                     (i, o) => new CognitiveSearchVectorIndexFunction.Input(o.Content, o.Embeddings.ToArray()))
                 .Then(_ => new SummariseContentFunction.Function(),
                     (i, o) => new SummariseContentFunction.Input(input.Context, o.OriginalInput.SearchText, o.Result))
-                .Run(wrapper, new SummariseAskFunction.Input(input.Context, input.SearchText), token);
+                .Run(wrapper, new ExtractKeyTermsFunction.Input(input.Context, input.SearchText), token);
 
             return new Output(output.Summarisation);
         }
