@@ -11,12 +11,12 @@ namespace BotComposerOpenAi.OpenAiResponseWithSystemPrompt;
 /// <summary>
 /// Simple dialog. Provide a system prompt and returns a response given the User's input.
 /// </summary>
-public class OpenAiResponseWithSystemPrompt : Dialog
+public class OpenAiResponseWithSystemPromptActivity : Dialog
 {
     private readonly SemanticKernelWrapperFactory _openAiClientFactory;
 
     [JsonConstructor]
-    public OpenAiResponseWithSystemPrompt(
+    public OpenAiResponseWithSystemPromptActivity(
         [CallerFilePath] string sourceFilePath = "",
         [CallerLineNumber] int sourceLineNumber = 0)
         : base()

@@ -163,7 +163,7 @@
             "id": "byr2AF"
           },
           "systemPrompt": "You are a bank teller.",
-          "resultProperty": "conversation.intialAsk",
+          "resultProperty": "conversation.initialAsk",
           "intents": "=dialog.initialAsk",
           "conversation": "=dialog.initialAsk"
         },

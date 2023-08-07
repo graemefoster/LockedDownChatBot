@@ -24,12 +24,11 @@
           "activity": "${SendActivity_mrf57L()}"
         },
         {
-          "$kind": "Microsoft.SetProperty",
+          "$kind": "UpdateGptConversation",
           "$designer": {
-            "id": "Cki8uX"
+            "id": "Nk8Bvs"
           },
-          "property": "dialog.userInput",
-          "value": "=createArray(conversation.intialAsk)"
+          "input": "=conversation.initialAsk"
         },
         {
           "$kind": "Microsoft.SetProperty",
@@ -88,13 +87,11 @@
                   "prompt": "${TextInput_Prompt_tnJNIB()}"
                 },
                 {
-                  "$kind": "Microsoft.EditArray",
+                  "$kind": "UpdateGptConversation",
                   "$designer": {
-                    "id": "J8smWM"
+                    "id": "iOMdJN"
                   },
-                  "changeType": "push",
-                  "itemsProperty": "dialog.userInput",
-                  "value": "=turn.input"
+                  "input": "=turn.input"
                 }
               ]
             }

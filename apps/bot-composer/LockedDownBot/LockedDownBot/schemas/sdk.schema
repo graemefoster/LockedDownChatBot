@@ -357,6 +357,9 @@
     },
     {
       "$ref": "#/definitions/SummariseConversation"
+    },
+    {
+      "$ref": "#/definitions/UpdateGptConversation"
     }
   ],
   "definitions": {
@@ -4231,6 +4234,9 @@
         },
         {
           "$ref": "#/definitions/SummariseConversation"
+        },
+        {
+          "$ref": "#/definitions/UpdateGptConversation"
         },
         {
           "type": "string",
@@ -9645,11 +9651,6 @@
           "title": "Intents",
           "description": "Intents to look for"
         },
-        "inputs": {
-          "$ref": "#/definitions/arrayExpression",
-          "title": "Inputs to look for intent over",
-          "description": "Pass in any text entered by the User to look for intent within"
-        },
         "resultProperty": {
           "$ref": "#/definitions/stringExpression",
           "title": "Result",
@@ -9740,11 +9741,6 @@
           "title": "Function",
           "description": "Json Schema representation of function"
         },
-        "inputs": {
-          "$ref": "#/definitions/arrayExpression",
-          "title": "Inputs to look for intent over",
-          "description": "Pass in any text entered by the User to look for intent within"
-        },
         "resultProperty": {
           "$ref": "#/definitions/stringExpression",
           "title": "Result",
@@ -9813,11 +9809,6 @@
           "title": "SystemPrompt",
           "description": "System Prompt"
         },
-        "conversation": {
-          "$ref": "#/definitions/arrayExpression",
-          "title": "Conversation",
-          "description": "Conversation to summarise"
-        },
         "resultProperty": {
           "$ref": "#/definitions/stringExpression",
           "title": "Result",
@@ -9829,6 +9820,41 @@
           "type": "string",
           "pattern": "^[a-zA-Z][a-zA-Z0-9.]*$",
           "const": "SummariseConversation"
+        },
+        "$designer": {
+          "title": "Designer information",
+          "type": "object",
+          "description": "Extra information for the Bot Framework Composer."
+        }
+      }
+    },
+    "UpdateGptConversation": {
+      "$role": "implements(Microsoft.IDialog)",
+      "title": "UpdateGptConversation",
+      "description": "Add a user interaction into the conversation backing this dialogue.",
+      "type": "object",
+      "required": [
+        "$kind"
+      ],
+      "additionalProperties": false,
+      "patternProperties": {
+        "^\\$": {
+          "title": "Tooling property",
+          "description": "Open ended property for tooling."
+        }
+      },
+      "properties": {
+        "input": {
+          "$ref": "#/definitions/stringExpression",
+          "title": "Input",
+          "description": "User Input to add to conversation"
+        },
+        "$kind": {
+          "title": "Kind of dialog object",
+          "description": "Defines the valid properties for the component you are configuring (from a dialog .schema file)",
+          "type": "string",
+          "pattern": "^[a-zA-Z][a-zA-Z0-9.]*$",
+          "const": "UpdateGptConversation"
         },
         "$designer": {
           "title": "Designer information",

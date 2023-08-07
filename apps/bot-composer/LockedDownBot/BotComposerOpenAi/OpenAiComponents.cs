@@ -1,6 +1,9 @@
 using BotComposerOpenAi.EnterpriseVectorSearch;
+using BotComposerOpenAi.OpenAiResponseWithSystemPrompt;
 using BotComposerOpenAi.SuggestFunctionCall;
+using BotComposerOpenAi.SummariseConversation;
 using BotComposerOpenAi.TryToFindUserIntent;
+using BotComposerOpenAi.UpdateGptCoversation;
 using LockedDownBotSemanticKernel.Primitives;
 using Microsoft.Bot.Builder;
 using Microsoft.Bot.Builder.Dialogs.Declarative;
@@ -27,9 +30,10 @@ public class OpenAiComponents : BotComponent
         services.AddSingleton<SemanticKernelWrapperFactory>();
         services.AddSingleton<DeclarativeType>(_ => new DeclarativeType<EnterpriseVectorSearchActivity>(EnterpriseVectorSearchActivity.Kind));
         services.AddSingleton<DeclarativeType>(_ => new DeclarativeType<EnterpriseSearchActivity>(EnterpriseSearchActivity.Kind));
-        services.AddSingleton<DeclarativeType>(_ => new DeclarativeType<OpenAiResponseWithSystemPrompt.OpenAiResponseWithSystemPrompt>(OpenAiResponseWithSystemPrompt.OpenAiResponseWithSystemPrompt.Kind));
-        services.AddSingleton<DeclarativeType>(_ => new DeclarativeType<OpenAiDetectIntent>(OpenAiDetectIntent.Kind));
-        services.AddSingleton<DeclarativeType>(_ => new DeclarativeType<OpenAiSuggestFunctionCall>(OpenAiSuggestFunctionCall.Kind));
-        services.AddSingleton<DeclarativeType>(_ => new DeclarativeType<SummariseConversation.SummariseConversation>(SummariseConversation.SummariseConversation.Kind));
+        services.AddSingleton<DeclarativeType>(_ => new DeclarativeType<OpenAiResponseWithSystemPromptActivity>(OpenAiResponseWithSystemPromptActivity.Kind));
+        services.AddSingleton<DeclarativeType>(_ => new DeclarativeType<OpenAiDetectIntentActivity>(OpenAiDetectIntentActivity.Kind));
+        services.AddSingleton<DeclarativeType>(_ => new DeclarativeType<OpenAiSuggestFunctionCallActivity>(OpenAiSuggestFunctionCallActivity.Kind));
+        services.AddSingleton<DeclarativeType>(_ => new DeclarativeType<SummariseConversationActivity>(SummariseConversationActivity.Kind));
+        services.AddSingleton<DeclarativeType>(_ => new DeclarativeType<UpdateGptConversationActivity>(UpdateGptConversationActivity.Kind));
     }
 }

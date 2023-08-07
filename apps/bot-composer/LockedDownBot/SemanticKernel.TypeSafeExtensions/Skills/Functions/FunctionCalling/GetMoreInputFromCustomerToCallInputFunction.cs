@@ -13,7 +13,7 @@ public static class GetMoreInputFromCustomerToCallInputFunction
             SKContext context,
             string suggestion)
         {
-            return input with { Suggestion = suggestion };
+            return input with { NextRecommendation = suggestion };
         }
 
         protected override string DescribeSituation(SKContext context, ExtractInformationToCallFunction.Output input)

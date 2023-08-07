@@ -1,0 +1,15 @@
+{
+    "$schema": "https://schemas.botframework.com/schemas/component/v1.0/component.schema",
+    "$role": "implements(Microsoft.IDialog)",
+    "title": "UpdateGptConversation",
+    "description": "Add a user interaction into the conversation backing this dialogue.",
+    "type": "object",
+    "additionalProperties": false,
+    "properties": {
+        "input": {
+            "$ref": "schema:#/definitions/stringExpression",
+            "title": "Input",
+            "description": "User Input to add to conversation"
+        }
+    }
+}

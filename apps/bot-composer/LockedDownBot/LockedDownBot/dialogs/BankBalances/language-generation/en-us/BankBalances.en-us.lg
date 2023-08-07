@@ -29,7 +29,7 @@
 # SendActivity_rxznMd_text()
 - ${dialog.formattedAccountData}
 # TextInput_Prompt_tnJNIB()
-- ${dialog.suggestedAction.Suggestion}
+- ${dialog.suggestedAction.NextRecommendation}
 # SendActivity_mrf57L()
 [Activity
     Text = ${SendActivity_mrf57L_text()}
@@ -44,3 +44,10 @@
 
 # SendActivity_bKEhyn_text()
 - Hold on when I retrieve that for you.
+# LogAction_Text_JlI6et()
+[Activity
+    Text = ${LogAction_Text_JlI6et_text()}
+]
+
+# LogAction_Text_JlI6et_text()
+- ${dialog.suggestedAction}

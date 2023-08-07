@@ -14,12 +14,12 @@ namespace BotComposerOpenAi.TryToFindUserIntent;
 /// <summary>
 /// Simple dialog. Provide a system prompt and returns a response given the User's input.
 /// </summary>
-public class OpenAiDetectIntent : Dialog
+public class OpenAiDetectIntentActivity : Dialog
 {
     private readonly SemanticKernelWrapperFactory _openAiClientFactory;
 
     [JsonConstructor]
-    public OpenAiDetectIntent(
+    public OpenAiDetectIntentActivity(
         [CallerFilePath] string sourceFilePath = "",
         [CallerLineNumber] int sourceLineNumber = 0)
         : base()

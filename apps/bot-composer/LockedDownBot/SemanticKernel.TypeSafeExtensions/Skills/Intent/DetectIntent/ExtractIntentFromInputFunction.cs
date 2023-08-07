@@ -42,6 +42,8 @@ Possible intents are:
 Use "Unknown" if the intent is not in this list.
 Respond with the intent as a single word.
 
+CONVERSATION
+------------
 {{$UserInput}}
 """;
 

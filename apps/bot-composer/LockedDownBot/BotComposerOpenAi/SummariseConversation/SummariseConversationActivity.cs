@@ -10,12 +10,12 @@ namespace BotComposerOpenAi.SummariseConversation;
 /// <summary>
 /// Simple dialog. Provide a system prompt and returns a response given the User's input.
 /// </summary>
-public class SummariseConversation : Dialog
+public class SummariseConversationActivity : Dialog
 {
     private readonly SemanticKernelWrapperFactory _openAiClientFactory;
 
     [JsonConstructor]
-    public SummariseConversation(
+    public SummariseConversationActivity(
         [CallerFilePath] string sourceFilePath = "",
         [CallerLineNumber] int sourceLineNumber = 0)
         : base()
@@ -39,15 +39,20 @@ public class SummariseConversation : Dialog
         var memory = _openAiClientFactory.GetMemoryFromSettings(settings);
 
         var conversation = await dc.GetConversationForDialog(memory, cancellationToken);
-        var input = conversation.ToString();
 
         var prompt = SystemPrompt.GetValue(dc.State);
+        
+        var input = conversation.ToString();
 
         var response = await
             new SummariseAskFunction.Function()
                 .Run(client, new SummariseAskFunction.Input(prompt, input), cancellationToken);
 
-        dc.State.SetValue(ResultProperty.GetValue(dc.State), response.Summarisation);
+        if (ResultProperty != null)
+        {
+            dc.State.SetValue(ResultProperty.GetValue(dc.State), response.Summarisation);
+        }
+
         return await dc.EndDialogAsync(result: response, cancellationToken);
     }
 }
