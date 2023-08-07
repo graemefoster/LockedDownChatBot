@@ -6,8 +6,8 @@ namespace LockedDownBotSemanticKernel.Skills.Foundational.SummariseContent;
 
 public static class SummariseContentFunction
 {
-    public record Input([Description("Operating Context")] string Context, [Description("What the user asked")] string OriginalAsk, [Description("Content to source resposne from")] string Content);
-    public record Output([Description("Response to users question")] string Summarisation);
+    public record Input([property:Description("Operating Context")] string Context, [property:Description("What the user asked")] string OriginalAsk, [property:Description("Content to source response from")] string Content);
+    public record Output([property:Description("Response to users question")] string Summarisation);
     
     [Description("Given user question, and some discovered content, this function will answer the user's question from the provided content.")]
     public class Function : SemanticKernelFunction<Input, Output>

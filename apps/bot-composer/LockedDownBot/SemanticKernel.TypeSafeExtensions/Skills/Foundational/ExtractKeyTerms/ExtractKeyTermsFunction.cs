@@ -7,11 +7,13 @@ namespace LockedDownBotSemanticKernel.Skills.Foundational.ExtractKeyTerms;
 public static class ExtractKeyTermsFunction
 {
     public record Input(
-        [Description("Operational Context")]string Context, 
-        [Description("Input to look for terms from")] string UserInput) ;
+        [property:Description("Operational Context")]string Context, 
+        [property:Description("Input to look for terms from")] string UserInput) ;
 
     public record Output(
-        [Description("List of key terms extracted from document")]string[] KeyTerms);
+        [property:Description("List of key terms extracted from document")]string[] KeyTerms,
+        [property:Description("List of key terms extracted from document as a string")]string KeyTermsString
+        );
 
     [Description("Given user input and context, will extract the key terms, separated by newlines, from it.")]
     public class Function : SemanticKernelFunction<Input, Output>
@@ -29,7 +31,8 @@ Given the user input, extract the key terms, separated by newlines, from it.
         protected override Output FromResult(Input input, SKContext context)
         {
             var suggestion = context.Result;
-            return new Output(context.Result.Split(Environment.NewLine));
+            var keyTerms = context.Result.Split(Environment.NewLine);
+            return new Output(keyTerms, string.Join(" ", keyTerms));
         }
     }
 }

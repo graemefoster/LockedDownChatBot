@@ -7,9 +7,9 @@ namespace LockedDownBotSemanticKernel.Skills.Foundational.ChitChat;
 
 public static class ChitChatFunction
 {
-    public record Input([Description("Chat Messages")] ChatMessage[] Messages);
+    public record Input([property:Description("Chat Messages")] ChatMessage[] Messages);
 
-    public record Output([Description("Response")] string Response);
+    public record Output([property:Description("Response")] string Response);
 
     [Description("Given OpenAI chat messages, will return a response")]
     public class Function : IChainableSkill<Input, Output>

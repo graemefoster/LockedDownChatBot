@@ -9,12 +9,12 @@ namespace LockedDownBotSemanticKernel.Skills.EnterpriseSearch;
 public static class CognitiveSearchVectorIndexFunction
 {
     public record Input(
-        [Description("Search text")]string SearchText, 
-        [Description("Search text Embeddings")]float[] Embeddings);
+        [property:Description("Search text")]string SearchText, 
+        [property:Description("Search text Embeddings")]float[] Embeddings);
 
     public record Output(
-        [Description("Original Input")]Input OriginalInput, 
-        [Description("Best Search Result from index")]string Result);
+        [property:Description("Original Input")]Input OriginalInput, 
+        [property:Description("Best Search Result from index")]string Result);
 
     public class Function : IChainableSkill<Input, Output>
     {

@@ -7,9 +7,9 @@ namespace LockedDownBotSemanticKernel.Skills.Foundational.GetEmbeddings;
 
 public static class GetEmbeddingsFunction
 {
-    public record Input([Description("Content to get embeddings from")]string Content);
+    public record Input([property:Description("Content to get embeddings from")]string Content);
 
-    public record Output([Description("Original content")] string Content, [Description("A list of embeddings")] IReadOnlyList<float> Embeddings);
+    public record Output([property:Description("Original content")] string Content, [property:Description("A list of embeddings")] float[] Embeddings);
 
     [Description("Fetches embeddings that can be used to execute a vector search")]
     public class Function : IChainableSkill<Input, Output>
@@ -25,7 +25,7 @@ public static class GetEmbeddingsFunction
         public async Task<Output> Run(SemanticKernelWrapper wrapper, Input input, CancellationToken token)
         {
             var embeddings = await _openAiClient.GetEmbeddingsAsync(_embeddingsModel, new EmbeddingsOptions(input.Content), token);
-            return new Output(input.Content, embeddings.Value.Data[0].Embedding);
+            return new Output(input.Content, embeddings.Value.Data[0].Embedding.ToArray());
         }
     }
 }

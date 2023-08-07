@@ -10,17 +10,16 @@ public static class ExtractInformationToCallFunction
     record GptOutput(Dictionary<string, string> Parameters);
 
     public record Input(
-        [Description("Operating Context")] string Context,
-        [Description("Conversation")] string UserInput, 
-        [Description("JSON Schema of function")] JsonSchemaFunctionInput FunctionDefinition);
+        [property:Description("Operating Context")] string Context,
+        [property:Description("Conversation")] string UserInput, 
+        [property:Description("JSON Schema of function")] JsonSchemaFunctionInput FunctionDefinition);
 
     public record Output(
-        [Description("JSON Schema of function")] JsonSchemaFunctionInput FunctionDefinition,
-        [Description("If all parameters were matched")] bool MatchedAllInputParameters,
-        [Description("Missing parameters")] HashSet<string> MissingParameters,
-        [Description("Values of parameters")] Dictionary<string, string> ParameterValues,
-        [Description("What to ask user to get the missing parameters")]
-        string? NextRecommendation);
+        [property:Description("JSON Schema of function")] JsonSchemaFunctionInput FunctionDefinition,
+        [property:Description("If all parameters were matched")] bool MatchedAllInputParameters,
+        [property:Description("Missing parameters")] HashSet<string> MissingParameters,
+        [property:Description("Values of parameters")] Dictionary<string, string> ParameterValues,
+        [property:Description("What to ask user to get the missing parameters")] string? NextRecommendation);
 
     public record JsonSchemaFunctionInput(JsonSchemaFunctionInputParameters Parameters);
 
