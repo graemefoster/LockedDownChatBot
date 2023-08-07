@@ -1,6 +1,9 @@
 ﻿using Azure;
 using Azure.AI.OpenAI;
+using Azure.Core;
 using Azure.Identity;
+using LockedDownBotSemanticKernel.Memory;
+using Microsoft.Azure.Cosmos;
 using Microsoft.SemanticKernel;
 
 namespace LockedDownBotSemanticKernel.Primitives;
@@ -16,6 +19,15 @@ public class SemanticKernelWrapperFactory
         var gotKey = config.TryGetValue("OPENAI_KEY", out var openAiKey);
         var clientId = config["OPENAI_MANAGED_IDENTITY_CLIENT_ID"] as string;
         return GetFromSettings(endpoint, gotKey ? openAiKey as string : null, clientId, model);
+    }
+    public CosmosMemory GetMemoryFromSettings(IDictionary<string, object> config)
+    {
+        var endpoint = (string)config["BOT_MEMORY_HOST"];
+        var gotKey = config.TryGetValue("BOT_MEMORY_KEY", out var memoryKey);
+        var clientId = config["OPENAI_MANAGED_IDENTITY_CLIENT_ID"] as string;
+        return gotKey
+            ? new CosmosMemory(new CosmosClient(endpoint, (string)memoryKey!))
+            : new CosmosMemory(new CosmosClient(endpoint, new ManagedIdentityCredential(clientId)));
     }
 
     public SemanticKernelWrapper GetFromSettings(string endpoint, string? key, string? clientId, string model)

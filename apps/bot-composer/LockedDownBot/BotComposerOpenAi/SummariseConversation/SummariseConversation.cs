@@ -28,20 +28,20 @@ public class SummariseConversation : Dialog
 
     [JsonProperty("systemPrompt")] public StringExpression SystemPrompt { get; set; }
 
-    [JsonProperty("conversation")] public ArrayExpression<string> Conversation { get; set; }
-
     [JsonProperty("resultProperty")] public StringExpression? ResultProperty { get; set; }
 
     public override async Task<DialogTurnResult> BeginDialogAsync(DialogContext dc, object options = null,
         CancellationToken cancellationToken = new())
     {
-        var client =
-            _openAiClientFactory.GetFromSettings((IDictionary<string, object>)dc.State["settings"]);
+        var settings = (IDictionary<string, object>)dc.State["settings"];
+
+        var client = _openAiClientFactory.GetFromSettings(settings);
+        var memory = _openAiClientFactory.GetMemoryFromSettings(settings);
+
+        var conversation = await dc.GetConversationForDialog(memory, cancellationToken);
+        var input = conversation.ToString();
 
         var prompt = SystemPrompt.GetValue(dc.State);
-
-        //read the conversation so-far
-        var input = string.Join('\n', Conversation.GetValue(dc.State));
 
         var response = await
             new SummariseAskFunction.Function()

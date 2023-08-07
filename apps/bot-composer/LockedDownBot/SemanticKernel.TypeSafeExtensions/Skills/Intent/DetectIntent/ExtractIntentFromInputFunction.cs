@@ -24,8 +24,8 @@ public static class ExtractIntentFromInputFunction
         [Description("True if we found an intent")]
         public bool FoundIntent { get; set; }
 
-        [Description("The Intent, or Unknown if we didn't find one")]
-        public string NextRecommendation { get; set; } = default!;
+        [Description("What to ask the customer next to get the required information.")]
+        public string? NextRecommendation { get; set; }
     }
 
     public class Function : SemanticKernelFunction<Input, Output>

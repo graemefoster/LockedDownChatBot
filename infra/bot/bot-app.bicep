@@ -148,6 +148,10 @@ resource app 'Microsoft.Web/sites@2022-09-01' = {
           name: 'OPENAI_MANAGED_IDENTITY_CLIENT_ID'
           value: botIdentity.properties.clientId
         }
+        {
+          name: 'BOT_MEMORY_HOST'
+          value: cosmosEndpoint
+        }
       ]
     }
   }

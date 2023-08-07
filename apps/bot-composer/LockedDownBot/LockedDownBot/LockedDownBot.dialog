@@ -65,14 +65,6 @@
         {
           "$kind": "Microsoft.SetProperty",
           "$designer": {
-            "id": "s812gT"
-          },
-          "property": "dialog.initialAsk",
-          "value": "=createArray(\"User: \" + turn.activity.text)"
-        },
-        {
-          "$kind": "Microsoft.SetProperty",
-          "$designer": {
             "id": "XoSfSO"
           },
           "property": "dialog.attempts",
@@ -110,15 +102,6 @@
               "condition": "=!dialog.intent.FoundIntent",
               "actions": [
                 {
-                  "$kind": "Microsoft.EditArray",
-                  "$designer": {
-                    "id": "rZejdk"
-                  },
-                  "changeType": "push",
-                  "itemsProperty": "dialog.initialAsk",
-                  "value": "system: ${dialog.intent.SuggestedPrompt}"
-                },
-                {
                   "$kind": "Microsoft.TextInput",
                   "$designer": {
                     "id": "oat8VZ"
@@ -131,15 +114,6 @@
                   "unrecognizedPrompt": "",
                   "invalidPrompt": "",
                   "property": "turn.input"
-                },
-                {
-                  "$kind": "Microsoft.EditArray",
-                  "$designer": {
-                    "id": "7NF2PI"
-                  },
-                  "changeType": "push",
-                  "itemsProperty": "dialog.initialAsk",
-                  "value": "user: ${turn.input}"
                 }
               ],
               "elseActions": [

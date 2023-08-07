@@ -42,14 +42,33 @@ resource db 'Microsoft.DocumentDB/databaseAccounts/sqlDatabases@2023-04-15' = {
   }
 }
 
-var sqlContainerName = 'bot-container'
-resource sqlContainer 'Microsoft.DocumentDB/databaseAccounts/sqlDatabases/containers@2023-04-15' = {
+var botPersistenceContainerName = 'bot-container'
+resource botPersistenceContainer 'Microsoft.DocumentDB/databaseAccounts/sqlDatabases/containers@2023-04-15' = {
   parent: db
-  name: sqlContainerName
+  name: botPersistenceContainerName
   location: location
   properties: {
     resource: {
-      id: sqlContainerName
+      id: botPersistenceContainerName
+      partitionKey: {
+        paths: [
+          '/id'
+        ]
+        kind: 'Hash'
+      }
+    }
+  }
+}
+
+
+var conversationHistoryMemoryContainerName = 'conversationHistory'
+resource sqlContainer 'Microsoft.DocumentDB/databaseAccounts/sqlDatabases/containers@2023-04-15' = {
+  parent: db
+  name: conversationHistoryMemoryContainerName
+  location: location
+  properties: {
+    resource: {
+      id: conversationHistoryMemoryContainerName
       partitionKey: {
         paths: [
           '/id'
@@ -163,4 +182,5 @@ output cosmosId string = database.id
 output cosmosSecretName string = authKeySecretName
 output cosmosUrl string = database.properties.documentEndpoint
 output databaseName string = databaseName
-output containerName string = sqlContainerName
+output containerName string = botPersistenceContainerName
+output conversationHistoryContainerName string = conversationHistoryMemoryContainerName
