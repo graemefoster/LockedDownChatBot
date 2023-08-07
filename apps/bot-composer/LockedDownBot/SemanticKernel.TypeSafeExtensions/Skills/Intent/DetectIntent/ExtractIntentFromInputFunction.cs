@@ -28,6 +28,7 @@ public static class ExtractIntentFromInputFunction
         public string? NextRecommendation { get; set; }
     }
 
+    [Description("Given user input and context and a list of possible intents, this will extract the intent from the user input.")]
     public class Function : SemanticKernelFunction<Input, Output>
     {
         public override string Prompt => """

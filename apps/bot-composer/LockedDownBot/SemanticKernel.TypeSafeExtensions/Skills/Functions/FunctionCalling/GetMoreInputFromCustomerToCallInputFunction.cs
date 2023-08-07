@@ -1,4 +1,5 @@
-﻿using LockedDownBotSemanticKernel.Skills.Foundational.ResponseToUserSuggestion;
+﻿using System.ComponentModel;
+using LockedDownBotSemanticKernel.Skills.Foundational.ResponseToUserSuggestion;
 using Microsoft.SemanticKernel.Orchestration;
 using Newtonsoft.Json;
 
@@ -6,6 +7,7 @@ namespace LockedDownBotSemanticKernel.Skills.Functions.FunctionCalling;
 
 public static class GetMoreInputFromCustomerToCallInputFunction
 {
+    [Description("Given user input and context, and a function definition, will suggest what to ask the user to get the values for missing function parameters.")]
     public class Function : RespondToUserInputFunction.Function<ExtractInformationToCallFunction.Output, ExtractInformationToCallFunction.Output>
     {
         protected override ExtractInformationToCallFunction.Output CreateResponse(
@@ -32,5 +34,6 @@ We are missing the following parameters.
 Please ask the user for the missing parameters.  
 """;
         }
+
     }
 }

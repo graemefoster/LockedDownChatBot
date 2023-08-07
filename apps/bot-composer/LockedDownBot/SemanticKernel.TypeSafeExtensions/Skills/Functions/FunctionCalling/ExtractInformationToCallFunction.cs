@@ -1,7 +1,6 @@
-﻿using LockedDownBotSemanticKernel.Primitives;
-using Microsoft.SemanticKernel;
+﻿using System.ComponentModel;
+using LockedDownBotSemanticKernel.Primitives;
 using Microsoft.SemanticKernel.Orchestration;
-using Microsoft.SemanticKernel.SkillDefinition;
 using Newtonsoft.Json;
 
 namespace LockedDownBotSemanticKernel.Skills.Functions.FunctionCalling;
@@ -9,12 +8,27 @@ namespace LockedDownBotSemanticKernel.Skills.Functions.FunctionCalling;
 public static class ExtractInformationToCallFunction
 {
     record GptOutput(Dictionary<string, string> Parameters);
-    public record Input(string SystemPrompt, string UserInput, JsonSchemaFunctionInput FunctionDefinition);    
-    public record Output(JsonSchemaFunctionInput FunctionDefinition, bool MatchedAllInputParameters,  HashSet<string> MissingParameters, Dictionary<string, string> ParameterValues, string? NextRecommendation);
+
+    public record Input(
+        [Description("Operating Context")] string Context,
+        [Description("Conversation")] string UserInput, 
+        [Description("JSON Schema of function")] JsonSchemaFunctionInput FunctionDefinition);
+
+    public record Output(
+        [Description("JSON Schema of function")] JsonSchemaFunctionInput FunctionDefinition,
+        [Description("If all parameters were matched")] bool MatchedAllInputParameters,
+        [Description("Missing parameters")] HashSet<string> MissingParameters,
+        [Description("Values of parameters")] Dictionary<string, string> ParameterValues,
+        [Description("What to ask user to get the missing parameters")]
+        string? NextRecommendation);
+
     public record JsonSchemaFunctionInput(JsonSchemaFunctionInputParameters Parameters);
+
     public record JsonSchemaFunctionInputParameters(Dictionary<string, object> Properties);
-    
-    public class Function :  SemanticKernelFunction<Input, Output>
+
+    [Description(
+        "Given user input and context, and a function definition, will extract the parameters to call the function with.")]
+    public class Function : SemanticKernelFunction<Input, Output>
     {
         public override string Prompt => """
 Read the users input and respond in JSON with arguments extracted from the user's input to call the function detailed below.
@@ -24,7 +38,7 @@ Read the users input and respond in JSON with arguments extracted from the user'
 - Use "UNKNOWN" for arguments you don't know.
 - ONLY respond in JSON.
 
-{{$SystemPrompt}}
+{{$Context}}
 
 ```function
 {{$Function}}

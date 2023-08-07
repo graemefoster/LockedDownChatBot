@@ -5,7 +5,6 @@ using LockedDownBotSemanticKernel.Primitives.Chains;
 using LockedDownBotSemanticKernel.Skills.EnterpriseSearch;
 using LockedDownBotSemanticKernel.Skills.Foundational.ExtractKeyTerms;
 using LockedDownBotSemanticKernel.Skills.Foundational.GetEmbeddings;
-using LockedDownBotSemanticKernel.Skills.Foundational.SummariseAsk;
 using LockedDownBotSemanticKernel.Skills.Foundational.SummariseContent;
 
 namespace LockedDownBotSemanticKernel.Skills.ComposedSkills;

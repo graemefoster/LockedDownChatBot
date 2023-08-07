@@ -1,4 +1,5 @@
-﻿using Azure.Search.Documents;
+﻿using System.ComponentModel;
+using Azure.Search.Documents;
 using Azure.Search.Documents.Models;
 using LockedDownBotSemanticKernel.Primitives;
 using LockedDownBotSemanticKernel.Primitives.Chains;

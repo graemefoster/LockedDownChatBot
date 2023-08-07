@@ -1,13 +1,15 @@
-﻿using LockedDownBotSemanticKernel.Primitives;
+﻿using System.ComponentModel;
+using LockedDownBotSemanticKernel.Primitives;
 using Microsoft.SemanticKernel.Orchestration;
 
 namespace LockedDownBotSemanticKernel.Skills.Foundational.SummariseContent;
 
 public static class SummariseContentFunction
 {
-    public record Input(string Context, string OriginalAsk, string Content);
-    public record Output(string Summarisation);
+    public record Input([Description("Operating Context")] string Context, [Description("What the user asked")] string OriginalAsk, [Description("Content to source resposne from")] string Content);
+    public record Output([Description("Response to users question")] string Summarisation);
     
+    [Description("Given user question, and some discovered content, this function will answer the user's question from the provided content.")]
     public class Function : SemanticKernelFunction<Input, Output>
     {
         public override string Prompt => """

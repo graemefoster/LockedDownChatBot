@@ -1,4 +1,5 @@
-﻿using Azure.Search.Documents;
+﻿using System.ComponentModel;
+using Azure.Search.Documents;
 using Azure.Search.Documents.Models;
 using LockedDownBotSemanticKernel.Primitives;
 using LockedDownBotSemanticKernel.Primitives.Chains;
@@ -7,9 +8,13 @@ namespace LockedDownBotSemanticKernel.Skills.EnterpriseSearch;
 
 public static class CognitiveSearchVectorIndexFunction
 {
-    public record Input(string SearchText, float[] Embeddings);
+    public record Input(
+        [Description("Search text")]string SearchText, 
+        [Description("Search text Embeddings")]float[] Embeddings);
 
-    public record Output(Input OriginalInput, string Result);
+    public record Output(
+        [Description("Original Input")]Input OriginalInput, 
+        [Description("Best Search Result from index")]string Result);
 
     public class Function : IChainableSkill<Input, Output>
     {

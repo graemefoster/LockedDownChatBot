@@ -1,4 +1,5 @@
-﻿using Azure.AI.OpenAI;
+﻿using System.ComponentModel;
+using Azure.AI.OpenAI;
 using LockedDownBotSemanticKernel.Primitives;
 using LockedDownBotSemanticKernel.Primitives.Chains;
 
@@ -6,10 +7,11 @@ namespace LockedDownBotSemanticKernel.Skills.Foundational.GetEmbeddings;
 
 public static class GetEmbeddingsFunction
 {
-    public record Input(string Content);
+    public record Input([Description("Content to get embeddings from")]string Content);
 
-    public record Output(string Content, IReadOnlyList<float> Embeddings);
+    public record Output([Description("Original content")] string Content, [Description("A list of embeddings")] IReadOnlyList<float> Embeddings);
 
+    [Description("Fetches embeddings that can be used to execute a vector search")]
     public class Function : IChainableSkill<Input, Output>
     {
         private readonly OpenAIClient _openAiClient;

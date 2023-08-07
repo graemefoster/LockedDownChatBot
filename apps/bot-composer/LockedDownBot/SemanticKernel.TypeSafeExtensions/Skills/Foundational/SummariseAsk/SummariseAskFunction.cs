@@ -1,15 +1,15 @@
-﻿using LockedDownBotSemanticKernel.Primitives;
-using Microsoft.SemanticKernel;
+﻿using System.ComponentModel;
+using LockedDownBotSemanticKernel.Primitives;
 using Microsoft.SemanticKernel.Orchestration;
-using Microsoft.SemanticKernel.SkillDefinition;
 
 namespace LockedDownBotSemanticKernel.Skills.Foundational.SummariseAsk;
 
 public static class SummariseAskFunction
 {
-    public record Input(string Context, string Content);
+    public record Input([Description("Operational Context")]string Context,  [Description("Content to summarise")] string Content);
     public record Output(string Summarisation);
     
+    [Description("Given user input and context, will summarise the user's ask in a single sentence.")]
     public class Function : SemanticKernelFunction<Input, Output>
     {
         public override string Prompt => """
@@ -17,13 +17,10 @@ public static class SummariseAskFunction
 
 Read the following dialogue. Summarise the key ask of the User into a single sentence.
 
---EXAMPLES
-User: When can I go to the branch?
-Response: Opening hours of branches?
-
 --- USER ASK FOLLOWS
 {{$Content}}
 """;
+
 
         protected override Output FromResult(Input input, SKContext context)
         {

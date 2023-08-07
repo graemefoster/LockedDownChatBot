@@ -1,9 +1,11 @@
-﻿using LockedDownBotSemanticKernel.Skills.Foundational.ResponseToUserSuggestion;
+﻿using System.ComponentModel;
+using LockedDownBotSemanticKernel.Skills.Foundational.ResponseToUserSuggestion;
 using LockedDownBotSemanticKernel.Skills.Intent.DetectIntent;
 using Microsoft.SemanticKernel.Orchestration;
 
 namespace LockedDownBotSemanticKernel.Skills.Intent.DetectIntentNextResponse;
 
+[Description("Given user input and context and a list of possible intents, this will suggest what to ask to get the intent from the user.")]
 public class GetMoreInputFromCustomerToDetectIntentInputFunction : RespondToUserInputFunction.Function<
     ExtractIntentFromInputFunction.Input, ExtractIntentFromInputFunction.Output>
 {
@@ -19,7 +21,7 @@ CONVERSATION
 ------------
 {{$UserInput}}
 """;
-
+    
     protected override void PopulateContext(SKContext context, ExtractIntentFromInputFunction.Input detectIntentInput)
     {
         base.PopulateContext(context, detectIntentInput);

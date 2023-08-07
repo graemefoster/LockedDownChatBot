@@ -32,7 +32,6 @@ public abstract class SemanticKernelFunction<TInput, TOutput> : IChainableSkill<
     }
     
     public abstract string Prompt { get;}
-
     protected virtual void PopulateContext(SKContext context, TInput input)
     {
         foreach (var prop in input.GetType().GetProperties(BindingFlags.Public | BindingFlags.Instance))
