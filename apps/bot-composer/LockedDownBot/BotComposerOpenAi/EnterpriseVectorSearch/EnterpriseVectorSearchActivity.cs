@@ -19,7 +19,7 @@ namespace BotComposerOpenAi.EnterpriseVectorSearch;
 /// </summary>
 public class EnterpriseVectorSearchActivity : Dialog
 {
-    private readonly SemanticKernelWrapperFactory _openAiClientFactory;
+    private readonly SkillWrapperFactory _openAiClientFactory;
 
     [JsonConstructor]
     public EnterpriseVectorSearchActivity(
@@ -27,7 +27,7 @@ public class EnterpriseVectorSearchActivity : Dialog
         [CallerLineNumber] int sourceLineNumber = 0)
         : base()
     {
-        _openAiClientFactory = new SemanticKernelWrapperFactory();
+        _openAiClientFactory = new SkillWrapperFactory();
         RegisterSourceLocation(sourceFilePath, sourceLineNumber);
     }
 

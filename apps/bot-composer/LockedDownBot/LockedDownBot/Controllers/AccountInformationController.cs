@@ -58,7 +58,7 @@ namespace LockedDownBot.Controllers
 
         public async Task<ExtractInformationToCallFunction.Output> Get(string input, CancellationToken token)
         {
-            var client = new SemanticKernelWrapperFactory().GetFromSettings(
+            var client = new SkillWrapperFactory().GetFromSettings(
                 _config["OPENAI_ENDPOINT"],
                 _config["OPENAI_KEY"],
                 _config["OPENAI_MANAGED_IDENTITY_CLIENT_ID"],

@@ -12,7 +12,7 @@ namespace BotComposerOpenAi.SummariseConversation;
 /// </summary>
 public class SummariseConversation : Dialog
 {
-    private readonly SemanticKernelWrapperFactory _openAiClientFactory;
+    private readonly SkillWrapperFactory _openAiClientFactory;
 
     [JsonConstructor]
     public SummariseConversation(
@@ -20,7 +20,7 @@ public class SummariseConversation : Dialog
         [CallerLineNumber] int sourceLineNumber = 0)
         : base()
     {
-        _openAiClientFactory = new SemanticKernelWrapperFactory();
+        _openAiClientFactory = new SkillWrapperFactory();
         RegisterSourceLocation(sourceFilePath, sourceLineNumber);
     }
 

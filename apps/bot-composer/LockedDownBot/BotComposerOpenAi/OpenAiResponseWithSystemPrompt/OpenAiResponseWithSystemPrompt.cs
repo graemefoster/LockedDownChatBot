@@ -13,7 +13,7 @@ namespace BotComposerOpenAi.OpenAiResponseWithSystemPrompt;
 /// </summary>
 public class OpenAiResponseWithSystemPrompt : Dialog
 {
-    private readonly SemanticKernelWrapperFactory _openAiClientFactory;
+    private readonly SkillWrapperFactory _openAiClientFactory;
 
     [JsonConstructor]
     public OpenAiResponseWithSystemPrompt(
@@ -21,7 +21,7 @@ public class OpenAiResponseWithSystemPrompt : Dialog
         [CallerLineNumber] int sourceLineNumber = 0)
         : base()
     {
-        _openAiClientFactory = new SemanticKernelWrapperFactory();
+        _openAiClientFactory = new SkillWrapperFactory();
         RegisterSourceLocation(sourceFilePath, sourceLineNumber);
     }
 

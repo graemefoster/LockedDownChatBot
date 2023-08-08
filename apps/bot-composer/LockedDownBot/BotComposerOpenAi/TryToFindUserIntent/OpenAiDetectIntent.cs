@@ -14,7 +14,7 @@ namespace BotComposerOpenAi.TryToFindUserIntent;
 /// </summary>
 public class OpenAiDetectIntent : Dialog
 {
-    private readonly SemanticKernelWrapperFactory _openAiClientFactory;
+    private readonly SkillWrapperFactory _openAiClientFactory;
 
     [JsonConstructor]
     public OpenAiDetectIntent(
@@ -22,7 +22,7 @@ public class OpenAiDetectIntent : Dialog
         [CallerLineNumber] int sourceLineNumber = 0)
         : base()
     {
-        _openAiClientFactory = new SemanticKernelWrapperFactory();
+        _openAiClientFactory = new SkillWrapperFactory();
         RegisterSourceLocation(sourceFilePath, sourceLineNumber);
     }
 

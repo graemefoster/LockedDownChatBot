@@ -29,7 +29,7 @@ namespace LockedDownBot.Controllers
 
         public async Task<ExtractIntentFromInputFunction.Output> Get(string input, CancellationToken token)
         {
-            var kernel = new SemanticKernelWrapperFactory().GetFromSettings(
+            var kernel = new SkillWrapperFactory().GetFromSettings(
                 _config["OPENAI_ENDPOINT"],
                 _config["OPENAI_KEY"],
                 _config["OPENAI_MANAGED_IDENTITY_CLIENT_ID"],

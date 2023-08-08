@@ -13,7 +13,7 @@ namespace BotComposerOpenAi.SuggestFunctionCall;
 /// </summary>
 public class OpenAiSuggestFunctionCall : Dialog
 {
-    private readonly SemanticKernelWrapperFactory _openAiClientFactory;
+    private readonly SkillWrapperFactory _openAiClientFactory;
 
     [JsonConstructor]
     public OpenAiSuggestFunctionCall(
@@ -21,7 +21,7 @@ public class OpenAiSuggestFunctionCall : Dialog
         [CallerLineNumber] int sourceLineNumber = 0)
         : base()
     {
-        _openAiClientFactory = new SemanticKernelWrapperFactory();
+        _openAiClientFactory = new SkillWrapperFactory();
         RegisterSourceLocation(sourceFilePath, sourceLineNumber);
     }
 
