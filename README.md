@@ -68,5 +68,3 @@ Not 100%, but the sample shows some System Prompts that can get JSON output to a
 The solution builds an Azure Architecture like this:
 
 ![Logical](./artifacts/Architecture.png "Simple view")
-
-![Azure Resources](./artifacts/sample-azure-resources.png "Generated view")
