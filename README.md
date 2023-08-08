@@ -32,6 +32,7 @@ To add a Firewall and Application Gateway
 ```bash
 azd env set DEPLOY_EDGE_SECURITY true
 # DNS used to provision a LetsEncrypt TLS certificate
+# The DNS host must be registered and resolvable on the public internet for LetsEncrypt to provision certificates.
 azd env set DNS_RESOURCE_RG <dns-resource-group-name>
 azd env set DNS_RESOURCE_NAME <dns-resource-name>
 azd env set CHAT_API_CUSTOM_HOST <host-name-to-provision-cert-for>
