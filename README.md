@@ -65,6 +65,8 @@ The sample sets up a Teams Channel which connects to your Bot via the Applicatio
 Not 100%, but the sample shows some System Prompts that can get JSON output to assist with you calling Downstream APIs.
 
 
-The solution builds an Azure Architecture like this:
+## Reference Architecture
+
+The solution can run within an Azure Architecture like this with Firewalls and Gateways at the edge. Firewall and Gateway are not part of the default deployment of this template.
 
 ![Logical](./artifacts/Architecture.png "Simple view")
