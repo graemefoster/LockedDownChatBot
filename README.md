@@ -4,14 +4,10 @@ A sample application showing a secure setup with
 
 - Azure Open AI 
 - Bot Composer Bot using Managed Identity
-- (Optional) Bot deployed with AAD Identity for local development
-- Firewalls
-- Application Gateways
 
 TLDR;
 ```bash
 azd init -t graemefoster/LockedDownChatBot
-#add env variables as necessary to tweak the deployment
 azd up
 ```
 
