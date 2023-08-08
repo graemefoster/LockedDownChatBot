@@ -20,31 +20,6 @@ To use a different location (**eastus** default) for a new OpenAI service
 azd env set OPENAI_LOCATION <open-ai-location>
 ```
 
-To use an existing Open AI deployment (GPT 3.5-turbo 0613 recommended)
-```bash
-azd env set OPENAI_RESOURCE_RG <open-ai-resource-group>
-azd env set OPENAI_RESOURCE_NAME <open-ai-resource-name>
-azd env set OPENAI_MODEL <pre-existing-gpt35turbo0613-model-name>
-azd env set OPENAI_EMBEDDING_MODEL <pre-existing-ada-002-model-name>
-```
-
-To add a Firewall and Application Gateway
-```bash
-azd env set DEPLOY_EDGE_SECURITY true
-# DNS used to provision a LetsEncrypt TLS certificate
-# The DNS host must be registered and resolvable on the public internet for LetsEncrypt to provision certificates.
-azd env set DNS_RESOURCE_RG <dns-resource-group-name>
-azd env set DNS_RESOURCE_NAME <dns-resource-name>
-azd env set CHAT_API_CUSTOM_HOST <host-name-to-provision-cert-for>
-```
-
-To enable local BOT development
-```bash
-# Local Bots cannot run using Managed Identity. To support running the Bot in Bot Composer we need to create a 2nd Azure Bot resource against an AAD Application
-azd env set LOCAL_BOT_AAD_ID <aad-application-id>
-azd env set LOCAL_BOT_AAD_TenantType <either MultiTenant or SingleTenant>
-```
-
 When you're ready to deploy:
 ```bash
 azd up
