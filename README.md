@@ -10,7 +10,6 @@ A sample application showing a secure setup with
 
 ```bash
 azd init -t graemefoster/LockedDownChatBot
-azd up
 ```
 
 To use a different location (**eastus** default) for a new OpenAI service
