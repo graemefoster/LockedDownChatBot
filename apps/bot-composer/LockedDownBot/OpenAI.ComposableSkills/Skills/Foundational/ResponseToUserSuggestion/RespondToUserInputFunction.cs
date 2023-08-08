@@ -10,7 +10,7 @@ public static class RespondToUserInputFunction
         string UserInput { get; }
     }
     
-    public abstract class Function<TRequest, TResponse> : ChainableSkillFunction<TRequest, TResponse>
+    public abstract class FunctionWithPrompt<TRequest, TResponse> : ChainableSkillFunctionWithPrompt<TRequest, TResponse>
         where TRequest : ISimpleRequest 
         where TResponse : notnull
     {
@@ -23,7 +23,7 @@ Given the current conversation, ask them something to get the required informati
 
 --- USER INPUT FOLLOWS
 {request.UserInput}
-""";
+";
 
         protected override TResponse FromResult(TRequest input, string response)
         {

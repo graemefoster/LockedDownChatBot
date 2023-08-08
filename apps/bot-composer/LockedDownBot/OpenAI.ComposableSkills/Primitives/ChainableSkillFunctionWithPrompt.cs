@@ -2,7 +2,7 @@
 
 namespace LockedDownBotSemanticKernel.Primitives;
 
-public abstract class ChainableSkillFunction<TInput, TOutput> : IChainableSkill<TInput, TOutput>, IAmAnSkFunction<TInput>
+public abstract class ChainableSkillFunctionWithPrompt<TInput, TOutput> : IChainableSkill<TInput, TOutput>, IChainableFunctionWithPrompt<TInput>
     where TInput : notnull
     where TOutput : notnull
 {

@@ -31,12 +31,12 @@ public static class VectorSearchAndSummarise
 
         public async Task<Output> Run(ChainableSkillWrapper wrapper, Input input, CancellationToken token)
         {
-            var output = await new SummariseAskFunction.Function()
+            var output = await new SummariseAskFunction.FunctionWithPrompt()
                 .Then(_ => new GetEmbeddingsFunction.Function(_openAiClient, _embeddingsModel),
                     (i, o) => new GetEmbeddingsFunction.Input(string.Join(' ', o.Summarisation)))
                 .Then(_ => new CognitiveSearchVectorIndexFunction.Function(_cognitiveSearchClient),
                     (i, o) => new CognitiveSearchVectorIndexFunction.Input(o.Content, o.Embeddings.ToArray()))
-                .Then(_ => new SummariseContentFunction.Function(),
+                .Then(_ => new SummariseContentFunction.FunctionWithPrompt(),
                     (i, o) => new SummariseContentFunction.Input(input.Context, o.OriginalInput.SearchText, o.Result))
                 .Run(wrapper, new SummariseAskFunction.Input(input.Context, input.SearchText), token);
 

@@ -1,10 +1,9 @@
 ﻿using LockedDownBotSemanticKernel.Skills.Foundational.ResponseToUserSuggestion;
 using LockedDownBotSemanticKernel.Skills.Intent.DetectIntent;
-using Microsoft.SemanticKernel.Orchestration;
 
 namespace LockedDownBotSemanticKernel.Skills.Intent.DetectIntentNextResponse;
 
-public class GetMoreInputFromCustomerToDetectIntentInputFunction : RespondToUserInputFunction.Function<ExtractIntentFromInputFunction.Input, ExtractIntentFromInputFunction.Output>
+public class GetMoreInputFromCustomerToDetectIntentInputFunctionWithPrompt : RespondToUserInputFunction.FunctionWithPrompt<ExtractIntentFromInputFunction.Input, ExtractIntentFromInputFunction.Output>
 {
     protected override ExtractIntentFromInputFunction.Output FromResult(ExtractIntentFromInputFunction.Input detectIntentInput, string result)
     {

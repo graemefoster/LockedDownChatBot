@@ -1,12 +1,11 @@
 ﻿using LockedDownBotSemanticKernel.Skills.Foundational.ResponseToUserSuggestion;
-using Microsoft.SemanticKernel.Orchestration;
 using Newtonsoft.Json;
 
 namespace LockedDownBotSemanticKernel.Skills.Functions.FunctionCalling;
 
 public static class GetMoreInputFromCustomerToCallInputFunction
 {
-    public class Function : RespondToUserInputFunction.Function<ExtractInformationToCallFunction.Output, ExtractInformationToCallFunction.Output>
+    public class FunctionWithPrompt : RespondToUserInputFunction.FunctionWithPrompt<ExtractInformationToCallFunction.Output, ExtractInformationToCallFunction.Output>
     {
         protected override ExtractInformationToCallFunction.Output CreateResponse(
             ExtractInformationToCallFunction.Output input,

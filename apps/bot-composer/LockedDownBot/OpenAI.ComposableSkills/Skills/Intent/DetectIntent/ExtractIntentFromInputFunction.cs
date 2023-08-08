@@ -1,9 +1,6 @@
 ﻿using System.ComponentModel;
 using LockedDownBotSemanticKernel.Primitives;
 using LockedDownBotSemanticKernel.Skills.Foundational.ResponseToUserSuggestion;
-using Microsoft.SemanticKernel;
-using Microsoft.SemanticKernel.Orchestration;
-using Microsoft.SemanticKernel.SkillDefinition;
 
 namespace LockedDownBotSemanticKernel.Skills.Intent.DetectIntent;
 
@@ -29,7 +26,7 @@ public static class ExtractIntentFromInputFunction
         public string NextRecommendation { get; set; } = default!;
     }
 
-    public class Function : ChainableSkillFunction<Input, Output>
+    public class FunctionWithPrompt : ChainableSkillFunctionWithPrompt<Input, Output>
     {
         public override string Prompt(Input input) => @$"
 {input.Context}

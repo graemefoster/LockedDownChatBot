@@ -8,7 +8,7 @@ public static class SummariseContentFunction
 
     public record Output(string Summarisation);
 
-    public class Function : ChainableSkillFunction<Input, Output>
+    public class FunctionWithPrompt : ChainableSkillFunctionWithPrompt<Input, Output>
     {
         public override string Prompt(Input input) => $@"
 {input.Context}
@@ -20,7 +20,7 @@ Using ONLY the following information, reply to the user with what they need to k
 
 --- INFORMATION FOLLOWS
 {input.Content}
-""";
+";
 
         protected override Output FromResult(Input input, string result)
         {

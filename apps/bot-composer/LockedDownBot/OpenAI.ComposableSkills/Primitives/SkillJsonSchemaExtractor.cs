@@ -8,7 +8,7 @@ public class SkillJsonSchemaExtractor
 {
     public static void Test()
     {
-        var schema = new SkillJsonSchemaExtractor().GenerateFor(new ExtractInformationToCallFunction.Function());
+        var schema = new SkillJsonSchemaExtractor().GenerateFor(new ExtractInformationToCallFunction.FunctionWithPrompt());
     }
     
     public JsonSchema GenerateFor<TIn, TOut>(IChainableSkill<TIn, TOut> fn)

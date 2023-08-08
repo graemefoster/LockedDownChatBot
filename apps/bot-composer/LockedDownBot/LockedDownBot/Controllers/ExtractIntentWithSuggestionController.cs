@@ -41,9 +41,9 @@ namespace LockedDownBot.Controllers
             var context = "You are a bank teller";
 
             var result = await
-                new ExtractIntentFromInputFunction.Function().ThenIf(
+                new ExtractIntentFromInputFunction.FunctionWithPrompt().ThenIf(
                         r => !r.FoundIntent,
-                        s => s.Resolve<GetMoreInputFromCustomerToDetectIntentInputFunction>())
+                        s => s.Resolve<GetMoreInputFromCustomerToDetectIntentInputFunctionWithPrompt>())
                     .Run(kernel, new ExtractIntentFromInputFunction.Input(context, intents, input), token);
 
             return result;

@@ -1,6 +1,5 @@
 ﻿using Azure.AI.OpenAI;
 using LockedDownBotSemanticKernel.Primitives.Chains;
-using Microsoft.SemanticKernel.SkillDefinition;
 
 namespace LockedDownBotSemanticKernel.Primitives;
 

@@ -2,15 +2,12 @@ using System.Threading;
 using System.Threading.Tasks;
 using LockedDownBotSemanticKernel.Primitives;
 using LockedDownBotSemanticKernel.Primitives.Chains;
-using LockedDownBotSemanticKernel.Skills.Foundational.ChitChat;
 using LockedDownBotSemanticKernel.Skills.Foundational.ExtractKeyTerms;
-using LockedDownBotSemanticKernel.Skills.Foundational.ResponseToUserSuggestion;
 using LockedDownBotSemanticKernel.Skills.Foundational.SummariseAsk;
 using LockedDownBotSemanticKernel.Skills.Intent.DetectIntent;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
-using Microsoft.SemanticKernel.Skills.Core;
 
 namespace LockedDownBot.Controllers
 {
@@ -47,17 +44,17 @@ namespace LockedDownBot.Controllers
             //         .Execute(kernel, new ExtractIntentFromInputFunction.Input(context, intents, input), token);
 
             var result = await
-                new ExtractIntentFromInputFunction.Function()
+                new ExtractIntentFromInputFunction.FunctionWithPrompt()
                     .ThenEither(x => x.Intent == "Account",
-                        sr => sr.Resolve<ExtractKeyTermsFunction.Function>(),
+                        sr => sr.Resolve<ExtractKeyTermsFunction.FunctionWithPrompt>(),
                         (i1,o1) => new ExtractKeyTermsFunction.Input("FOO", "BAR"),
-                        sr => sr.Resolve<SummariseAskFunction.Function>(),
+                        sr => sr.Resolve<SummariseAskFunction.FunctionWithPrompt>(),
                         (i1,o1) => new SummariseAskFunction.Input("FOO", "BAR")
                     )
                     .Combine(
                         (i, output) => new ExtractIntentFromInputFunction.Input(context, intents, input),
                         (i, output) => new ExtractIntentFromInputFunction.Input(context, intents, input),
-                        r => r.Resolve<ExtractIntentFromInputFunction.Function>()
+                        r => r.Resolve<ExtractIntentFromInputFunction.FunctionWithPrompt>()
                         )
                     .Run(
                         kernel, 

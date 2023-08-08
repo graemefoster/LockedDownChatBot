@@ -44,7 +44,7 @@ public class SummariseConversation : Dialog
         var input = string.Join('\n', Conversation.GetValue(dc.State));
 
         var response = await
-            new SummariseAskFunction.Function()
+            new SummariseAskFunction.FunctionWithPrompt()
                 .Run(client, new SummariseAskFunction.Input(prompt, input), cancellationToken);
 
         dc.State.SetValue(ResultProperty.GetValue(dc.State), response.Summarisation);

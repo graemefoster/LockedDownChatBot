@@ -1,10 +1,6 @@
 ﻿using LockedDownBotSemanticKernel.Primitives;
 using LockedDownBotSemanticKernel.Skills.Foundational.ResponseToUserSuggestion;
-using Microsoft.SemanticKernel;
-using Microsoft.SemanticKernel.Orchestration;
-using Microsoft.SemanticKernel.SkillDefinition;
 using Newtonsoft.Json;
-using JsonSerializer = System.Text.Json.JsonSerializer;
 
 namespace LockedDownBotSemanticKernel.Skills.Functions.FunctionCalling;
 
@@ -16,7 +12,7 @@ public static class ExtractInformationToCallFunction
     public record JsonSchemaFunctionInput(JsonSchemaFunctionInputParameters Parameters);
     public record JsonSchemaFunctionInputParameters(Dictionary<string, object> Properties);
     
-    public class Function :  ChainableSkillFunction<Input, Output>
+    public class FunctionWithPrompt :  ChainableSkillFunctionWithPrompt<Input, Output>
     {
         public override string Prompt(Input input) => $@"
 Read the users input and respond in JSON with arguments extracted from the user's input to call the function detailed below.

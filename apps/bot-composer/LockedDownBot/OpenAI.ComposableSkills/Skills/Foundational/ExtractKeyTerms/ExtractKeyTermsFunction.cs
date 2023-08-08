@@ -8,7 +8,7 @@ public static class ExtractKeyTermsFunction
 
     public record Output(string[] KeyTerms);
 
-    public class Function : ChainableSkillFunction<Input, Output>
+    public class FunctionWithPrompt : ChainableSkillFunctionWithPrompt<Input, Output>
     {
         public override string Prompt(Input input) => $@"
 {input.Context}
@@ -17,7 +17,7 @@ Given the user input, extract the key terms separated by a newline from it.
 
 --- USER INPUT FOLLOWS
 {input.UserInput}
-""";
+";
 
         protected override Output FromResult(Input input, string result)
         {
