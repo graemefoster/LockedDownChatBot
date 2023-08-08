@@ -40,7 +40,7 @@ azd env set CHAT_API_CUSTOM_HOST <host-name-to-provision-cert-for>
 
 To enable local BOT development
 ```bash
-# Local Bots cannot use Managed Identity.
+# Local Bots cannot run using Managed Identity. To support running the Bot in Bot Composer we need to create a 2nd Azure Bot resource against an AAD Application
 azd env set LOCAL_BOT_AAD_ID <aad-application-id>
 azd env set LOCAL_BOT_AAD_TenantType <either MultiTenant or SingleTenant>
 ```
