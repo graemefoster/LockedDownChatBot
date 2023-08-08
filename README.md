@@ -8,7 +8,6 @@ A sample application showing a secure setup with
 - Vector search
 - Open AI function calling
 
-TLDR;
 ```bash
 azd init -t graemefoster/LockedDownChatBot
 azd up
