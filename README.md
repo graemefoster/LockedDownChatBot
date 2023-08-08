@@ -4,6 +4,9 @@ A sample application showing a secure setup with
 
 - Azure Open AI 
 - Bot Composer Bot using Managed Identity
+- Document Cracking function
+- Vector search
+- Open AI function calling
 
 TLDR;
 ```bash
