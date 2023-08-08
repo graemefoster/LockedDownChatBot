@@ -60,28 +60,10 @@ The sample runs a Bot Composer Bot inside your own network, where it can be zone
 
 The sample sets up a Teams Channel which connects to your Bot via the Application Gateway
 
-## TLS certificates
-
-The sample uses LetsEncrypt to fetch TLS certificates to secure the Application Gateway
-
 ## Support for 'Functions'
 
 Not 100%, but the sample shows some System Prompts that can get JSON output to assist with you calling Downstream APIs.
 
-# How do I deploy this?
-
-We support the Azure Developer CLI (azd). To get started you'll need a few things handy:
-
-- DNS (a subzone will do, but to wire up the Application Gateway we need to provision a LetsEncrypt certificate)
-- An OpenAI service. We don't deploy this (right now) so please bring your own.
-- Optional AAD application for local testing. We use a Managed Identity in the cloud to auth your Bot, but this isn't possible from a local dev machine
-- Optional AAD sign-in card. There's a dialogue to trigger a User-SignIn if you want to understand the flows.
-  - Your application needs a redirect to https://token.botframework.com/.auth/web/redirect 
-
-```bash
-azd init -t graemefoster/LockedDownChatBot
-azd up
-```
 
 The solution builds an Azure Architecture like this:
 
