@@ -1,0 +1,42 @@
+<<<<<<< HEAD:apps/bot-composer/LockedDownBot/SemanticKernel.TypeSafeExtensions/Skills/Foundational/SummariseAsk/SummariseAskFunction.cs
+﻿using System.ComponentModel;
+using LockedDownBotSemanticKernel.Primitives;
+using Microsoft.SemanticKernel.Orchestration;
+=======
+﻿using LockedDownBotSemanticKernel.Primitives;
+>>>>>>> main:apps/bot-composer/LockedDownBot/OpenAI.ComposableSkills/Skills/Foundational/SummariseAsk/SummariseAskFunction.cs
+
+namespace LockedDownBotSemanticKernel.Skills.Foundational.SummariseAsk;
+
+public static class SummariseAskFunction
+{
+    public record Input([property:Description("Operational Context")]string Context,  [property:Description("Content to summarise")] string Content);
+    public record Output(string Summarisation);
+    
+<<<<<<< HEAD:apps/bot-composer/LockedDownBot/SemanticKernel.TypeSafeExtensions/Skills/Foundational/SummariseAsk/SummariseAskFunction.cs
+    [Description("Given user input and context, will summarise the user's ask in a single sentence.")]
+    public class Function : SemanticKernelFunction<Input, Output>
+=======
+    public class FunctionWithPrompt : ChainableSkillFunctionWithPrompt<Input, Output>
+>>>>>>> main:apps/bot-composer/LockedDownBot/OpenAI.ComposableSkills/Skills/Foundational/SummariseAsk/SummariseAskFunction.cs
+    {
+        public override string Prompt(Input input) => $@"
+{input.Context}
+
+Read the following dialogue. Summarise the key ask of the User into a single sentence.
+
+--- USER ASK FOLLOWS
+{input.Content}
+";
+
+<<<<<<< HEAD:apps/bot-composer/LockedDownBot/SemanticKernel.TypeSafeExtensions/Skills/Foundational/SummariseAsk/SummariseAskFunction.cs
+
+        protected override Output FromResult(Input input, SKContext context)
+=======
+        protected override Output FromResult(Input input, string result)
+>>>>>>> main:apps/bot-composer/LockedDownBot/OpenAI.ComposableSkills/Skills/Foundational/SummariseAsk/SummariseAskFunction.cs
+        {
+            return new Output(result);
+        }
+    }
+}

@@ -1,0 +1,44 @@
+<<<<<<< HEAD:apps/bot-composer/LockedDownBot/SemanticKernel.TypeSafeExtensions/Skills/Foundational/SummariseContent/SummariseContentFunction.cs
+﻿using System.ComponentModel;
+using LockedDownBotSemanticKernel.Primitives;
+using Microsoft.SemanticKernel.Orchestration;
+=======
+﻿using LockedDownBotSemanticKernel.Primitives;
+>>>>>>> main:apps/bot-composer/LockedDownBot/OpenAI.ComposableSkills/Skills/Foundational/SummariseContent/SummariseContentFunction.cs
+
+namespace LockedDownBotSemanticKernel.Skills.Foundational.SummariseContent;
+
+public static class SummariseContentFunction
+{
+<<<<<<< HEAD:apps/bot-composer/LockedDownBot/SemanticKernel.TypeSafeExtensions/Skills/Foundational/SummariseContent/SummariseContentFunction.cs
+    public record Input([property:Description("Operating Context")] string Context, [property:Description("What the user asked")] string OriginalAsk, [property:Description("Content to source response from")] string Content);
+    public record Output([property:Description("Response to users question")] string Summarisation);
+    
+    [Description("Given user question, and some discovered content, this function will answer the user's question from the provided content.")]
+    public class Function : SemanticKernelFunction<Input, Output>
+=======
+    public record Input(string Context, string OriginalAsk, string Content);
+
+    public record Output(string Summarisation);
+
+    public class FunctionWithPrompt : ChainableSkillFunctionWithPrompt<Input, Output>
+>>>>>>> main:apps/bot-composer/LockedDownBot/OpenAI.ComposableSkills/Skills/Foundational/SummariseContent/SummariseContentFunction.cs
+    {
+        public override string Prompt(Input input) => $@"
+{input.Context}
+
+The user asked this:
+{input.OriginalAsk}
+
+Using ONLY the following information, reply to the user with what they need to know.
+
+--- INFORMATION FOLLOWS
+{input.Content}
+";
+
+        protected override Output FromResult(Input input, string result)
+        {
+            return new Output(result);
+        }
+    }
+}

@@ -5,17 +5,22 @@
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
         <LangVersion>default</LangVersion>
+        <RootNamespace>LockedDownBotSemanticKernel</RootNamespace>
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="Azure.Identity" Version="1.9.0" />
       <PackageReference Include="Azure.AI.OpenAI" Version="1.0.0-beta.5" />
+      <PackageReference Include="Azure.Identity" Version="1.9.0" />
       <PackageReference Include="Azure.Search.Documents" Version="11.5.0-beta.3" />
-        <PackageReference Include="Microsoft.Bot.Builder.Dialogs.Adaptive.Runtime" Version="4.18.1" />
+      <PackageReference Include="Microsoft.Azure.Cosmos" Version="3.35.2" />
+      <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\OpenAI.ComposableSkills\OpenAI.ComposableSkills.csproj" />
+      <None Remove="Skills\Intents\ExtractIntentFromInput\config.json" />
+      <None Remove="Skills\Intents\ExtractIntentFromInput\skprompt.txt" />
     </ItemGroup>
+
+
 
 </Project>

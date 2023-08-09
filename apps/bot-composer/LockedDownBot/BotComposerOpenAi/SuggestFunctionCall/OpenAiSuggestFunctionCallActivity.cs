@@ -13,7 +13,7 @@ namespace BotComposerOpenAi.SuggestFunctionCall;
 /// </summary>
 public class OpenAiSuggestFunctionCallActivity : Dialog
 {
-    private readonly SemanticKernelWrapperFactory _openAiClientFactory;
+    private readonly SkillWrapperFactory _openAiClientFactory;
 
     [JsonConstructor]
     public OpenAiSuggestFunctionCallActivity(
@@ -21,7 +21,7 @@ public class OpenAiSuggestFunctionCallActivity : Dialog
         [CallerLineNumber] int sourceLineNumber = 0)
         : base()
     {
-        _openAiClientFactory = new SemanticKernelWrapperFactory();
+        _openAiClientFactory = new SkillWrapperFactory();
         RegisterSourceLocation(sourceFilePath, sourceLineNumber);
     }
 
@@ -45,18 +45,17 @@ public class OpenAiSuggestFunctionCallActivity : Dialog
         var prompt = SystemPrompt.GetValue(dc.State);
         var function = Function.GetValue(dc.State);
 
-        var userInput = conversation.ToString();
 
         var result = await
-            new ExtractInformationToCallFunction.Function()
+            new ExtractInformationToCallFunction.FunctionWithPrompt()
                 .ThenIf(
                     output => output.MissingParameters.Any(),
-                    s => s.Resolve<GetMoreInputFromCustomerToCallInputFunction.Function>())
+                    s => s.Resolve<GetMoreInputFromCustomerToCallInputFunction.FunctionWithPrompt>())
                 .Run(
                     client,
                     new ExtractInformationToCallFunction.Input(
                         prompt,
-                        userInput,
+                        conversation.ToString(),
                         JsonConvert.DeserializeObject<ExtractInformationToCallFunction.JsonSchemaFunctionInput>(
                             function)!),
                     cancellationToken);

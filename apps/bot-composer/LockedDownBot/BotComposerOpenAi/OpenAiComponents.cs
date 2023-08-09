@@ -27,7 +27,7 @@ public class OpenAiComponents : BotComponent
     public override void ConfigureServices(IServiceCollection services, IConfiguration configuration)
     {
         // Anything that could be done in Startup.ConfigureServices can be done here.
-        services.AddSingleton<SemanticKernelWrapperFactory>();
+        services.AddSingleton<SkillWrapperFactory>();
         services.AddSingleton<DeclarativeType>(_ => new DeclarativeType<EnterpriseVectorSearchActivity>(EnterpriseVectorSearchActivity.Kind));
         services.AddSingleton<DeclarativeType>(_ => new DeclarativeType<EnterpriseSearchActivity>(EnterpriseSearchActivity.Kind));
         services.AddSingleton<DeclarativeType>(_ => new DeclarativeType<OpenAiResponseWithSystemPromptActivity>(OpenAiResponseWithSystemPromptActivity.Kind));

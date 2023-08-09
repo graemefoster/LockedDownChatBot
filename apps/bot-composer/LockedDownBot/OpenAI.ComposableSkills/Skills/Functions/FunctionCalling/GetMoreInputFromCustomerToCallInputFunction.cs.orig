@@ -1,0 +1,46 @@
+<<<<<<< HEAD:apps/bot-composer/LockedDownBot/SemanticKernel.TypeSafeExtensions/Skills/Functions/FunctionCalling/GetMoreInputFromCustomerToCallInputFunction.cs
+﻿using System.ComponentModel;
+using LockedDownBotSemanticKernel.Skills.Foundational.ResponseToUserSuggestion;
+using Microsoft.SemanticKernel.Orchestration;
+=======
+﻿using LockedDownBotSemanticKernel.Skills.Foundational.ResponseToUserSuggestion;
+>>>>>>> main:apps/bot-composer/LockedDownBot/OpenAI.ComposableSkills/Skills/Functions/FunctionCalling/GetMoreInputFromCustomerToCallInputFunction.cs
+using Newtonsoft.Json;
+
+namespace LockedDownBotSemanticKernel.Skills.Functions.FunctionCalling;
+
+public static class GetMoreInputFromCustomerToCallInputFunction
+{
+<<<<<<< HEAD:apps/bot-composer/LockedDownBot/SemanticKernel.TypeSafeExtensions/Skills/Functions/FunctionCalling/GetMoreInputFromCustomerToCallInputFunction.cs
+    [Description("Given user input and context, and a function definition, will suggest what to ask the user to get the values for missing function parameters.")]
+    public class Function : RespondToUserInputFunction.Function<ExtractInformationToCallFunction.Output, ExtractInformationToCallFunction.Output>
+=======
+    public class FunctionWithPrompt : RespondToUserInputFunction.FunctionWithPrompt<ExtractInformationToCallFunction.Output, ExtractInformationToCallFunction.Output>
+>>>>>>> main:apps/bot-composer/LockedDownBot/OpenAI.ComposableSkills/Skills/Functions/FunctionCalling/GetMoreInputFromCustomerToCallInputFunction.cs
+    {
+        protected override ExtractInformationToCallFunction.Output CreateResponse(
+            ExtractInformationToCallFunction.Output input,
+            string suggestion)
+        {
+            return input with { NextRecommendation = suggestion };
+        }
+
+        protected override string DescribeSituation(ExtractInformationToCallFunction.Output input)
+        {
+            return $"""
+We want to call the following function:
+
+```function
+{JsonConvert.SerializeObject(input.FunctionDefinition, Formatting.Indented)}
+```
+
+We are missing the following parameters.
+--MISSING PARAMETERS
+{string.Join('\n', input.MissingParameters)}
+
+Please ask the user for the missing parameters.  
+""";
+        }
+
+    }
+}

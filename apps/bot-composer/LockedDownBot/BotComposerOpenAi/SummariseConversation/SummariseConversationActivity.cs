@@ -12,7 +12,7 @@ namespace BotComposerOpenAi.SummariseConversation;
 /// </summary>
 public class SummariseConversationActivity : Dialog
 {
-    private readonly SemanticKernelWrapperFactory _openAiClientFactory;
+    private readonly SkillWrapperFactory _openAiClientFactory;
 
     [JsonConstructor]
     public SummariseConversationActivity(
@@ -20,7 +20,7 @@ public class SummariseConversationActivity : Dialog
         [CallerLineNumber] int sourceLineNumber = 0)
         : base()
     {
-        _openAiClientFactory = new SemanticKernelWrapperFactory();
+        _openAiClientFactory = new SkillWrapperFactory();
         RegisterSourceLocation(sourceFilePath, sourceLineNumber);
     }
 
@@ -45,7 +45,7 @@ public class SummariseConversationActivity : Dialog
         var input = conversation.ToString();
 
         var response = await
-            new SummariseAskFunction.Function()
+            new SummariseAskFunction.FunctionWithPrompt()
                 .Run(client, new SummariseAskFunction.Input(prompt, input), cancellationToken);
 
         if (ResultProperty != null)

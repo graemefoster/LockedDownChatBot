@@ -11,7 +11,7 @@ namespace BotComposerOpenAi.UpdateGptCoversation;
 /// </summary>
 public class UpdateGptConversationActivity : Dialog
 {
-    private readonly SemanticKernelWrapperFactory _openAiClientFactory;
+    private readonly SkillWrapperFactory _openAiClientFactory;
 
     [JsonConstructor]
     public UpdateGptConversationActivity(
@@ -19,7 +19,7 @@ public class UpdateGptConversationActivity : Dialog
         [CallerLineNumber] int sourceLineNumber = 0)
         : base()
     {
-        _openAiClientFactory = new SemanticKernelWrapperFactory();
+        _openAiClientFactory = new SkillWrapperFactory();
         RegisterSourceLocation(sourceFilePath, sourceLineNumber);
     }
 

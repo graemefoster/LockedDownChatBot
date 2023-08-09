@@ -16,7 +16,7 @@ namespace BotComposerOpenAi.TryToFindUserIntent;
 /// </summary>
 public class OpenAiDetectIntentActivity : Dialog
 {
-    private readonly SemanticKernelWrapperFactory _openAiClientFactory;
+    private readonly SkillWrapperFactory _openAiClientFactory;
 
     [JsonConstructor]
     public OpenAiDetectIntentActivity(
@@ -24,7 +24,7 @@ public class OpenAiDetectIntentActivity : Dialog
         [CallerLineNumber] int sourceLineNumber = 0)
         : base()
     {
-        _openAiClientFactory = new SemanticKernelWrapperFactory();
+        _openAiClientFactory = new SkillWrapperFactory();
         RegisterSourceLocation(sourceFilePath, sourceLineNumber);
     }
 
@@ -52,9 +52,9 @@ public class OpenAiDetectIntentActivity : Dialog
         var intents = Intents.GetValue(dc.State)?.ToArray() ?? Array.Empty<string>();
 
         var result = await
-            new ExtractIntentFromInputFunction.Function()
+            new ExtractIntentFromInputFunction.FunctionWithPrompt()
                 .ThenIf(x => !x.FoundIntent,
-                    s => s.Resolve<GetMoreInputFromCustomerToDetectIntentInputFunction>())
+                    s => s.Resolve<GetMoreInputFromCustomerToDetectIntentInputFunctionWithPrompt>())
                 .Run(client, new ExtractIntentFromInputFunction.Input(prompt, intents, input), cancellationToken);
 
         if (result.NextRecommendation != null)

@@ -21,6 +21,6 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\BotComposerOpenAi\BotComposerOpenAi.csproj" />
-    <ProjectReference Include="..\SemanticKernel.TypeSafeExtensions\SemanticKernel.TypeSafeExtensions.csproj" />
+    <ProjectReference Include="..\OpenAI.ComposableSkills\OpenAI.ComposableSkills.csproj" />
   </ItemGroup>
 </Project>
