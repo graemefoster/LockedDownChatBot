@@ -60,10 +60,8 @@ public class OpenAiSuggestFunctionCallActivity : Dialog
                     output => output.MissingParameters.Any(),
                     s => s
                         .Resolve<GetMoreInputFromCustomerToCallInputFunction.Function>()
-                        .UpdateChatMemory(
-                            (i, o) => new Chat()
-                                { Actor = Conversation.AssistantActor, Message = o.NextRecommendation! }, memory,
-                            conversationId))
+                        .UpdateChatMemory((i, o) => new Chat() { Actor = Conversation.AssistantActor, Message = o.NextRecommendation! }, memory,conversationId)
+                )
                 .Run(
                     client,
                     new RecallMemoryFunction.Input(RecallMemoryFunction.MemoryType.Last10Turns),
