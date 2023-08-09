@@ -9,7 +9,7 @@ public static class SummariseAskFunction
     public record Output(string Summarisation);
     
     [Description("Given user input and context, will summarise the user's ask in a single sentence.")]
-    public class FunctionWithPrompt : ChainableSkillFunctionWithPrompt<Input, Output>
+    public class Function : ChainableSkillFunctionWithPrompt<Input, Output>
     {
         public override string Prompt(Input input) => $@"
 {input.Context}

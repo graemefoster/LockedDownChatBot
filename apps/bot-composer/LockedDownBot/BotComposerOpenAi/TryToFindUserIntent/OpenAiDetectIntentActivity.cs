@@ -52,9 +52,9 @@ public class OpenAiDetectIntentActivity : Dialog
         var intents = Intents.GetValue(dc.State)?.ToArray() ?? Array.Empty<string>();
 
         var result = await
-            new ExtractIntentFromInputFunction.FunctionWithPrompt()
+            new ExtractIntentFromInputFunction.Function()
                 .ThenIf(x => !x.FoundIntent,
-                    s => s.Resolve<GetMoreInputFromCustomerToDetectIntentInputFunctionWithPrompt>())
+                    s => s.Resolve<GetMoreInputFromCustomerToDetectIntentInputFunction>())
                 .Run(client, new ExtractIntentFromInputFunction.Input(prompt, intents, input), cancellationToken);
 
         if (result.NextRecommendation != null)

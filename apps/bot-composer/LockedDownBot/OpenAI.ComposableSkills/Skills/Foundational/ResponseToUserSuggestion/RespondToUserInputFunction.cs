@@ -10,7 +10,7 @@ public static class RespondToUserInputFunction
         string UserInput { get; }
     }
     
-    public abstract class FunctionWithPrompt<TRequest, TResponse> : ChainableSkillFunctionWithPrompt<TRequest, TResponse>
+    public abstract class Function<TRequest, TResponse> : ChainableSkillFunctionWithPrompt<TRequest, TResponse>
         where TRequest : ISimpleRequest 
         where TResponse : notnull
     {

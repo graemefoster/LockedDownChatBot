@@ -1,7 +1,9 @@
 using System.Runtime.CompilerServices;
 using AdaptiveExpressions.Properties;
+using LockedDownBotSemanticKernel.Memory;
 using LockedDownBotSemanticKernel.Primitives;
 using LockedDownBotSemanticKernel.Primitives.Chains;
+using LockedDownBotSemanticKernel.Skills.Foundational.Memory;
 using LockedDownBotSemanticKernel.Skills.Functions.FunctionCalling;
 using Microsoft.Bot.Builder.Dialogs;
 using Newtonsoft.Json;
@@ -41,31 +43,31 @@ public class OpenAiSuggestFunctionCallActivity : Dialog
         var client = _openAiClientFactory.GetFromSettings(settings);
         var memory = _openAiClientFactory.GetMemoryFromSettings(settings);
 
-        var conversation = await dc.GetConversationForDialog(memory, cancellationToken);
+        var conversationId = dc.GetConversationIdForDialog();
         var prompt = SystemPrompt.GetValue(dc.State);
         var function = Function.GetValue(dc.State);
 
 
         var result = await
-            new ExtractInformationToCallFunction.FunctionWithPrompt()
+            new RecallMemoryFunction.Function(memory, conversationId)
+                .Then(_ => new ExtractInformationToCallFunction.Function(),
+                    (i, o) => new ExtractInformationToCallFunction.Input(
+                        prompt,
+                        o.Memories.ChatsToString(),
+                        JsonConvert.DeserializeObject<ExtractInformationToCallFunction.JsonSchemaFunctionInput>(
+                            function)!))
                 .ThenIf(
                     output => output.MissingParameters.Any(),
-                    s => s.Resolve<GetMoreInputFromCustomerToCallInputFunction.FunctionWithPrompt>())
+                    s => s
+                        .Resolve<GetMoreInputFromCustomerToCallInputFunction.Function>()
+                        .UpdateChatMemory(
+                            (i, o) => new Chat()
+                                { Actor = Conversation.AssistantActor, Message = o.NextRecommendation! }, memory,
+                            conversationId))
                 .Run(
                     client,
-                    new ExtractInformationToCallFunction.Input(
-                        prompt,
-                        conversation.ToString(),
-                        JsonConvert.DeserializeObject<ExtractInformationToCallFunction.JsonSchemaFunctionInput>(
-                            function)!),
+                    new RecallMemoryFunction.Input(RecallMemoryFunction.MemoryType.Last10Turns),
                     cancellationToken);
-
-        if (result.NextRecommendation != null)
-        {
-            conversation.UpdateConversationWithSystemResponse(result.NextRecommendation);
-        }
-
-        await memory.SaveConversation(conversation, cancellationToken);
 
         if (ResultProperty != null)
         {

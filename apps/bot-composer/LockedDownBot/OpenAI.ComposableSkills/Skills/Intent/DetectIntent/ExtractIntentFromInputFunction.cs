@@ -27,7 +27,7 @@ public static class ExtractIntentFromInputFunction
     }
 
     [Description("Given user input and context and a list of possible intents, this will extract the intent from the user input.")]
-    public class FunctionWithPrompt : ChainableSkillFunctionWithPrompt<Input, Output>
+    public class Function : ChainableSkillFunctionWithPrompt<Input, Output>
     {
         public override string Prompt(Input input) => @$"
 {input.Context}

@@ -31,7 +31,7 @@ public static class VectorSearchAndSummarise
 
         public async Task<Output> Run(ChainableSkillWrapper wrapper, Input input, CancellationToken token)
         {
-            var output = await new SummariseAskFunction.FunctionWithPrompt()
+            var output = await new SummariseAskFunction.Function()
                 .Then(_ => new GetEmbeddingsFunction.Function(_openAiClient, _embeddingsModel),
                     (i, o) => new GetEmbeddingsFunction.Input(string.Join(' ', o.Summarisation)))
                 .Then(_ => new CognitiveSearchVectorIndexFunction.Function(_cognitiveSearchClient),

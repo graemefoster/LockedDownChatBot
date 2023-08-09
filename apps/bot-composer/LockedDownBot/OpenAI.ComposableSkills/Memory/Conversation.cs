@@ -5,6 +5,9 @@ namespace LockedDownBotSemanticKernel.Memory;
 
 public class Conversation
 {
+    public static string UserActor = "User";
+    public static string AssistantActor = "System";
+    
     [JsonProperty("id")] public string Id { get; set; }
     public DateTimeOffset StartDate { get; set; }
     public DateTimeOffset LastUpdateDate { get; set; }
@@ -24,13 +27,7 @@ public class Conversation
 
     public override string ToString()
     {
-        var sb = new StringBuilder();
-        foreach (var chat in Chat)
-        {
-            sb.AppendLine($"{chat.Actor}: {chat.Message}");
-        }
-
-        return sb.ToString();
+        return Chat.ChatsToString();
     }
 
     private void UpdateConversation(string actor, string response)

@@ -7,7 +7,7 @@ namespace LockedDownBotSemanticKernel.Skills.Functions.FunctionCalling;
 public static class GetMoreInputFromCustomerToCallInputFunction
 {
     [Description("Given user input and context, and a function definition, will suggest what to ask the user to get the values for missing function parameters.")]
-    public class FunctionWithPrompt : RespondToUserInputFunction.FunctionWithPrompt<ExtractInformationToCallFunction.Output, ExtractInformationToCallFunction.Output>
+    public class Function : RespondToUserInputFunction.Function<ExtractInformationToCallFunction.Output, ExtractInformationToCallFunction.Output>
     {
         protected override ExtractInformationToCallFunction.Output CreateResponse(
             ExtractInformationToCallFunction.Output input,

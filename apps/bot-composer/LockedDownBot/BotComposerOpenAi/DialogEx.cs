@@ -16,5 +16,15 @@ public static class DialogEx
         
         return await memoryClient.GetConversation(conversationId, token);
     }
-    
+
+    public static string GetConversationIdForDialog(this DialogContext context)
+    {
+        var dialogueState = (IDictionary<string, object>)context.State["dialog"];
+        var conversationId = dialogueState.TryGetValue("__gptconversationId", out var value)
+            ? (string)value
+            : Guid.NewGuid().ToString();
+
+        return conversationId!;
+    }
+
 }

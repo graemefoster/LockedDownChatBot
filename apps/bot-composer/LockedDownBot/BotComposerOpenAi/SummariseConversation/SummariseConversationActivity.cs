@@ -45,7 +45,7 @@ public class SummariseConversationActivity : Dialog
         var input = conversation.ToString();
 
         var response = await
-            new SummariseAskFunction.FunctionWithPrompt()
+            new SummariseAskFunction.Function()
                 .Run(client, new SummariseAskFunction.Input(prompt, input), cancellationToken);
 
         if (ResultProperty != null)

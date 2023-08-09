@@ -29,7 +29,7 @@ public static class ExtractInformationToCallFunction
 
     [Description(
         "Given user input and context, and a function definition, will extract the parameters to call the function with.")]
-    public class FunctionWithPrompt :  ChainableSkillFunctionWithPrompt<Input, Output>
+    public class Function :  ChainableSkillFunctionWithPrompt<Input, Output>
     {
         public override string Prompt(Input input) => $@"
 Read the users input and respond in JSON with arguments extracted from the user's input to call the function detailed below.
