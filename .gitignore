@@ -10,3 +10,4 @@ sample-teams-manifest/
 .bkp
 .dtmp
 local.settings.development.json
+.orig
