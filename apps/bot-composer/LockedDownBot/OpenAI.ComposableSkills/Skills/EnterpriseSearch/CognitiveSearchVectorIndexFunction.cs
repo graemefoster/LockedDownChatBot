@@ -9,12 +9,15 @@ namespace LockedDownBotSemanticKernel.Skills.EnterpriseSearch;
 public static class CognitiveSearchVectorIndexFunction
 {
     public record Input(
-        [property:Description("Search text")]string SearchText, 
-        [property:Description("Search text Embeddings")]float[] Embeddings);
+        [property: Description("Search text")] string SearchText,
+        [property: Description("Search text Embeddings")]
+        float[] Embeddings);
 
     public record Output(
-        [property:Description("Original Input")]Input OriginalInput, 
-        [property:Description("Best Search Result from index")]string Result);
+        [property: Description("Original Input")]
+        Input OriginalInput,
+        [property: Description("Best Search Result from index")]
+        string Result);
 
     public class Function : IChainableSkill<Input, Output>
     {
@@ -28,13 +31,14 @@ public static class CognitiveSearchVectorIndexFunction
         public async Task<Output> Run(ChainableSkillWrapper wrapper, Input input, CancellationToken token)
         {
             var vector = new SearchQueryVector
-                { KNearestNeighborsCount = 3, Fields = "contentVector", Value = input.Embeddings };
+                { KNearestNeighborsCount = 3, Value = input.Embeddings };
+            vector.Fields.Add("contentVector");
             var searchOptions = new SearchOptions
             {
-                Vector = vector,
                 Size = 5,
                 Select = { "metadata_storage_name", "content" },
             };
+            searchOptions.Vectors.Add(vector);
 
             var searchResult = (await _client
                 .SearchAsync<SearchDocument>(
