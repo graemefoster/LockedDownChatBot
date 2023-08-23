@@ -6,6 +6,7 @@ using LockedDownBotSemanticKernel.Skills.EnterpriseSearch;
 using LockedDownBotSemanticKernel.Skills.Foundational.ExtractKeyTerms;
 using LockedDownBotSemanticKernel.Skills.Foundational.GetEmbeddings;
 using LockedDownBotSemanticKernel.Skills.Foundational.SummariseContent;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 

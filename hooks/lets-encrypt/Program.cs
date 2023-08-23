@@ -87,11 +87,13 @@ var kv = rg.GetKeyVaults()
 //And they default to false.
 if (!deployEdgeSecurity) { return;}
 
-if (string.IsNullOrWhiteSpace(dnsResourceGroup) || string.IsNullOrWhiteSpace(dnsSuffix))
+if (string.IsNullOrWhiteSpace(dnsResourceGroup) || string.IsNullOrWhiteSpace(dnsSuffix) || string.IsNullOrWhiteSpace(certificateName))
 {
     Console.WriteLine("You use pre-configure 'DNS_RESOURCE_RG' and 'DNS_RESOURCE_NAME' to enable edge security.");
     Console.WriteLine("  azd env set DNS_RESOURCE_RG <dns-resource-group-name>");
     Console.WriteLine("  azd env set DNS_RESOURCE_NAME <dns-resource-name>");
+    Console.WriteLine("  azd env set CHAT_API_CUSTOM_HOST <host-name-without-dns-suffix>");
+    throw new NotSupportedException();
 }
 
 Console.WriteLine($"Looking for Dns Zone: {dnsResourceGroup}/{dnsSuffix}");
@@ -135,7 +137,7 @@ await acme.GetNonceAsync();
 
 if (account == null || accountSigner == null)
 {
-    account = await acme.CreateAccountAsync(new[] { me.UserPrincipalName }.Select(x => "mailto:" + x), true);
+    account = await acme.CreateAccountAsync(new[] { me.Mail }.Select(x => "mailto:" + x), true);
     account.Payload.TermsOfServiceAgreed = true;
     accountSigner = acme.Signer;
     acme.Account = account;
