@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
@@ -7,9 +8,7 @@ using Azure.AI.OpenAI;
 using Azure.Identity;
 using Azure.Storage.Blobs;
 using Microsoft.Azure.WebJobs;
-using Microsoft.DeepDev;
 using Microsoft.Extensions.Logging;
-using UglyToad.PdfPig;
 
 namespace ContentSplitter;
 
@@ -25,8 +24,6 @@ public static class CrackDocument
         var outputClient =
             new BlobContainerClient(Environment.GetEnvironmentVariable("BlobStorageAccount"), "sample-documents");
 
-        var tokenCounter = await TokenizerBuilder.CreateByModelNameAsync("gpt-3.5-turbo");
-
         var embeddingModelName = Environment.GetEnvironmentVariable("AzureOpenAIEmbeddingModel")!;
         var openAiHost = new Uri(Environment.GetEnvironmentVariable("AzureOpenAIHost")!);
         var accessOpenAiUsingManagedIdentity =
@@ -38,36 +35,27 @@ public static class CrackDocument
             : new OpenAIClient(openAiHost,
                 new AzureKeyCredential(Environment.GetEnvironmentVariable("AzureOpenAISecret")!));
 
-        using var document = PdfDocument.Open(inputBlob);
+        var cracker = Path.GetExtension(name) switch
+        {
+            ".pdf" => (ICrack)new CrackPdf(),
+            ".docx" => new CrackWord(),
+            _ => new CrackText()
+        };
 
         var chunkNumber = 0;
-        var content = string.Empty;
-        foreach (var page in document.GetPages())
+        var wordList = new List<string>();
+        await foreach (var phrase in cracker.Crack(inputBlob))
         {
-            string pageText = page.Text;
-
-            foreach (var contentPiece in pageText.Split('\n'))
+            wordList.Add(phrase);
+            if (wordList.Count > 200)
             {
-                var potentialChunk = content + Environment.NewLine + contentPiece;
-                var tokens = tokenCounter.Encode(potentialChunk, new string[] { });
-                if (tokens.Count > 600)
-                {
-                    //tipped over the limit. Lock the chunk without the additional line
-                    await LockChunk(outputClient, client, embeddingModelName, name, chunkNumber, content);
-                    chunkNumber++;
-                    content = contentPiece; //didn't fit into this chunk
-                }
-                else
-                {
-                    content = potentialChunk;
-                }
+                await LockChunk(outputClient, client, embeddingModelName, name, ++chunkNumber,
+                    string.Join(' ', wordList));
+                wordList = wordList.TakeLast(20).ToList();
             }
         }
 
-        if (content != string.Empty)
-        {
-            await LockChunk(outputClient, client, embeddingModelName, name, chunkNumber, content);
-        }
+        await LockChunk(outputClient, client, embeddingModelName, name, ++chunkNumber, string.Join(' ', wordList));
     }
 
     private static async Task LockChunk(
@@ -97,6 +85,8 @@ public static class CrackDocument
             ContentVector = embeddings.Value.Data.First().Embedding.ToArray()
         };
 
+        await blobContainerClient.DeleteBlobIfExistsAsync(fileName);
         await blobContainerClient.UploadBlobAsync(fileName, new BinaryData(documentWithEmbeddings));
     }
 }
+
