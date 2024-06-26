@@ -30,15 +30,22 @@ public static class CognitiveSearchVectorIndexFunction
 
         public async Task<Output> Run(ChainableSkillWrapper wrapper, Input input, CancellationToken token)
         {
-            var vector = new SearchQueryVector
-                { KNearestNeighborsCount = 3, Value = input.Embeddings };
-            vector.Fields.Add("contentVector");
             var searchOptions = new SearchOptions
             {
                 Size = 5,
                 Select = { "metadata_storage_name", "content" },
+                VectorSearch = new VectorSearchOptions()
+                {
+                    Queries =
+                    {
+                        new VectorizedQuery(input.Embeddings)
+                        {
+                            Fields = { "contentVector" },
+                            KNearestNeighborsCount = 3,
+                        }
+                    }
+                }
             };
-            searchOptions.Vectors.Add(vector);
 
             var searchResult = (await _client
                 .SearchAsync<SearchDocument>(

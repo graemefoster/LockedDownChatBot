@@ -36,7 +36,7 @@ public class OpenAiDetectIntentActivity : Dialog
 
     [JsonProperty("resultProperty")] public StringExpression? ResultProperty { get; set; }
 
-    public override async Task<DialogTurnResult> BeginDialogAsync(DialogContext dc, object options = null,
+    public override async Task<DialogTurnResult> BeginDialogAsync(DialogContext dc, object? options = null,
         CancellationToken cancellationToken = new())
     {
         var settings = (IDictionary<string, object>)dc.State["settings"];

@@ -13,12 +13,13 @@ public class ChainableSkillWrapper : ISkillResolver
         _openAiClient = openAiClient;
         _modelName = modelName;
     }
-    
+
     public Task<TOutput> RunSkill<TInput, TOutput>(IChainableSkill<TInput, TOutput> chain, TInput input,
         CancellationToken cancellationToken)
     {
         return chain.Run(this, input, cancellationToken);
     }
+
     /// <summary>
     /// TODO Bring in proper container
     /// </summary>
@@ -29,14 +30,15 @@ public class ChainableSkillWrapper : ISkillResolver
 
     public async Task<string> RunRaw(string prompt)
     {
-        var output = await _openAiClient.GetChatCompletionsAsync(_modelName, new ChatCompletionsOptions()
+        var output = await _openAiClient.GetChatCompletionsAsync(new ChatCompletionsOptions()
         {
-            Messages = { new ChatMessage(ChatRole.System, prompt) },
+            Messages = { new ChatRequestSystemMessage(prompt) },
             Temperature = 0,
             FrequencyPenalty = 0,
             MaxTokens = 100,
             PresencePenalty = 0,
-            NucleusSamplingFactor = 0
+            NucleusSamplingFactor = 0,
+            DeploymentName = _modelName
         });
         return output.Value.Choices[0].Message.Content;
     }

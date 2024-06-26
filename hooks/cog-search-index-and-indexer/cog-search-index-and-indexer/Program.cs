@@ -26,17 +26,20 @@ var blobConnectionString = "DefaultEndpointsProtocol=https;AccountName=" + stora
 var searchIndexClient = new SearchIndexClient(new Uri(searchEndpoint), new DefaultAzureCredential());
 var searchIndexerClient = new SearchIndexerClient(new Uri(searchEndpoint), new DefaultAzureCredential());
 
-var vectorSearchConfig = new VectorSearch()
-{
-    AlgorithmConfigurations =
-    {
-        new HnswVectorSearchAlgorithmConfiguration("vector-search-config")
-    }
-};
-
 var index = new SearchIndex(expectedIndexName)
 {
-    VectorSearch = vectorSearchConfig,
+    VectorSearch = new VectorSearch()
+    {
+        Profiles =
+        {
+            new VectorSearchProfile("vector-profile", "vector-search-config")
+            {
+                CompressionConfigurationName = "grf-scalar-quantizer",
+            }
+        },
+        Algorithms = { new HnswAlgorithmConfiguration("vector-search-config") },
+        Compressions = { new ScalarQuantizationCompressionConfiguration("grf-scalar-quantizer") }
+    },
     Fields = new List<SearchField>()
     {
         new SearchField("id", SearchFieldDataType.String)
@@ -45,7 +48,7 @@ var index = new SearchIndex(expectedIndexName)
         {
             IsFilterable = false, IsSearchable = true, IsSortable = false, IsFacetable = false,
             IsHidden = true,
-            VectorSearchConfiguration = "vector-search-config",
+            VectorSearchProfileName = "vector-profile",
             VectorSearchDimensions = 1536, //text-embedding-ada-002
         },
         new SearchField("content", SearchFieldDataType.String)
@@ -57,19 +60,17 @@ var index = new SearchIndex(expectedIndexName)
         new SearchField("metadata_storage_content_type", SearchFieldDataType.String)
             { IsFilterable = true, IsSearchable = false, IsSortable = true },
     },
-    SemanticSettings = new SemanticSettings()
+    SemanticSearch = new SemanticSearch()
     {
         Configurations =
         {
-            new SemanticConfiguration("default", new PrioritizedFields()
+            new SemanticConfiguration("default", new SemanticPrioritizedFields()
             {
-                TitleField = new SemanticField() { FieldName = "metadata_storage_name" },
-                ContentFields = { new SemanticField() { FieldName = "content" } },
-                KeywordFields = { new SemanticField() { FieldName = "content" } },
-                
+                TitleField = new SemanticField("metadata_storage_name"),
+                ContentFields = { new SemanticField("content") },
+                KeywordsFields = { new SemanticField("content") },
             })
-        },
-        DefaultConfiguration = "default"
+        }
     }
 };
 var indexDataSource = new SearchIndexerDataSourceConnection(

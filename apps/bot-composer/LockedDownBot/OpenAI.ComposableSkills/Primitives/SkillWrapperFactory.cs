@@ -18,6 +18,7 @@ public class SkillWrapperFactory
         var clientId = config["OPENAI_MANAGED_IDENTITY_CLIENT_ID"] as string;
         return GetFromSettings(endpoint, openAiKey, clientId, model);
     }
+
     public CosmosMemory GetMemoryFromSettings(IDictionary<string, object> config)
     {
         var endpoint = (string)config["BOT_MEMORY_HOST"];
@@ -32,7 +33,7 @@ public class SkillWrapperFactory
     {
         if (_client == null)
         {
-            _client =  new ChainableSkillWrapper(GetRawClientFromSettings(endpoint, key, clientId), model);
+            _client = new ChainableSkillWrapper(GetRawClientFromSettings(endpoint, key, clientId), model);
         }
 
         return _client;
@@ -49,7 +50,7 @@ public class SkillWrapperFactory
 
         return GetRawClientFromSettings(endpoint, openAiKey, clientId);
     }
-    
+
     private OpenAIClient GetRawClientFromSettings(string endpoint, object? openAiKey, string? clientId)
     {
         var gotKey = openAiKey != null;
@@ -58,5 +59,4 @@ public class SkillWrapperFactory
             ? new OpenAIClient(new Uri(endpoint), new ManagedIdentityCredential(clientId))
             : new OpenAIClient(new Uri(endpoint), new AzureKeyCredential((string)openAiKey!));
     }
-
 }

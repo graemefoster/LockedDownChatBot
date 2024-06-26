@@ -7,9 +7,11 @@ namespace LockedDownBotSemanticKernel.Skills.Foundational.ChitChat;
 
 public static class ChitChatFunction
 {
-    public record Input([property:Description("Chat Messages")] ChatMessage[] Messages);
+    public record Input(
+        [property: Description("Chat Messages")]
+        ChatRequestMessage[] Messages);
 
-    public record Output([property:Description("Response")] string Response);
+    public record Output([property: Description("Response")] string Response);
 
     [Description("Given OpenAI chat messages, will return a response")]
     public class Function : IChainableSkill<Input, Output>
@@ -25,9 +27,9 @@ public static class ChitChatFunction
 
         public async Task<Output> Run(ChainableSkillWrapper wrapper, Input input, CancellationToken token)
         {
-            var options = new ChatCompletionsOptions();
+            var options = new ChatCompletionsOptions() { DeploymentName = _model };
             foreach (var msg in input.Messages) options.Messages.Add(msg);
-            var response = await _openAiClient.GetChatCompletionsAsync(_model, options, token);
+            var response = await _openAiClient.GetChatCompletionsAsync(options, token);
             return new Output(response.Value.Choices[0].Message.Content);
         }
     }

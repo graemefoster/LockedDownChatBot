@@ -1,6 +1,7 @@
 using LockedDownBotSemanticKernel.Primitives.Chains;
 using LockedDownBotSemanticKernel.Skills.Functions.FunctionCalling;
 using Newtonsoft.Json.Schema;
+using Newtonsoft.Json.Schema.Generation;
 
 namespace LockedDownBotSemanticKernel.Primitives;
 
@@ -10,10 +11,10 @@ public class SkillJsonSchemaExtractor
     {
         var schema = new SkillJsonSchemaExtractor().GenerateFor(new ExtractInformationToCallFunction.Function());
     }
-    
-    public JsonSchema GenerateFor<TIn, TOut>(IChainableSkill<TIn, TOut> fn)
+
+    public JSchema GenerateFor<TIn, TOut>(IChainableSkill<TIn, TOut> fn)
     {
-        var schemaGen = new JsonSchemaGenerator();
+        var schemaGen = new JSchemaGenerator();
         var schema = schemaGen.Generate(typeof(TIn));
         return schema;
     }

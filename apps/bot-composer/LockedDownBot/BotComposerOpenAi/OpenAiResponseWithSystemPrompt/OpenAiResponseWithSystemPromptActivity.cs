@@ -33,25 +33,24 @@ public class OpenAiResponseWithSystemPromptActivity : Dialog
 
     [JsonProperty("resultProperty")] public StringExpression? ResultProperty { get; set; }
 
-    public override async Task<DialogTurnResult> BeginDialogAsync(DialogContext dc, object options = null,
+    public override async Task<DialogTurnResult> BeginDialogAsync(DialogContext dc, object? options = null,
         CancellationToken cancellationToken = new())
     {
         var client = _openAiClientFactory.GetFromSettings((IDictionary<string, object>)dc.State["settings"]);
-        
+
         var rawClient =
             _openAiClientFactory.GetRawClientFromSettings((IDictionary<string, object>)dc.State["settings"],
                 out var model,
                 out var embeddingModel);
-        
+
         var input = string.Join('\n', Inputs.GetValue(dc.State));
 
         var response = await new ChitChatFunction.Function(rawClient, model)
             .Run(client, new ChitChatFunction.Input(
-                new[]
-                {
-                    new ChatMessage(ChatRole.System, SystemPrompt.GetValue(dc.State)),
-                    new ChatMessage(ChatRole.User, input)
-                }), cancellationToken);
+            [
+                new ChatRequestSystemMessage(SystemPrompt.GetValue(dc.State)),
+                new ChatRequestUserMessage(input)
+            ]), cancellationToken);
 
         var result = response.Response;
 

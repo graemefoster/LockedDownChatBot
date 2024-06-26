@@ -29,7 +29,10 @@ public static class CognitiveSearchFunction
                     new SearchOptions()
                     {
                         Size = 1,
-                        SemanticConfigurationName = "default"
+                        SemanticSearch = new SemanticSearchOptions()
+                        {
+                            SemanticConfigurationName = "default",
+                        }
                     }, token)).Value.GetResults().First();
 
             return new Output( input,searchResult.Document.GetString("content"));
