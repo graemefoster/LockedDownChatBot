@@ -47,7 +47,7 @@ public static class CrackDocument
         await foreach (var phrase in cracker.Crack(inputBlob))
         {
             wordList.Add(phrase);
-            if (wordList.Count > 200)
+            if (wordList.Count > 400)
             {
                 await LockChunk(outputClient, client, embeddingModelName, name, ++chunkNumber,
                     string.Join(' ', wordList));
